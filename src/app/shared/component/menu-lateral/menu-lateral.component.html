@@ -1,0 +1,11 @@
+<h3><b>{{title}}</b></h3>
+
+<div class="list-container" [ngClass]="{'scroll':maxHeight != 'auto', 'horizontal': orientation != 'vertical'}">
+    <div *ngFor="let menu of list" class="item"
+        [style.width]="orientation != 'vertical' ? ((100  / itensPerLine) + '%') : '100%'" (click)="menu.action()"
+        [ngClass]="{'horizontal': orientation != 'vertical'}">
+        <span class="fix">
+            {{menu.name}}
+        </span>
+    </div>
+</div>

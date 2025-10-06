@@ -1,0 +1,18 @@
+<div id="dialog-generico">
+    <div [ngClass]="{'header': true, 'aviso': tipo === 'A', 'info': tipo === 'I', 'erro': tipo === 'E', 'sucesso': tipo === 'S'}"
+        cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+        <h2 mat-dialog-title>{{titulo}}</h2>
+    </div>
+    <div mat-dialog-content class="dialog-generico-corpo mat-app-background">
+        <h3>{{texto}}</h3>
+    </div>
+    <div *ngIf="obsTexto" mat-dialog-content class="dialog-generico-obs mat-app-background">
+        <h5>{{obsTexto}}</h5>
+    </div>
+    <div mat-dialog-actions class="dialog-generico-botoes mat-app-background">
+        <button mat-button class="mat-button" color="lightgray" mat-dialog-close (click)="botaoCancelarCallback()"
+            *ngIf="possuiBotaoCancelar">{{botaoCancelarTexto}}</button>
+        <button mat-button mat-dialog-close (click)="botaoContinuarCallback()"
+            *ngIf="possuiBotaoContinuar">{{botaoContinuarTexto}}</button>
+    </div>
+</div>

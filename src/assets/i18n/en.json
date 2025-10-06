@@ -1,0 +1,29 @@
+{
+    "Login": {
+        "hello": "Oi,",
+        "welcome": "seja bem vindo",
+        "instruction": "Para entrar digite os dados abaixo.",
+        "esqueceu-senha": "ESQUECI MINHA SENHA"
+    },
+    "Lost": {
+        "forgot": "Esqueceu sua senha?",
+        "yourpass": "",
+        "instruction": "Digite o e-mail abaixo para recuperar sua senha",
+        "forgot1": "Altere",
+        "yourpass1": "sua senha!",
+        "instruction1": "Preencha os campos abaixo com a nova senha.",
+        "confirmpassword": "Confirmar Senha"
+    },
+    "Estabelecimento": {
+        "uploadLogotipo": "Upload do logotipo"
+    },
+    "Shared": {
+        "enter": "Entrar",
+        "email": "E-mail",
+        "password": "Senha",
+        "change": "Alterar",
+        "send": "Enviar",
+        "search": "Pesquisar",
+        "goBack": "Voltar"
+    }
+}

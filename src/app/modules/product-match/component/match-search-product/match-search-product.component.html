@@ -1,0 +1,99 @@
+<div id="dialog-match">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+        <div class="fl-row title">
+            <mat-icon class="header-icon" color="primary">qr_code_2</mat-icon>
+        </div>
+    </div>
+
+    <div mat-dialog-content fxLayout="column" fxLayoutGap="16px">
+        <div>
+            <table class="table-info">
+                <thead>
+                    <tr>
+                        <th class="center">Empresa</th>
+                        <th class="center">Código</th>
+                        <th class="center col-35">Produto</th>
+                        <th class="center">Marca</th>
+                        <th class="center">Un.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="left col-35">{{model.companyName}}</td>
+                        <td class="center">{{model.referenceCode}}</td>
+                        <td class="left">{{model.name}}</td>
+                        <td class="left">{{model.brandName}}</td>
+                        <td class="center">{{model.unitOfMeasureAcronym}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="div-form" fxFlex="100">
+            <label [ngClass]="isValidSearchForm ? 'label-div': 'label-div error'">Localizar mais produtos</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="90">
+                    <form class="form-cadastro" [formGroup]='searchForm'>
+                        <mat-form-field class="w100" appearance="outline">
+                            <mat-label>Produto-BF</mat-label>
+                            <input matInput placeholder="informe um trecho das informação do produtos"
+                                [matAutocomplete]="auto" formControlName='searchInput'>
+                        </mat-form-field>
+
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                            (optionSelected)="onSearchAutocomplet($event)">
+                            <mat-option *ngFor="let prod of filteredProducts" [value]="prod">
+                                <span>{{ prod.productId}}&nbsp;-&nbsp;{{ prod.name }}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </form>
+                </div>
+                <div fxFlex="10">
+                    <mat-spinner *ngIf="isLoading"></mat-spinner>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="listProducts.length > 0" class="div-form space-top-div" fxFlex="100">
+            <label [ngClass]="isValidSearchForm ? 'label-div': 'label-div error'">Produtos selecionados</label>
+            <div class="scrollable-content">
+                <table class="table-info">
+                    <thead>
+                        <tr>
+                            <th class="center title">ID BF</th>
+                            <th class="center title">Produto</th>
+                            <th class="center title">Categoria</th>
+                            <th class="center title">Sub Categoria</th>
+                            <th class="center title">Un.</th>
+                            <th class="center title">Referências</th>
+                            <th>...</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let prod of listProducts">
+                        <tr>
+                            <td class="right">{{prod.productId}}</td>
+                            <td class="left">{{prod.name}}</td>
+                            <td class="left">{{prod.groupName}}</td>
+                            <td class="left">{{prod.subGroupName}}</td>
+                            <td class="center">{{prod.unitOfMeasureAcronym}}</td>
+                            <td class="left">
+                                <mat-list role="list">
+                                    <mat-list-item *ngFor="let ref of prod.references" role="listitem">{{ref}}
+                                    </mat-list-item>
+                                </mat-list>
+                            </td>
+                            <td class="left col-5">
+                                <button mat-raised-button color="primary" class="white"
+                                    (click)="sendProduct(prod.productId, prod.name)">
+                                    <mat-icon>add_link</mat-icon>Vincular
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions class="dialog-match-botoes" align="end">
+        <button class="large" mat-raised-button color="lightgray" (click)="cancel()" mat-dialog-close>Cancelar</button>
+        <!-- <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="saveConfirmMatch()">Confirmar</button> -->
+    </div>
+</div>

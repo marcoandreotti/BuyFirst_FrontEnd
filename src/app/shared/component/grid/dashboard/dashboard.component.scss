@@ -1,0 +1,113 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.dashboard {
+    margin: 10px 0px 20px 0px;
+    position: relative;
+}
+
+.dash-card {
+    min-width: 250px;
+    text-align: center;
+    border: 1px solid rgb(206 206 206 / 60%);
+}
+
+.dash-container {
+    width: 100%;
+    padding: 0px 10px 0px 10px;
+    box-sizing: border-box;
+}
+
+.dash-title {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.dash-value {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    color: mat-color($bv-palette-primary);
+}
+
+.dash-hide {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.flex-end {
+    justify-content: flex-end;
+}
+
+.left-container {
+    flex: 1;
+    position: relative;
+}
+
+.dashboard-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.dashboard-data {
+    flex: 1;
+    overflow-x: auto;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.chart {
+    display: grid;
+}
+
+.flex1 {
+    flex: 1 1;
+}
+
+.chart-wrapper {
+    display: flex;
+    overflow: hidden;
+}
+
+.chart-container {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 999;
+    padding: 20px;
+    box-sizing: border-box;
+    visibility: hidden;
+    height: max-content;
+    left: 0;
+    transition: all 0.5s;
+}
+
+.credito-color {
+    color: #5bb26e;
+}
+
+.debito-color {
+    color: #c8414b;
+}
+
+.chart-button {
+    width: 50px;
+    height: 50px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white !important;
+    background-color: #5bb26e;
+    margin: 0px 15px 0px 15px;
+}
+
+.chart-margin {
+    margin-bottom: 80px;
+}
+
+.chart-border {
+    border-left: 1px solid rgb(206 206 206 / 60%);
+    padding-left: 20px;
+}

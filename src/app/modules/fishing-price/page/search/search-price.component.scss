@@ -1,0 +1,76 @@
+.result-search {
+  float: left;
+  height: 100%;
+  margin-top: 10px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.result-paginator {
+  position: fixed;
+  bottom: 0;
+  width: 91%;
+}
+
+.fishing-card {
+  min-height: 412px;
+  max-height: 412px;
+  min-width: 304px;
+
+  .favorit-buton {
+    color: var(--theme-primary-500);
+    float: left;
+    margin-top: 14px;
+  }
+
+  .mat-card-image {
+    width: 50%;
+    padding: 0 25%;
+  }
+
+  .container-body {
+    float: left;
+    width: 100%;
+
+    .body-info {
+      float: left;
+      width: 100%;
+      color: var(--theme-primary-500);
+      font-size: medium;
+      font-weight: 600;
+
+      .label-info {
+        // position: absolute;
+        font-size: 12px;
+        margin-top: 5px;
+        margin-left: 0;
+        margin-right: 10px;
+        transform: translateY(-1.59375em) scale(0.85);
+        font-weight: 300;
+      }
+    }
+  }
+
+  .mat-card-price {
+    position: absolute;
+    bottom: 34px;
+    right: 5px;
+
+    .fishing-price {
+      font-size: x-large;
+      font-weight: 600;
+      float: right;
+      padding: 10px;
+    }
+  }
+
+  .mat-card-actions {
+    position: absolute;
+    bottom: 14px;
+    right: 5px;
+  }
+}
+
+.table-scroll {
+  height: 70% !important;
+}

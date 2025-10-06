@@ -1,0 +1,137 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.grid-filters {
+    width: 100%;
+    //border: solid 1px rgb(234 234 234 / 60%);
+    background: rgba(0, 0, 0, 0.05);
+    margin: 10px 0px;
+    padding: 6px;
+    border-radius: 10px;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: space-between;
+    min-height: 55px;
+
+    .left {
+        flex: 1;
+    }
+
+    .filter {
+        padding: 5px;
+
+        h4 {
+            margin: 0px 0px 0px 10px !important;
+        }
+    }
+
+    .filter:hover {
+
+
+        background: #e0e0e0;
+        border: 1px solid #e0e0e0;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    mat-icon {
+        margin: 0px 10px;
+    }
+
+    input{
+        color: black;
+    }
+}
+
+input {
+    width: 100%;
+    border: 0px;
+    background: transparent;
+}
+
+input:focus {
+    outline: none;
+}
+
+.special-filters {
+    width: 100%;
+    margin-top: 15px;
+    padding: 6px;
+    border-radius: 10px;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: space-between;
+    background-color: white;
+    display: contents;
+
+    @media only screen and (max-width: $mobile) {
+        position: absolute;
+        left: 0;
+        z-index: 99;
+        width: calc(100% - 40px);
+        margin: 0px 20px;
+        border-radius: 0px 0px 10px 10px;
+        border: 1px solid rgb(234 234 234 / 60%);
+        padding: 15px;
+        box-shadow: 1px 11px 7px #c7c7c773;
+    }
+}
+
+.margin-filter{
+    margin-bottom: 15px;
+}
+
+.special-filters ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+
+.remove-filter {
+    border-top: 1px solid rgba(212, 212, 212, 0.4) !important;
+    padding: 10px;
+    justify-content: flex-end;
+    cursor: pointer;
+
+    span {
+        margin-left: 5px;
+        font-size: 12px;
+    }
+}
+
+.remove-filter:hover {
+    background: rgb(234 234 234 / 60%);
+}
+
+.filter-scroll {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.filter-search {
+    .input-control {
+        width: 100%;
+        position: relative;
+        height: 40px;
+    }
+
+    input {
+        width: 100%;
+        height: 40px;
+        border-bottom: 1px solid rgb(206 206 206 / 60%);
+        position: absolute;
+        padding: 0px 0px 10px 38px;
+        box-sizing: border-box;
+    }
+
+    .input-control mat-icon {
+        position: absolute;
+        left: 10px;
+        top: 5px;
+    }
+}
+
+:host ::ng-deep {
+    .mat-menu-content:not(:empty) {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+}

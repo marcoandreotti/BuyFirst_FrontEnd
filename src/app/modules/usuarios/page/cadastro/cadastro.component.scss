@@ -1,0 +1,62 @@
+.div-form {
+  border: var(--theme-primary-500) solid 1px ;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.space-top-div {
+  margin-top: 16px;
+}
+
+.label-div {
+  font-weight: 500;
+  padding: 4px 8px;
+  position: absolute;
+  margin-top: -22px;
+  background-color: var(--theme-primary-500);
+  border-radius: 3px;
+  color: #fff;
+}
+
+///////////////////////////////////////////////////
+
+.mat-option-text {
+  font-size: 12px;
+}
+
+///////////////////////////////////////////////////
+
+.table-company {
+  width: 100%;
+  border: var(--theme-primary-500) solid 2px;
+  border-radius: 5px;
+  margin-top: 10px;
+  
+  th {
+    width: 50%;
+  }
+
+  .company-identity {
+    background-color: var(--theme-primary-400);
+    color: #fff;
+    text-align: left;
+    padding-left: 7px;
+  }
+  .company-none {
+    background-color: #cfcfcf;
+    // color: #fff;
+  }
+  
+  td {
+    .mat-button-toggle {
+      .mat-button-toggle {
+        .mat-button-toggle-button{
+          .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+              padding: 0 8px;
+          }
+        }
+      }
+    }
+  }
+
+}

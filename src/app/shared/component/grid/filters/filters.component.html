@@ -1,0 +1,58 @@
+<div *ngIf="(opened || (!isMobile() && alwaysFilters)) && specialFilter" class="special-filters"
+    [ngClass]="{'margin-filter': useMargin}">
+    <app-form [formRows]="filters" [model]="filterModel" (onSubmit)="formSubmit($event)" [useErrors]="false"></app-form>
+</div>
+
+<div *ngIf="(opened || (!isMobile() && alwaysFilters)) && !specialFilter" class="grid-filters fl-row">
+
+    <div class="left fl-row align-c">
+        <mat-icon color="gray">search</mat-icon>
+        <input [ngModel]="filterEvent.search" (ngModelChange)="aoPesquisar($event)"
+            placeholder="Pesquise por alguma palavra">
+    </div>
+
+    <div class="filter-menu right fl-row align-c">
+
+        <ng-container *ngFor="let f of filters, let i = index">
+
+            <div class="filter fl-row align-c" [matTooltip]="countFilters(f) > 0 ? f.title : null"
+                [matMenuTriggerFor]="filterOptions">
+                <h4 *ngIf="countFilters(f) == 0">{{f.title}}</h4>
+                <h4 *ngIf="countFilters(f) > 0"><b>{{firstSelected(f).name + (countFilters(f) > 1
+                        ?
+                        ' (+'+(countFilters(f)-1)+')' : '')}}</b></h4>
+                <mat-icon color="darkgray">expand_more</mat-icon>
+            </div>
+
+            <mat-menu #filterOptions="matMenu">
+                <div *ngIf="f.search != null" class="filter-search" (click)="$event.stopPropagation();">
+                    <div class="input-control mat-app-background">
+                        <input [(ngModel)]="f.search" class="mat-app-background"
+                            [placeholder]="'Shared.search' | translate">
+                        <mat-icon>search</mat-icon>
+                    </div>
+                </div>
+                <div class="filter-scroll">
+                    <section (click)="$event.stopPropagation();"
+                        style="display: flex;flex-direction: column;min-width:200px;">
+                        <ng-container *ngFor="let o of f.options">
+                            <mat-checkbox
+                                *ngIf="f.search == null || (f.search == '' || haveOption(f.search, o.name, o.value))"
+                                color="primary" [value]="o.checked" [ngModel]="o.checked"
+                                (ngModelChange)="aoFiltrar(f, o, $event)" class="mat-menu-item">
+                                {{o.name}}
+                            </mat-checkbox>
+                        </ng-container>
+                    </section>
+                </div>
+                <div class="remove-filter fl-row align-c" *ngIf="countFilters(f) > 0" (click)="cleanFilter(f);">
+                    <mat-icon color="darkgray">close</mat-icon><span>LIMPAR</span>
+                </div>
+            </mat-menu>
+
+
+        </ng-container>
+
+    </div>
+
+</div>

@@ -1,0 +1,8 @@
+<div style="display: grid !important; padding: 0 7px;">
+    <mat-label *ngIf="label" style="margin-bottom: 18px;">{{label}}</mat-label>
+    <div style="float: left;">
+        <mat-slider thumbLabel [formControl]="form" [min]="min" [max]="max" [step]="step" [value]="value"
+            (input)="onInputChange($event)" style="float: inherit;"></mat-slider>
+        <span style="font-weight: bold; width: 25px; float: left; padding: 15px 8px;">{{form.value}}</span>
+    </div>
+</div>

@@ -1,0 +1,213 @@
+<div class="bf-container" fxLayout="column" fxLayoutGap="16px">
+    <div class="div-info" fxFlex="12">
+        <div fxLayout="row" fxLayoutGap="16px">
+            <div class="col-filter" fxFlex="28">
+                <mat-button-toggle-group class="btn-toggle-app" #group="matButtonToggleGroup" [value]="rdoShowResult" (change)="radioButtonChange(group)">
+                    <mat-button-toggle value="1">Grupos/Produtos - <b>{{model.quantityGroupCompanies| number }}</b> / {{model.quantityProducts| number }}</mat-button-toggle>
+                    <mat-button-toggle value="2">Fornecedores/Catálogos - <b>{{model.quantityMatchesSupplier| number }}</b> / {{model.quantityCatalog| number }}</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <div fxFlex="71">
+                <table *ngIf="model" class="table-info">
+                    <thead>
+                        <tr>
+                            <th class="center col-5">ID BF</th>
+                            <th class="center col-50">Produto</th>
+                            <th class="center">Un.</th>
+                            <th class="center">Grupo.</th>
+                            <th class="center">SubGrupo</th>
+                            <th class="center">Empresas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="center back-blue">{{model.productId}}</td>
+                            <td class="left">{{model.name}}</td>
+                            <td class="center">{{model.unitOfMeasureAcronym}}</td>
+                            <td class="center">{{model.groupName}}</td>
+                            <td class="center">{{model.subGroupName}}</td>
+                            <td class="center">{{model.quantityCompanies| number }}</td>
+                            <td class="center no-border">
+                                <button mat-icon-button class="button-small-icon"
+                                    (click)="onExportDetailCsv(model.productId)" mat-tooltip="Exportar Csv!">
+                                    <mat-icon>file_download</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="rdoShowResult == '1'" class="scrollable-content" fxFlex="'86'">
+        <!-- Grupo -->
+        <div class="alert-empity" *ngIf="!lstProducts || lstProducts.length <= 0">
+            <h3>Não há grupos de empresas/produtos erp, para o produto BF selecionado.</h3>
+        </div>
+        <div *ngIf="lstProducts && lstProducts.length > 0">
+            <table class="table-info">
+                <thead>
+                    <tr>
+                        <th class="center">Grupo</th>
+                        <th class="center">UF</th>
+                        <th class="center">Erp ID</th>
+                        <th class="center">Produto</th>
+                        <th class="center">Un.</th>
+                        <th class="center">Compradores</th>
+                        <th class="center">Fornecedores</th>
+                        <th class="center">Cotações</th>
+                        <th class="center">Envios</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let grp of lstProducts" [ngClass]="getCssGroup(grp.companyCodeSac) ? 'body-group' : ''">
+                    <tr *ngFor="let prod of grp.products" class="tr-hover">
+                        <td class="center no-border col-5">
+                            <a mat-raised-button class="button-small" [href]="onOpenAnalysisGroup(grp.companyCodeSac)"
+                                target="_blank">{{grp.companyCodeSac}}</a>
+                        </td>
+                        <td class="center" [ngClass]="prod.stateAcronym && !prod.foundRegion ? 'back-red' : ''">
+                            {{prod.stateAcronym}}</td>
+                        <td class="center">{{prod.productErpCode}}</td>
+                        <td class="left">{{prod.productName}}</td>
+                        <td class="center">{{prod.unitOfMeasureAcronym}}</td>
+                        <td class="center">{{prod.quantityBuyer| number}}</td>
+                        <td class="center">{{prod.quantitySupplier| number}}</td>
+                        <td class="center">{{prod.quantityQuote| number}}</td>
+                        <td class="center">{{prod.quantitySend| number}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div *ngIf="rdoShowResult != '1'" class="scrollable-content" fxFlex="'86'">
+        <!-- Grupo -->
+        <div class="alert-empity" *ngIf="!lstSuppliers || lstSuppliers.length <= 0">
+            <h3>Não há Fornecedores/Catálogos, para o produto BF selecionado.</h3>
+        </div>
+        <div *ngIf="lstSuppliers && lstSuppliers.length > 0">
+            <table class="table-info">
+                <tbody *ngFor="let sup of lstSuppliers">
+                    <tr>
+                        <td class="right no-border">Fornecedor</td>
+                        <th class="left td-supplier"><span>{{sup.supplierDocument}}</span> - {{sup.supplierName}}</th>
+                        <td class="center no-border td-grid">
+                            <div *ngFor="let reg of sup.regions" class="div-region"><b>{{reg.stateAcronym}}</b></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- Products -->
+                        <td class="no-border"></td>
+                        <td colspan="2">
+                            <table class="table-info">
+                                <tbody *ngFor="let prod of sup.products">
+                                    <tr>
+                                        <th class="right">Produto</th>
+                                        <td class="left"><b>{{prod.productName}}</b></td>
+                                        <th class="right">Un.</th>
+                                        <td class="center">{{prod.acronym}}</td>
+                                        <th class="right">Marca</th>
+                                        <td class="center"><b>{{prod.brandName}}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <!-- Catalog -->
+                                        <td class="no-border"></td>
+                                        <td colspan="5" class="no-border">
+                                            <table class="table-info">
+                                                <tbody *ngFor="let cat of prod.catalogs">
+                                                    <tr>
+                                                        <th class="center">Catálogo</th>
+                                                        <td class="left">{{cat.catalogName}}</td>
+                                                        <th class="center">Vigênvia</th>
+                                                        <td class="center no-border">
+                                                            <span class="spn-date-min">{{cat.startDate| date:'dd/MM/yyyy'}}</span>
+                                                            <span class="spn-date-max">{{cat.expirationDate| date:'dd/MM/yyyy'}}</span>
+                                                        </td>
+                                                        <th class="center">Qtd</th>
+                                                        <td class="right">{{cat.availableQuantity| number }}</td>
+                                                        <th class="center">Preço</th>
+                                                        <td class="right">{{cat.price| currency:'':''}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <!-- Payment -->
+                                                        <td class="no-border"></td>
+                                                        <td class="no-border" colspan="7">
+                                                            <table class="table-info" *ngIf="cat.payments && cat.payments.length > 0">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="no-border"></th>
+                                                                        <th class="center">Descrição</th>
+                                                                        <th class="center">Tipo</th>
+                                                                        <th class="center">Parcelas</th>
+                                                                        <th class="center">%</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody *ngFor="let pay of cat.payments">
+                                                                    <tr>
+                                                                        <th class="center" *ngIf="pay.paymentConditionSupplierId > 0 && pay.paymentConditionCatalogId <= 0">Conds. Fornecedor</th>
+                                                                        <th class="center" *ngIf="pay.paymentConditionCatalogId > 0">Conds. Catálogo</th>
+                                                                        <td class="center">{{pay.paymentTypeName}} - {{pay.paymentConditionName}}</td>
+                                                                        <td class="center">{{pay.daysByPayment}} - {{pay.maturityDateTypeDescription}}</td>
+                                                                        <td class="center">{{pay.quantityInstallments| number}}</td>
+                                                                        <td class="center" *ngIf="pay.paymentConditionSupplierId > 0 && pay.paymentConditionCatalogId <= 0">{{pay.percentagSupplier| currency:'':''}}</td>
+                                                                        <td class="center" *ngIf="pay.paymentConditionCatalogId > 0">{{pay.percentagCatalog| currency:'':''}}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="no-border"></td>
+                                                                        <td class="no-border" colspan="5">
+                                                                            <table *ngIf="pay.specials && pay.specials.length > 0" class="table-info">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th class="center no-border"></th>
+                                                                                        <th class="center">Tipo</th>
+                                                                                        <th class="center">Restrição</th>
+                                                                                        <th class="center">Vigênvia</th>
+                                                                                        <th class="center">%</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody *ngFor="let sp of pay.specials">
+                                                                                    <tr
+                                                                                        *ngIf="sp.specialConditionSupplierId > 0">
+                                                                                        <th class="right no-border">Conds. Especial/Fornecedor</th>
+                                                                                        <td class="center">{{sp.restrict_SupDescription}}
+                                                                                        </td>
+                                                                                        <td *ngIf="sp.cnpj_Sup" class="center">{{sp.cnpj_Sup}}</td>
+                                                                                        <td *ngIf="sp.regionName_Sup" class="center">{{sp.regionName_Sup}}</td>
+                                                                                        <td class="center no-border">
+                                                                                            <span class="spn-date-min">{{sp.startDate_Sup| date:'dd/MM/yyyy'}}</span>
+                                                                                            <span class="spn-date-max">{{sp.expirationDate_Sup| date:'dd/MM/yyyy'}}</span>
+                                                                                        </td>
+                                                                                        <td class="right">{{sp.percentageOnPrice_Sup| currency:'':''}}</td>
+                                                                                    </tr>
+                                                                                    <tr *ngIf="sp.specialConditionCatalogId > 0">
+                                                                                        <th class="right no-border">Conds. Especial/Catálogo</th>
+                                                                                        <td class="center">{{sp.restrict_CatDescription}}</td>
+                                                                                        <td *ngIf="sp.cnpj_Cat" class="center">{{sp.cnpj_Cat}}</td>
+                                                                                        <td *ngIf="sp.regionName_Cat" class="center">{{sp.regionName_Cat}}</td>
+                                                                                        <td class="center no-border">
+                                                                                            <span class="spn-date-min">{{sp.startDate_Cat| date:'dd/MM/yyyy'}}</span>
+                                                                                            <span class="spn-date-max">{{sp.expirationDate_Cat| date:'dd/MM/yyyy'}}</span>
+                                                                                        </td>
+                                                                                        <td class="right">{{sp.percentageOnPrice_Cat| currency:'':''}}</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

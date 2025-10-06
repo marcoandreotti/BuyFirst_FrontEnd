@@ -1,0 +1,165 @@
+.produtos {
+  margin: 20px 0px;
+}
+
+.example-tab-text {
+  vertical-align: middle;
+  font-size: 17px;
+  padding-top: 5px;
+}
+
+.mat-radio-button {
+  margin-left: 7px;
+}
+
+.form-restrict {
+  margin-top: 10px;
+}
+
+h4 {
+  margin-bottom: 15px !important;
+}
+
+.div-restrict-opt {
+  width: 30%;
+  float: left;
+}
+
+.div-restrict-form {
+  width: 70%;
+  float: right;
+}
+
+.total-records {
+  font-size: smaller;
+  padding: 2px;
+  border: #c7c7c7 solid 0.1rem;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+
+.mat-icon-tabs {
+  font-size: 1.1rem;
+  height: 12px;
+  font-weight: 700;
+}
+
+
+.card-payment {
+  margin-top: 5px;
+  border: var(--theme-primary-500) solid 0.1rem;
+}
+
+.mat-card-avatar {
+  height: 30px;
+  width: 30px;
+  background-size: cover;
+  border: var(--theme-primary-500) solid 0.1rem;
+
+  .mat-icon {
+    margin: 13%;
+  }
+}
+
+.mat-card-header-text {
+  margin: 3px 16px !important;
+}
+
+
+.payment-type {
+  margin-left: 20px;
+
+  h3 {
+    font-size: 1.37em;
+    ;
+    font-weight: 600;
+    padding: 0;
+    margin: 12px 2px 12px;
+    border-bottom: var(--theme-primary-500) solid 0.1rem;
+  }
+
+  .card-item-payment {
+    margin-left: 20px;
+    padding: 0 4px 11px;
+  }
+
+  .mat-table {
+    width: 100%;
+
+    th {
+      text-align: left;
+    }
+
+    td {
+      padding: 9px 4px 9px 4px;
+      border-bottom: #555555 solid 0.1rem;
+    }
+
+    .tr-selected {
+      color: var(--theme-primary-500);
+    }
+
+    .tr-unselected {
+      color: #adadad;
+    }
+
+    .td-center {
+      text-align: center;
+    }
+
+    .td-right {
+      text-align: right;
+      margin-right: 3px;
+    }
+
+    .td-action {
+      text-align: center;
+      border-bottom: none;
+
+      .btn-margin-3 {
+        margin-right: 3px;
+      }
+    }
+
+    .button-margin {
+      margin-left: 6px;
+    }
+  }
+}
+
+.table-special {
+  font-size: x-small;
+  background-color: #e3efe2;
+  color: #424242;
+}
+
+.table-special-inactive {
+  font-size: x-small;
+  background-color: #efefef;
+  color: var(--theme-primary-500);
+}
+
+.icon-special {
+  color: #e3efe2;
+}
+
+.icon-special-inactive {
+  color: #efefef;
+}
+
+.btn-products {
+  margin-right: 5px;
+}
+
+.btn-analise {
+  margin-right: 5px;
+  background-color: #e4e9ff;
+  color: #424242;
+}
+
+.div-alert {
+  background-color: #f44336;
+  padding: 17px;
+  border-radius: 5px;
+  color: #fff;
+}

@@ -1,0 +1,55 @@
+<div fxLayout="row" fxLayoutGap="16px">
+   <div [fxFlex]="showTypesGrid ? '78' : '100'" fxFlex.xs="100" fxFlex.sm="100" [fxFlex.xl]="showTypesGrid ? '78' : '100'" [fxFlex.md]="showTypesGrid ? '78' : '100'">
+      <app-form (form)="form" [model]="model" [formRows]="formRow" (onSubmit)="formSubmit($event)"></app-form>
+   </div>
+   <div *ngIf="showTypesGrid" fxFlex="22" fxFlex.xs="100" fxFlex.sm="100" fxFlex.xl="22" fxFlex.md="22">
+      <div fxLayout="row wrap" fxLayoutGap="26px" class="row-buttons">
+         <div fxFlex="18" fxFlex.xs="100" fxFlex.sm="50" fxFlex.xl="20" fxFlex.md="18">
+            <button mat-button mat-raised-button [matMenuTriggerFor]="menuFavorite" color="lightgray" [matBadge]="totalFavorite" matBadgeColor="accent">
+               <mat-icon [color]="totalFavorite > 0 ? 'primary' : ''">favorite</mat-icon>
+            </button>
+            <mat-menu #menuFavorite="matMenu">
+               <button mat-menu-item (click)="onFavoriteSubmit()">
+                  <mat-icon>visibility</mat-icon>
+                  <span>Exibir favoritos</span>
+               </button>
+               <button mat-menu-item (click)="onDeleteAllFavoriteSubmit()">
+                  <mat-icon>delete_forever</mat-icon>
+                  <span>Limpar favoritos</span>
+               </button>
+            </mat-menu>
+         </div>
+         <div fxFlex="18" fxFlex.xs="100" fxFlex.sm="50" fxFlex.xl="20" fxFlex.md="18">
+            <button mat-button mat-raised-button [matMenuTriggerFor]="menuShoppingCart" color="lightgray" [matBadge]="totalShoppingCart" matBadgeColor="accent">
+               <mat-icon [color]="totalShoppingCart > 0 ? 'primary' : ''">shopping_cart</mat-icon>
+            </button>
+            <mat-menu #menuShoppingCart="matMenu">
+               <button mat-menu-item (click)="onShoppingCartSubmit()">
+                  <mat-icon>visibility</mat-icon>
+                  <span>Exibir compras</span>
+               </button>
+               <button mat-menu-item>
+                  <mat-icon>shopping_cart</mat-icon>
+                  <span>Finalizar compras</span>
+               </button>
+               <button mat-menu-item (click)="onDeleteAllShoppingCartSubmit()">
+                  <mat-icon>remove_shopping_cart</mat-icon>
+                  <span>Limpar compras</span>
+               </button>
+            </mat-menu>
+         </div>
+         <div fxFlex="18" fxFlex.xs="100" fxFlex.sm="50" fxFlex.xl="20" fxFlex.md="18">
+            <button mat-button mat-raised-button [color]="selectedButtonToggleVal == 'list' ? 'primary' : 'lightgray'"
+               (click)="onButtonToggleSubmit('list')">
+               <mat-icon>view_list</mat-icon>
+            </button>
+         </div>
+         <div fxFlex="18" fxFlex.xs="100" fxFlex.sm="50" fxFlex.xl="20" fxFlex.md="18">
+            <button mat-button mat-raised-button [color]="selectedButtonToggleVal == 'list' ? 'lightgray' : 'primary'"
+               (click)="onButtonToggleSubmit('cards')">
+               <mat-icon>grid_view</mat-icon>
+            </button>
+         </div>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,16 @@
+@media (min-width: 1024px) and (max-width: 1366px) {
+  ::ng-deep .mat-column-name {
+      width: 150px !important;
+  }
+}
+
+::ng-deep .mat-column-regionId {
+  flex: none !important;
+  width: 80px !important;
+}
+
+::ng-deep .mat-column-name {
+  flex: none !important;
+  width: 700px !important;
+}
+

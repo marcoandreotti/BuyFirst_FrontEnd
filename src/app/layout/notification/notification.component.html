@@ -1,0 +1,14 @@
+<div [@notificationOpened]="notificationOpened" class="notification-container mat-app-background">
+
+    <div class="notification-scroll">
+        <div *ngFor="let notificacao of (notificacoes$ | async)" class="notification-item">
+
+            <h4 class="notification-title">{{notificacao.descricao}}</h4>
+            <div class="fl-row aling-c justify-end w100">
+                <mat-icon class="notification-data">alarm</mat-icon>
+                <h4 class="notification-data">{{getStringDate(notificacao.data)}}</h4>
+            </div>
+
+        </div>
+    </div>
+</div>

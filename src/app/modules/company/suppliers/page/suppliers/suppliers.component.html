@@ -1,0 +1,21 @@
+<div class="bf-container">
+  <app-grid *ngIf="suppliers$ != null"
+          (onFilter)="onFilter($event)"
+          (pageChange)="onPageEvent($event)"
+          (onChangeSorterValue)="changeSorter($event)"
+          [alwaysFilters]="true"
+          [columns]="cols"
+          [displayedColumns]="displayedColumns"
+          [filterModel]="lastFilter"
+          [filters]="filters"
+          [itemMenus]="itemMenus"
+          [modelIdentity]="modelIdentity"
+          [pageIndex]="pageIndex"
+          [pageLength]="suppliers$.totalRecords"
+          [pageSize]="pageSize"
+          [rows]="suppliers$.data"
+          [specialFilter]="true"
+          [title]="gridSuppliers"
+          [useSelect]="false">
+  </app-grid>
+</div>

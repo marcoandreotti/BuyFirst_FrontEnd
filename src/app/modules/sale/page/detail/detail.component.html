@@ -1,0 +1,199 @@
+<div class="bf-container">
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header><mat-panel-title>Dados do pedido</mat-panel-title></mat-expansion-panel-header>
+        <div class="header-venda">
+            <table>
+                <tbody>
+                    <tr>
+                        <td [rowSpan]="model.note != null && model.note.length > 0 ? '4' : '2'" class="text-center">
+                            <div class="icon-style"><mat-icon>shopping_cart</mat-icon></div>
+                        </td>
+                        <th class="text-left">Pedido</th>
+                        <th class="text-left">ERP. Nro.</th>
+                        <th class="text-left">Data/Hora do pedido</th>
+                        <th class="text-left" *ngIf="!displayElement">Status Atual</th>
+                        <td rowspan="2">
+                            <div class="buttons-container">
+                                <button mat-raised-button class="mat-button" color="lightgray" (click)="StatusVendaShow()">
+                                    <mat-icon inline=true color="primary">history</mat-icon>
+                                    <span class="text-button">Histórico</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">{{model.orderId}}</td>
+                        <td class="text-left">{{model.externalCode}}</td>
+                        <td class="text-left">{{model.openingDate| date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td class="text-left" *ngIf="!displayElement">
+                            {{model.statuses[0].name}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="model.note != null && model.note.length > 0">
+                        <th class="text-left">Observações</th>
+                    </tr>
+                    <tr *ngIf="model.note != null && model.note.length > 0">
+                        <td colspan="2">{{model.note}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="total-venda">
+            <table>
+                <tbody>
+                    <tr>
+                        <th class="text-right">Total da venda</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">{{model.totalOrder| currency:'BRL':true:'1.2-2'   }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="status-venda" *ngIf="displayElement">
+            <table class="table-status">
+                <tbody *ngFor="let st of model.statuses">
+                    <tr>
+                        <td rowspan="2" class="text-center">
+                            <div class="icon-style">
+                                <mat-icon>history</mat-icon>
+                            </div>
+                        </td>
+                        <!-- <th class="text-left">Id</th> -->
+                        <th class="text-left">Data</th>
+                        <th class="text-left">Status</th>
+                        <th class="text-left">Anotação</th>
+                    </tr>
+                    <tr class="row-items">
+                        <!-- <td class="text-left">{{st.orderStatusId}}</td> -->
+                        <td class="text-left">{{st.created| date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td class="text-left">{{st.name}}</td>
+                        <td class="text-left" *ngIf="st.statusDescription">{{st.statusDescription}}</td>
+                        <td class="text-left" *ngIf="!st.statusDescription">{{st.description}}</td>
+                    </tr>
+                    <tr>
+                        <td><br></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-expansion-panel>
+    <div class="separetor"></div>
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Dados do cliente</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td rowspan="2" class="text-center">
+                            <div class="icon-style"><mat-icon>account_circle</mat-icon></div>
+                        </td>
+                        <th class="text-left">CNPJ</th>
+                        <th class="text-left">Razão Social</th>
+                        <th class="text-left">Endereço de entrega</th>
+                        <th class="text-left">Endereço de cobrança</th>
+                    </tr>
+                    <tr>
+                        <td class="text-left">{{model.buyer.document}}</td>
+                        <td class="text-left">{{model.buyer.name}}</td>
+                        <td class="text-left">{{deliveryAddress}}</td>
+                        <td class="text-left">{{billingAddress}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-expansion-panel>
+    <div class="separetor"></div>
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Condições de pagamento</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td rowspan="2" class="text-center">
+                            <div class="icon-style"><mat-icon>monetization_on</mat-icon></div>
+                        </td>
+                        <th class="text-left">Condição</th>
+                        <th class="text-left">Tipo de vencimento</th>
+                        <th class="text-left">Dias para o pagamento</th>
+                        <th class="text-left">Quantidade de parcelas</th>
+                    </tr>
+                    <tr>
+                        <td class="text-left">{{model.paymentCondition.name}}</td>
+                        <td class="text-left">{{model.paymentCondition.maturityDateType}}</td>
+                        <td class="text-left">{{model.paymentCondition.daysByPayment}}</td>
+                        <td class="text-left">{{model.paymentCondition.quantityInstallments}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-expansion-panel>
+    <div class="separetor"></div>
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Produtos adquiridos</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+            <table>
+                <tbody *ngFor="let prod of model.products">
+                    <tr>
+                        <td rowspan="2" class="text-center">
+                            <div class="icon-style"><mat-icon>build</mat-icon></div>
+                        </td>
+                        <th class="text-left">Código de referência</th>
+                        <th class="text-left">Descrição</th>
+                        <th class="text-left">Quantidade</th>
+                        <th class="text-left">Unidade de medida</th>
+                        <th class="text-left">Marca</th>
+                        <th class="text-left">Valor unitário</th>
+                    </tr>
+                    <tr class="row-items">
+                        <td class="text-left">{{prod.referenceCode}}</td>
+                        <td class="text-left">{{prod.name}}</td>
+                        <td class="text-left">{{prod.quantity}}</td>
+                        <td class="text-left">{{prod.unitOfMeasureName}}</td>
+                        <td class="text-left">{{prod.brandName}}</td>
+                        <td class="text-left">{{prod.price| currency:'BRL':true:'1.2-2'}}</td>
+                    </tr>
+                    <tr><td><br></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-expansion-panel>
+    <div class="separetor"*ngIf="model.waitingQueues"></div>
+    <mat-expansion-panel *ngIf="model.waitingQueues">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Ocorrências</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+            <table>
+                <tbody *ngFor="let queue of model.waitingQueues">
+                    <tr>
+                        <td rowspan="2" class="text-center">
+                            <div class="icon-style icon-style-error">
+                                <mat-icon>error</mat-icon>
+                            </div>
+                        </td>
+                        <th class="text-left">Id</th>
+                        <th class="text-left">Mensagem</th>
+                        <th class="text-left">Quantidade</th>
+                        <th class="text-left">Valor unitário</th>
+                    </tr>
+                    <tr class="row-items">
+                        <td class="text-left">{{queue.orderProductWaitingQueueId}}</td>
+                        <td class="text-left">{{queue.message}}</td>
+                        <td class="text-left">{{queue.quantity}}</td>
+                        <td class="text-left">R$ {{queue.price}}</td>
+                    </tr>
+                    <tr>
+                        <td><br></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-expansion-panel>
+</div>

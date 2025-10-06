@@ -1,0 +1,85 @@
+<div id="dialog-summary">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+        <div class="fl-row title">
+            <mat-icon class="header-icon" color="primary">military_tech</mat-icon>
+            <h2 mat-dialog-title><span class="span-title">{{model.buyerName}}</span> - Pedido - <b>{{model.orderSolId}}</b></h2>
+        </div>
+    </div>
+    <div mat-dialog-content class="dialog-summary-corpo mat-app-background">
+        <div *ngIf="model" class="div-container" fxLayout="column wrap" fxLayoutGap="16px">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="right td-label">Data:</td>
+                        <th class="left">{{model.openingDate| date:'dd/MM/yyyy HH:mm'}}</th>
+                    </tr>                    
+                    <tr>
+                        <td class="right td-label">Fornecedor: </td>
+                        <th class="left">
+                            <p>{{model.supplierName}}</p>
+                            <p>{{model.supplierLocation}}</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="right td-label">Cobrança: </td>
+                        <th class="left">
+                            <p>{{model.billingAddress.street}}, {{model.billingAddress.number ? model.billingAddress.number : 'S/N'}}</p>
+                            <p>{{model.billingAddress.location}} / {{model.billingAddress.stateAcronym}}</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="right td-label">Entrega: </td>
+                        <th class="left">
+                            <p>{{model.deliveryAddress.street}}, {{model.billingAddress.number ? model.billingAddress.number : 'S/N'}}</p>
+                            <p>{{model.deliveryAddress.location}} / {{model.billingAddress.stateAcronym}}</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table class="table-products">
+                                <thead>
+                                    <tr>
+                                        <td class="center td-label">Referencia</td>
+                                        <td class="center td-label">Produto</td>
+                                        <td class="center td-label">Marca</td>
+                                        <td class="center td-label">Quantidade</td>
+                                        <td class="center td-label">Valor Unit.</td>        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let prod of model.products">
+                                        <th class="center">{{prod.productRetry.referenceCode}}</th>
+                                        <th class="left">
+                                            {{prod.productRetry.productName}}
+                                            <p *ngIf="prod.productRetry.productNote" class="p-note">{{prod.productRetry.productNote}}</p>
+                                        </th>
+                                        
+                                        <th class="left" *ngIf="prod.productRetry.brandNote" class="td-brand-note">{{prod.productRetry.brandNote}}</th>
+                                        <th class="left" *ngIf="!prod.productRetry.brandNote">{{prod.productRetry.brandName}}</th>
+                                        
+                                        <th class="right">{{prod.quantity| currency:'':''}}</th>
+                                        <th class="right">{{prod.productRetry.price| currency:'':''}}</th>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="right td-label">Total:</td>
+                                        <th colspan="2" class="right td-price">{{model.amount| currency:'':''}}</th>
+                                    </tr>
+                                    <tr *ngIf="model.totalTaxes > 0">
+                                        <td colspan="3" class="right td-label">Impo/Impostos:</td>
+                                        <th colspan="2" class="right td-price">{{model.totalTaxes| currency:'':''}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div mat-dialog-actions class="dialog-summary-botoes mat-app-background">
+        <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Fechar</button>
+        <!-- <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="onSubmit()">Gerar pedidos</button> -->
+    </div>
+</div>

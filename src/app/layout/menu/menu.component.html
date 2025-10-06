@@ -1,0 +1,26 @@
+<div class="menu mat-app-background" [ngClass]="{'dark': (isDark$ | async)}" [class.expanded]="(isOpened$  | async)">
+
+  <div (click)="expand()" (mouseleave)="subLeave($event)" class="item fechar desktop-toggle">
+    <mat-icon color="primary">{{(isOpened$ | async) ? 'close' : 'menu'}}</mat-icon>
+    <app-logo></app-logo>
+  </div>
+
+  <div class="menu-itens">
+    <ng-container *ngFor="let m of menus, let i = index">
+      <div class="item btn" [class.active]="hoveredMenu == i || m.rota === rotaAtual.replace('/','')"
+      (click)="goToRoute(m.rota)">
+      <mat-icon>{{m.icone}}</mat-icon>
+      <h4 class="label">{{m.nome}}</h4>
+    </div>
+  </ng-container>
+
+  <div *ngIf="auth" (click)="logOut()" class="logout">
+    <mat-icon class="icone">close</mat-icon>
+    <h4>{{ 'Login.logout' | translate }}</h4>
+    </div>
+  </div>
+
+</div>
+
+<div class="menu-background" (click)="expand()" [class.expanded]="(isOpened$  | async)">
+</div>

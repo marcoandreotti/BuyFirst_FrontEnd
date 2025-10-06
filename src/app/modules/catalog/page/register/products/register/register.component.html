@@ -1,0 +1,25 @@
+<div class="bf-container crud">
+  <mat-card>
+    <div class="card-crud">
+      <h2><b> Gerenciando Produtos</b></h2>
+      <div class="form-crud">
+        <app-form [(form)]="catalogProductForm" [model]="model" [formRows]="form"></app-form>
+        <div class="div-note" *ngIf="productType == 2 || productType == 3">
+          <app-form [(form)]="noteForm" [model]="modelNote" [formRows]="formNote"></app-form>
+
+          <!-- <form class="form-cadastro" [formGroup]="noteForm">
+            <ng-container>
+              <mat-form-field class="w100" appearance="outline">
+                <mat-label>Observações</mat-label>
+                <textarea matInput placeholder="Observações" [formControl]="noteText"></textarea>
+              </mat-form-field>
+            </ng-container>
+          </form> -->
+        </div>        
+        <div class="fl-row button-large justify-end">
+          <button class="large" mat-raised-button color="primary" (click)="save()" [style.color]="'white'">Salvar</button>
+        </div>
+      </div>
+    </div>
+</mat-card>
+</div>

@@ -1,0 +1,133 @@
+<div id="dialog-summary">
+   <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+      <div class="fl-row title">
+         <mat-icon class="header-icon" color="primary">military_tech</mat-icon>
+         <h2 mat-dialog-title>Resumo de {{model ? model.suppliers.length : 0}} pedido{{!model ? '' :
+            model.suppliers.length > 1 ? 's' : ''}}...
+         </h2>
+      </div>
+   </div>
+   <div mat-dialog-content class="dialog-summary-corpo mat-app-background">
+      <div *ngIf="model" class="div-container" fxLayout="column wrap" fxLayoutGap="16px">
+         <div *ngIf="selectedAddress" class="div-form" fxFlex>
+            <label class="label-div">Endreço para cobrança</label>
+            <mat-card style="margin-top: 10px;" class="card-scale-md">
+               <div fxLayout="row" fxLayoutGap="16px">
+                  <div *ngIf="listAddress.length > 1" class="div-form-action" fxFlex="5">
+                     <button mat-raised-button (click)="stepAddresses(-1)"><mat-icon>arrow_back_ios</mat-icon></button>
+                  </div>
+                  <div [fxFlex]="listAddress.length > 1 ? 90 : 100">
+                     <div class="div-left div-info">
+                        <label>CEP</label>
+                        <span class="spn-text">{{selectedAddress.zipCode}}</span>
+                     </div>
+                     <div class="div-divider"></div>
+                     <div class="div-left div-info">
+                        <label>Endereço</label>
+                        <span class="spn-text">{{selectedAddress.street}}</span>
+                     </div>
+                     <div class="div-divider"></div>
+                     <div class="div-left div-info">
+                        <label>Nro</label>
+                        <span class="spn-text">{{selectedAddress.number}}</span>
+                     </div>
+                     <div class="div-divider"></div>
+                     <div class="div-left div-info">
+                        <label>Bairro</label>
+                        <span class="spn-text">{{selectedAddress.neighborhood}}</span>
+                     </div>
+                     <div class="div-divider"></div>
+                     <div class="div-left div-info">
+                        <label>Complemento</label>
+                        <span class="spn-text">{{selectedAddress.complement}}</span>
+                     </div>
+                     <div class="div-divider"></div>
+                     <div class="div-left div-info">
+                        <label>Cidade</label>
+                        <span class="spn-text">{{selectedAddress.location}} /
+                           <b>{{selectedAddress.stateAcronym}}</b></span>
+                     </div>
+                  </div>
+                  <div *ngIf="listAddress.length > 1" class="div-form-action" fxFlex="5">
+                     <button mat-raised-button
+                        (click)="stepAddresses(1)"><mat-icon>arrow_forward_ios</mat-icon></button>
+                  </div>
+               </div>
+            </mat-card>
+         </div>
+         <div class="div-orders" fxFlex>
+            <table *ngFor="let sup of model.suppliers">
+               <thead>
+                  <tr class="tr-title">
+                     <th colspan="6" class="left title-company">{{sup.supplier.tradingName}}</th>
+                  </tr>
+                  <tr class="tr-title">
+                     <th colspan="4" class="left">Pagto: {{sup.paymentDescription}}</th>
+                     <th colspan="2" class="right">Frete: {{sup.freightTypeDescription}}</th>
+                  </tr>
+                  <tr class="tr-head-normal">
+                     <td class="left">Código</td>
+                     <td class="left">Produto</td>
+                     <td class="left">Marca</td>
+                     <td class="right">Qdt</td>
+                     <td class="right">Valor Unit.</td>
+                     <td class="right">Total</td>
+                  </tr>
+               </thead>
+               <tbody *ngFor="let prod of sup.products">
+                  <tr>
+                     <td class="left">{{prod.referenceCode}}</td>
+                     <td class="left">
+                        {{prod.productName}}
+                        <p *ngIf="prod.productNote" class="p-note">{{prod.productNote}}</p>
+                     </td>
+                     
+                     <td class="left" *ngIf="prod.brandNote" class="td-brand-note">{{prod.brandNote}}</td>
+                     <td class="left" *ngIf="!prod.brandNote">{{prod.brandName}}</td>
+  
+                     <td class="right">{{prod.quantity| currency:'':''}}</td>
+                     <td class="right">{{prod.price| currency:'':''}}</td>
+                     <td class="right">{{prod.totalWithOutTaxe| currency:'':''}}</td>
+                  </tr>
+                  <tr *ngIf="prod.deliveryAddresses && prod.deliveryAddresses.length > 1">
+                     <td class="no-border"></td>
+                     <td colspan="5" class="body-result">
+                        <table class="table-info">
+                           <thead>
+                              <tr>
+                                 <th class="left">Endereço</th>
+                                 <th class="center">Quantidade</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr *ngFor="let ad of prod.deliveryAddresses">
+                                 <td class="left">{{ad.concatAddress}}</td>
+                                 <td class="right">{{ad.quantity| currency:'':''}}</td>
+                              </tr>
+                              <tr>
+                                 <td class="center error">Serão gerados {{prod.deliveryAddresses.length}} pedidos distintos por endereço de entrega </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </td>
+                  </tr>
+               </tbody>
+               <tfoot>
+                  <tr class="tr-title">
+                     <th colspan="3" class="left">Itens: {{sup.products.length}}</th>
+                     <th colspan="3" class="right">Valor total: {{sup.totalWithOutTaxe| currency:'':''}}</th>
+                  </tr>
+                  <tr *ngIf="sup.totalWithTaxe > sup.totalWithOutTaxe" class="tr-title">
+                     <th colspan="3"></th>
+                     <th colspan="3" class="right">Valor total + impostos: {{sup.totalWithTaxe| currency:'':''}}</th>
+                  </tr>
+               </tfoot>
+            </table>
+         </div>
+      </div>
+   </div>
+   <div mat-dialog-actions class="dialog-summary-botoes mat-app-background">
+      <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Cancelar</button>
+      <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="onSubmit()">Gerar pedidos</button>
+   </div>
+</div>

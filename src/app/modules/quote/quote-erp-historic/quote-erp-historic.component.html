@@ -1,0 +1,216 @@
+<div class="bf-container" fxLayout="column" fxLayoutGap="16px">
+    <div fxFlex="10">
+        <div fxLayout="row" fxLayoutGap="16px">
+            <div class="col-filter" fxFlex="30">
+                <mat-button-toggle-group #group="matButtonToggleGroup" [value]="rdoShowResult"
+                    (change)="radioButtonChange(group)">
+                    <mat-button-toggle value="1">Produtos</mat-button-toggle>
+                    <mat-button-toggle value="2" disabled>Compradores</mat-button-toggle>
+                </mat-button-toggle-group>
+                <!-- <mat-slide-toggle class="left-10" [(ngModel)]="showReferences" color="primary" mat-tooltip="Referencias"></mat-slide-toggle> -->
+            </div>
+            <div class="col-action" fxFlex="50">
+                <app-form [(form)]="searchForm" [model]="modelSerarch" [formRows]="formSearch" [useErrors]="true"></app-form>
+            </div>
+            <div class="col-action" fxFlex="5">
+                <button mat-raised-button class="button-menu-top" (click)="onRefreshProds()"
+                    matTooltip="Limpa seleção e efetua a busca novamente!">
+                    <mat-icon>bolt</mat-icon>
+                </button>
+            </div>
+            <div class="col-action" fxFlex="5">
+                <button mat-raised-button class="button-menu-top" (click)="onSelectAll()"
+                    matTooltip="Seleciona todos os registros exibidos abaixo!">
+                    <mat-icon>checklist</mat-icon>
+                </button>
+            </div>
+            <div class="col-action" fxFlex="5">
+                <button mat-raised-button class="button-menu-top" (click)="onClearAll()" color="warn"
+                    matTooltip="Limpa todos os filtros! (Trará todos os registros!)">
+                    <mat-icon>do_not_touch</mat-icon>
+                </button>
+            </div>
+            <div class="col-action" fxFlex="5">
+                <button mat-raised-button class="button-menu-top" [matMenuTriggerFor]="menuProduct">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menuProduct="matMenu">
+                    <button mat-menu-item (click)="onExportCsv()">
+                        <mat-icon>file_download</mat-icon>
+                        <span>Exportar CSV</span>
+                    </button>
+                    <button mat-menu-item (click)="onExportAnalysisCsv()">
+                        <mat-icon>downloading</mat-icon>
+                        <span>Exp. analitico CSV</span>
+                    </button>
+                </mat-menu>
+                <!-- <button mat-raised-button class="button-menu-top"  (click)="onExportCsv()"
+                    matTooltip="Exportar para CSV!">
+                    <mat-icon>file_download</mat-icon>
+                </button> -->
+            </div>
+        </div>
+    </div>
+    <div class="scrollable-content" [fxFlex]="!existsSelected ? '84' : '79'">
+        <div class="alert-empity" *ngIf="lstProds && lstProds.length <= 0">
+            <h3>Não há registros para o filtro especificado.</h3>
+        </div>
+        <table class="table-info" *ngIf="lstProds && lstProds.length > 0">
+            <thead>
+                <tr>
+                    <th class="right col-1">
+                        <button mat-button (click)="showModalFilter('productId')"
+                            [color]="!filterReq.productId ? '' : 'warn'">
+                            <mat-icon>search</mat-icon>ID BF
+                            <mat-icon *ngIf="sort.active == 'productId'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                    <th class="right col-1">
+                        <button mat-button (click)="showModalFilter('companyCodeSac')"
+                            [color]="!filterReq.companyCodeSac ? '' : 'warn'">
+                            <mat-icon>search</mat-icon>Grupo
+                            <mat-icon *ngIf="sort.active == 'companyCodeSac'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                    <th class="right col-1">
+                        <button mat-button (click)="showModalFilter('productErpCode')"
+                            [color]="!filterReq.productErpCode ? '' : 'warn'">
+                            <mat-icon>search</mat-icon>ID ERP
+                            <mat-icon *ngIf="sort.active == 'productErpCode'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                    <th class="left col-70">
+                        <button mat-button (click)="showModalFilter('default')"
+                            [color]="filterReq.productArguments.length > 0 ? 'warn' : ''">
+                            <mat-icon>search</mat-icon>Produto
+                            <mat-icon *ngIf="sort.active == 'default' || sort.active == 'productName'">{{iconSort}}
+                            </mat-icon>
+                        </button>
+                    </th>
+                    <th class="center">
+                        <button mat-button [matMenuTriggerFor]="menuUnitOfMeasureAcronym" >Un.<mat-icon *ngIf="sort.active == 'unitOfMeasureAcronym'">{{iconSort}}</mat-icon></button>
+                        <mat-menu #menuUnitOfMeasureAcronym="matMenu">
+                          <button mat-menu-item (click)="onAscendant('unitOfMeasureAcronym')"><mat-icon [color]="sort.active == 'unitOfMeasureAcronym' && sort.direction == 'asc' ? 'primary' : ''">south</mat-icon><span>Ascendente</span></button>
+                          <button mat-menu-item (click)="onDescendant('unitOfMeasureAcronym')"><mat-icon [color]="sort.active == 'unitOfMeasureAcronym' && sort.direction == 'desc' ? 'primary' : ''">north</mat-icon><span>Descendente</span></button>
+                        </mat-menu>            
+                    </th>
+                    <th class="center col-1-small">
+                        <button mat-button [matMenuTriggerFor]="menuAverageQuantity" >Qdt Méd<mat-icon *ngIf="sort.active == 'averageQuantity'">{{iconSort}}</mat-icon></button>
+                        <mat-menu #menuAverageQuantity="matMenu">
+                          <button mat-menu-item (click)="onAscendant('averageQuantity')"><mat-icon [color]="sort.active == 'averageQuantity' && sort.direction == 'asc' ? 'primary' : ''">south</mat-icon><span>Ascendente</span></button>
+                          <button mat-menu-item (click)="onDescendant('averageQuantity')"><mat-icon [color]="sort.active == 'averageQuantity' && sort.direction == 'desc' ? 'primary' : ''">north</mat-icon><span>Descendente</span></button>
+                        </mat-menu>            
+                    </th>
+                    <th class="center col-1-small">
+                        <button mat-button [matMenuTriggerFor]="menuAveragePrice" >Valor Méd<mat-icon *ngIf="sort.active == 'averagePrice'">{{iconSort}}</mat-icon></button>
+                        <mat-menu #menuAveragePrice="matMenu">
+                          <button mat-menu-item (click)="onAscendant('averagePrice')"><mat-icon [color]="sort.active == 'averagePrice' && sort.direction == 'asc' ? 'primary' : ''">south</mat-icon><span>Ascendente</span></button>
+                          <button mat-menu-item (click)="onDescendant('averagePrice')"><mat-icon [color]="sort.active == 'averagePrice' && sort.direction == 'desc' ? 'primary' : ''">north</mat-icon><span>Descendente</span></button>
+                        </mat-menu>            
+                    </th>
+
+                    <th class="center col-1-small">
+                        <button mat-button [matMenuTriggerFor]="menuQuantityQuote" >Cotações<mat-icon *ngIf="sort.active == 'quantityQuote'">{{iconSort}}</mat-icon></button>
+                        <mat-menu #menuQuantityQuote="matMenu">
+                          <button mat-menu-item (click)="onAscendant('quantityQuote')"><mat-icon [color]="sort.active == 'quantityQuote' && sort.direction == 'asc' ? 'primary' : ''">south</mat-icon><span>Ascendente</span></button>
+                          <button mat-menu-item (click)="onDescendant('quantityQuote')"><mat-icon [color]="sort.active == 'quantityQuote' && sort.direction == 'desc' ? 'primary' : ''">north</mat-icon><span>Descendente</span></button>
+                        </mat-menu>            
+                    </th>
+                    <th class="center col-1-small">
+                        <button mat-button [matMenuTriggerFor]="menuQuantitySend" >Envios<mat-icon *ngIf="sort.active == 'quantitySend'">{{iconSort}}</mat-icon></button>
+                        <mat-menu #menuQuantitySend="matMenu">
+                          <button mat-menu-item (click)="onAscendant('quantitySend')"><mat-icon [color]="sort.active == 'quantitySend' && sort.direction == 'asc' ? 'primary' : ''">south</mat-icon><span>Ascendente</span></button>
+                          <button mat-menu-item (click)="onDescendant('quantitySend')"><mat-icon [color]="sort.active == 'quantitySend' && sort.direction == 'desc' ? 'primary' : ''">north</mat-icon><span>Descendente</span></button>
+                        </mat-menu>            
+                    </th>
+                    <th class="center col-1-small">
+                        <button mat-button [matMenuTriggerFor]="menuQuantityBuyer" >Clientes<mat-icon *ngIf="sort.active == 'quantityBuyer'">{{iconSort}}</mat-icon></button>
+                        <mat-menu #menuQuantityBuyer="matMenu">
+                          <button mat-menu-item (click)="onAscendant('quantityBuyer')"><mat-icon [color]="sort.active == 'quantityBuyer' && sort.direction == 'asc' ? 'primary' : ''">south</mat-icon><span>Ascendente</span></button>
+                          <button mat-menu-item (click)="onDescendant('quantityBuyer')"><mat-icon [color]="sort.active == 'quantityBuyer' && sort.direction == 'desc' ? 'primary' : ''">north</mat-icon><span>Descendente</span></button>
+                        </mat-menu>            
+                    </th>
+                    <th class="center col-1-small">
+                        <button mat-button [matMenuTriggerFor]="menuQuantitySupplier" >Fornecs<mat-icon *ngIf="sort.active == 'quantitySupplier'">{{iconSort}}</mat-icon></button>
+                        <mat-menu #menuQuantitySupplier="matMenu">
+                          <button mat-menu-item (click)="onAscendant('quantitySupplier')"><mat-icon [color]="sort.active == 'quantitySupplier' && sort.direction == 'asc' ? 'primary' : ''">south</mat-icon><span>Ascendente</span></button>
+                          <button mat-menu-item (click)="onDescendant('quantitySupplier')"><mat-icon [color]="sort.active == 'quantitySupplier' && sort.direction == 'desc' ? 'primary' : ''">north</mat-icon><span>Descendente</span></button>
+                        </mat-menu>            
+                    </th>
+                    <th class="center col-1-small">
+                        <button mat-button [matMenuTriggerFor]="menuQuantityCatalog" >Catálogos<mat-icon *ngIf="sort.active == 'quantityCatalog'">{{iconSort}}</mat-icon></button>
+                        <mat-menu #menuQuantityCatalog="matMenu">
+                          <button mat-menu-item (click)="onAscendant('quantityCatalog')"><mat-icon [color]="sort.active == 'quantityCatalog' && sort.direction == 'asc' ? 'primary' : ''">south</mat-icon><span>Ascendente</span></button>
+                          <button mat-menu-item (click)="onDescendant('quantityCatalog')"><mat-icon [color]="sort.active == 'quantityCatalog' && sort.direction == 'desc' ? 'primary' : ''">north</mat-icon><span>Descendente</span></button>
+                        </mat-menu>            
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let prod of lstProds">
+                <tr class="tr-hover" [ngClass]="prod.selected ? 'row-selectd' : ''">
+                    <td class="center col-1 no-border">
+                        <button mat-raised-button class="button-small" (click)="onOpenAnalysis(prod)" *ngIf="prod.productId > 0">
+                            {{prod.productId}}
+                            <mat-icon *ngIf="prod.foundOrder" color="primary" style="position: absolute; font-size: 26px !important;">attach_money</mat-icon>
+                        </button>
+                    </td>
+                    <td class="center col-1  td-cursor no-border">
+                        <button mat-raised-button class="button-small" (click)="onOpenAnalysisGroup(prod.companyCodeSac)" *ngIf="prod.companyCodeSac">
+                            {{prod.companyCodeSac}}
+                        </button>
+                    </td>
+                    <td class="right td-cursor" (click)="onSelectedRow(prod)">{{prod.productErpCode}}</td>
+                    <td class="left td-cursor" (click)="onSelectedRow(prod)">{{prod.productName}}</td>
+                    <td class="center">{{prod.unitOfMeasureAcronym}}</td>
+                    <td class="right col-1">{{prod.averageQuantity}}</td>
+                    <td class="right col-1" [ngClass]="prod.quantityCatalog > 0 && prod.averagePrice <= 0 ? 'color-error' : ''">
+                        <mat-icon class="icon-region" color="warn" *ngIf="prod.quantityCatalog > 0 && !prod.foundRegion" mat-tooltip="Região não atendida!">south_america</mat-icon>
+                        <span *ngIf="prod.averagePrice > 0">{{prod.averagePrice| currency:'':''}}</span>
+                        <span *ngIf="prod.quantityCatalog > 0 && prod.foundRegion && prod.averagePrice <= 0" class="color-error">Restrict</span>
+                    </td>
+                    <td class="right col-1">{{prod.quantityQuote}}</td>
+                    <td class="right col-1">{{prod.quantitySend}}</td>
+                    <td class="right col-1">{{prod.quantityBuyer}}</td>
+                    <td class="right col-1">{{prod.quantitySupplier}}</td>
+                    <td class="right col-1" [ngClass]="prod.quantityCatalog > 0 ? 'back-blue' : prod.averagePrice > 0 ? 'back-red' : ''">{{prod.quantityCatalog}}</td>
+                    <!-- <td class="right no-border" style="display: table-cell;">
+                        <div style="display: flex;">
+                            <button mat-icon-button class="button-small-icon" (click)="onEdit(prod.productId)"
+                                matTooltip="Editar">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button class="button-small-icon" [color]="prod.active ? 'primary' : 'warn'"
+                                (click)="onActive(prod)" [matTooltip]="prod.active ? 'Inativar' : 'Ativar'">
+                                <mat-icon>{{ prod.active ? 'toggle_off' : 'toggle_on'}}</mat-icon>
+                            </button>
+                        </div>
+                    </td> -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="existsSelected" align="end" fxFlex="5">
+        <button mat-raised-button color="warn" class="right-5" (click)="onRemoveItems()">Excluir item(ns)</button>
+        <button mat-raised-button color="primary" [style.color]="'white'" (click)="onGroupProducts()">Agrupar/Unificar</button>
+    </div>
+    <div class="row pagination" *ngIf="totalRecords > pageSize" fxFlex="6">
+        <div class="col page-select">
+            <button *ngIf="!showGotoPage" class="small button-page-select" mat-button (click)="onClickShowGotoPage()">
+                <mat-icon>auto_stories</mat-icon>
+                Ir para
+            </button>
+
+            <mat-form-field *ngIf="showGotoPage">
+                <mat-label>Ir Para:</mat-label>
+                <mat-select [(ngModel)]="pageIndex" (ngModelChange)="onUpdateManualPage($event)">
+                    <mat-option *ngFor="let page of listPages$" [value]="page.id">{{ page.description }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-auto">
+            <mat-paginator [length]="totalRecords" [pageIndex]="pageIndex" [pageSize]="pageSize"
+                aria-label="Select page" (page)="onPageEvent($event)" showFirstLastButtons>
+            </mat-paginator>
+        </div>
+    </div>
+</div>

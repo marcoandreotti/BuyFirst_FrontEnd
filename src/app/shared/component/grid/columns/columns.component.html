@@ -1,0 +1,22 @@
+<div class="columns mat-app-background" [class.opened]="opened">
+
+    <div (click)="close()" class="item">
+        <mat-icon color="primary">close</mat-icon>
+        <h4><b>Configurar Colunas</b></h4>
+    </div>
+
+    <div class="column-container">
+        <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+            <div class="column-box" *ngFor="let c of columns" cdkDrag>
+                <div class="item">
+                    <mat-checkbox color="primary" [(ngModel)]="c.show">{{c.title}}</mat-checkbox>
+                    <div class="handle" cdkDragHandle>
+                        <mat-icon>drag_indicator</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

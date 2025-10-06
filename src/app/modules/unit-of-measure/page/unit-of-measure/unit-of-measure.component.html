@@ -1,0 +1,19 @@
+<div class="bf-container crud">
+  <app-grid *ngIf="unitOfMeasure$ != null"
+  (onFilter)="onFilter($event)"
+  (pageChange)="onPageEvent($event)"
+  [alwaysFilters]="true"
+  [columns]="cols"
+  [displayedColumns]="displayedColumns"
+  [filterModel]="lastFilter"
+  [filters]="filters"
+  [modelIdentity]="modelIdentity"
+  [pageIndex]="pageIndex"
+  [pageLength]="unitOfMeasure$.totalRecords"
+  [pageSize]="pageSize"
+  [rows]="unitOfMeasure$.data"
+  [specialFilter]="true"
+  [title]="gridUnitOfMeasure"
+  [useSelect]="false">
+</app-grid>
+</div>

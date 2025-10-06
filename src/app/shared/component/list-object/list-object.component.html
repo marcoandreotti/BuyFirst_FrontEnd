@@ -1,0 +1,23 @@
+<div class="list-container" [style.maxHeight.px]="maxHeight"
+    [ngClass]="{'scroll':maxHeight != 'auto', 'horizontal': orientation != 'vertical'}">
+
+    <div *ngFor="let column of list" class="item"
+        [style.width]="orientation != 'vertical' ? ((100  / itensPerLine) + '%') : '100%'"
+        (click)="copy(getElementValue(value, column).value)" [ngClass]="{'horizontal': orientation != 'vertical'}">
+        <span class="fix">
+            <b>
+                {{column.title}}
+            </b>
+        </span>
+        <div>
+            <ng-container *ngIf="getElementValue(value, column).mask">{{getElementValue(value, column).value
+                |
+                mask: getElementValue(value, column).mask}}
+            </ng-container>
+            <ng-container *ngIf="!getElementValue(value, column).mask">
+                {{getElementValue(value,
+                column).value}}
+            </ng-container>
+        </div>
+    </div>
+</div>

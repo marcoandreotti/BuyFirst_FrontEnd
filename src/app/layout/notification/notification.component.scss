@@ -1,0 +1,61 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.notification-container {
+  width: 380px;
+  height: 400px;
+  top: 58px;
+  border-radius: 10px;
+  border: 1px solid rgb(206 206 206 / 60%);
+  left: -167px;
+  z-index: 450;
+  position: absolute;
+  -webkit-box-shadow: 5px 10px 10px 0px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 5px 10px 10px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 5px 10px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.notification-container:before,
+.notification-container:after {
+  content: "\0020";
+  display: block;
+  position: absolute;
+  top: -18px;
+  left: 170px;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  border: solid 20px transparent;
+  border-top: 0;
+  border-bottom-color: #fff;
+}
+
+.notification-scroll{
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.notification-container:before {
+  top: -20px;
+  z-index: 1;
+  border-bottom-color: rgb(206 206 206 / 60%);
+}
+
+h4,
+h5 {
+  margin: 0 !important;
+}
+
+.notification-data {
+  font-size: 12px;
+}
+
+.notification-item {
+  padding: 15px 15px 5px 15px;
+  border-bottom: 1px solid rgb(206 206 206 / 60%);
+}
+
+.justify-end {
+  justify-content: flex-end;
+}

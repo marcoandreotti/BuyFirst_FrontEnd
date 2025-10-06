@@ -1,0 +1,49 @@
+<div fxLayout="row" fxLayout.xs="column" fxLayoutWrap="wrap" fxLayoutGap="20px">
+    <div fxFlex="100" fxFlex.lt-md="100" fxFlex.lt-sm="70">
+        <mat-card class="forgot-password">
+            <div class="form-group">
+                <h1>
+                    <b>{{ "Lost.forgot" | translate }} </b>
+                </h1>
+                <h3>{{ "Lost.instruction" | translate }}</h3>
+            </div>
+
+            <form #myForm="ngForm" (ngSubmit)="forgotPassword()">
+                <div class="form-inputs">
+                    <div class="form-group">
+                        <mat-form-field appearance="outline">
+                            <mat-label>
+                                {{ "Shared.email" | translate }}
+                            </mat-label>
+                            <input type="text" [placeholder]="'Shared.email' | translate" matInput
+                                [(ngModel)]="emailText" id="emailInput" name="emailInput" email="true" required
+                                #emailInput="ngModel" />
+                        </mat-form-field>
+                        <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)"
+                            class="alert alert-danger">
+                            <mat-error *ngIf="emailInput.errors.required">
+                                O e-mail é obrigatório.
+                            </mat-error>
+                            <mat-error *ngIf="emailInput.errors.email">
+                                Formato de e-mail inválido.
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="buttons-container">
+                        <button mat-raised-button color="primary" class="button-forgot-password" type="submit">
+                            {{ "Shared.send" | translate | uppercase }}
+                        </button>
+                    </div>
+                    <div class="buttons-container">
+                        <a class="mat-raised-button button-senha" href="/#">
+                            {{ "Shared.goBack" | translate | uppercase }}
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+</div>

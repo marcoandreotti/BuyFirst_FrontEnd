@@ -1,0 +1,229 @@
+<div *ngIf="model" class="bf-container" fxLayout="column" fxLayoutGap="16px">
+    <div class="div-info" [fxFlex]="!modelCompany ? 12 : 24">
+        <table class="table-info">
+            <thead>
+                <tr>
+                    <th class="center">Período Cotação</th>
+                    <th class="center">Grupo</th>
+                    <th class="center">Qtd. Produtos</th>
+                    <th class="center">Cotações</th>
+                    <th class="center">Prods. Cotados</th>
+                    <th class="center">Retornos/Compras</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center no-border col-14">
+                        <div *ngIf="model.startDate">
+                            <span class="spn-date-min">{{model.startDate| date:'dd/MM/yy HH'}}h</span>
+                            <span class="spn-date-max">{{model.endDate| date:'dd/MM/yy HH'}}h</span>
+                        </div>
+                    </td>
+                    <td class="center back-blue">{{model.companyCodeSac}}</td>
+                    <td class="right">{{model.qtdProduct| number }}</td>
+                    <td class="right">{{model.qtdQuote| number }}</td>
+                    <td class="right">{{model.qtdQuoteErpProduct| number }}</td>
+                    <td class="right" [ngClass]="model.qtdQuoteProduct > 0 ? 'color-blue' : 'color-error'">
+                        <span>{{model.qtdQuoteProduct| number }}</span>
+                        <span *ngIf="model.qtdOrder > 0">&nbsp;/&nbsp;{{model.qtdOrder| number }}</span>
+                    </td>
+                    <td class="right no-border">
+                        <button mat-icon-button class="button-small-icon" [matMenuTriggerFor]="menuProduct">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menuProduct="matMenu">
+                            <button mat-menu-item (click)="onShowQuotesOnly()">
+                                <mat-icon>{{ showQuotesOnly ? 'expand' : 'compress'}}</mat-icon>
+                                <span>{{ showQuotesOnly ? 'Exibir todos' : 'Somente c/cotações'}}</span>
+                            </button>
+                            <button mat-menu-item (click)="onExportCsv()">
+                                <mat-icon>file_download</mat-icon>
+                                <span>Exportar CSV</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </tr>
+                <!-- Empresa -->
+                <tr *ngIf="modelCompany">
+                    <td class="no-border"></td>
+                    <td class="no-border" colspan="6">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="center no-border"></th>
+                                    <th class="center">Período Cotação</th>
+                                    <th class="center">CNPJ</th>
+                                    <th class="center">Empresa</th>
+                                    <th class="center">Cotações</th>
+                                    <th class="center">Prods. Cotados</th>
+                                    <th class="center">Retornos/Compras</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="!showQuotesOnly || (showQuotesOnly && modelCompany.qtdQuote > 0)">
+                                    <td class="center col-1-small no-border">
+                                        <button mat-icon-button class="button-small-icon" (click)="onContractCompany()">
+                                            <mat-icon>keyboard_backspace</mat-icon>
+                                        </button>
+                                    </td>
+                                    <td class="center no-border col-16">
+                                        <div *ngIf="modelCompany.startDate">
+                                            <span class="spn-date-min">{{modelCompany.startDate| date:'dd/MM/yy HH'}}h</span>
+                                            <span class="spn-date-max">{{modelCompany.endDate| date:'dd/MM/yy HH'}}h</span>
+                                        </div>
+                                    </td>
+                                    <td class="center back-blue col-5">
+                                        {{modelCompany.document}}
+                                        <mat-icon *ngIf="modelCompany.qtdOrder > 0" color="primary" style="position: absolute; font-size: 26px !important;">attach_money</mat-icon>
+                                    </td>
+                                    <td class="left back-blue col-60">{{modelCompany.name}}</td>
+                                    <td class="right">{{modelCompany.qtdQuote| number }}</td>
+                                    <td class="right">{{modelCompany.qtdQuoteErpProduct| number }}</td>
+                                    <td class="right">
+                                        <span [ngClass]="modelCompany.qtdQuoteProduct > 0 ? 'color-blue' : 'color-error'">{{modelCompany.qtdQuoteProduct| number }}</span>
+                                        <span *ngIf="modelCompany.qtdOrder > 0">&nbsp;/&nbsp;{{modelCompany.qtdOrder| number }}</span>
+                                    </td>
+                                    <td class="right no-border">
+                                        <button mat-icon-button (click)="onShowQuoteProdsOnly()" [matTooltip]="showQuoteProdsOnly ? 'Exibir todos' : 'Exibir c/Fornecedores'" >
+                                            <mat-icon>{{ showQuoteProdsOnly ? 'expand' : 'compress'}}</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>                
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="scrollable-content" [fxFlex]="!modelCompany ? '86' : '78'">
+        <!-- Grupo -->
+        <div class="alert-empity" *ngIf="!modelCompany && model && model.companies <= 0">
+            <h3>Não há empresas para o grupo selecionado.</h3>
+        </div>
+        <div *ngIf="!modelCompany">
+            <table class="table-info" *ngIf="model && model.companies.length > 0">
+                <thead>
+                    <tr>
+                        <th class="center">CNPJ</th>
+                        <th class="center">Empresa</th>
+                        <th class="center">Período Cotação</th>
+                        <th class="center">Cotações</th>
+                        <th class="center">Prods. Cotados</th>
+                        <th class="center">Retornos/Compras</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let comp of model.companies">
+                    <tr *ngIf="!showQuotesOnly || (showQuotesOnly && comp.qtdQuote > 0)" class="tr-hover">
+                        <td class="center no-border col-5">
+                            <button mat-raised-button class="button-small" *ngIf="comp.companyId > 0" (click)="onExpandedCompany(comp)">
+                                {{comp.document}}
+                                <mat-icon *ngIf="comp.qtdOrder > 0" color="primary" style="position: absolute; font-size: 26px !important;">attach_money</mat-icon>
+                            </button>
+                        </td>
+                        <td class="left col-60">{{comp.name}}</td>
+                        <td class="center no-border col-14">
+                            <div *ngIf="comp.startDate">
+                                <span class="spn-date-min">{{comp.startDate| date:'dd/MM/yy HH'}}h</span>
+                                <span class="spn-date-max">{{comp.endDate| date:'dd/MM/yy HH'}}h</span>
+                            </div>
+                        </td>
+                        <td class="right">{{comp.qtdQuote| number }}</td>
+                        <td class="right">{{comp.qtdQuoteErpProduct| number }}</td>
+                        <td class="right">
+                            <span [ngClass]="comp.qtdQuoteProduct > 0 ? 'color-blue' : 'color-error'">{{comp.qtdQuoteProduct| number }}</span>
+                            <span *ngIf="comp.qtdOrder > 0">&nbsp;/&nbsp;{{comp.qtdOrder| number }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empresa -->
+        <div class="alert-empity" *ngIf="modelCompany && (!lstProds || lstProds.length <= 0)">
+            <h3>Não há produtos cotados para a empresa selecionada.</h3>
+        </div>
+        <div *ngIf="modelCompany">
+            <table class="table-info" *ngIf="lstProds && lstProds.length > 0">
+                <thead>
+                    <tr>
+                        <th class="center col-4">Erp_ID</th>
+                        <th class="center col-4">ID_BF</th>
+                        <th class="center">Produto</th>
+                        <th class="center">Un.</th>
+                        <th class="center">Período Cotação</th>
+                        <th class="center">Qtd. Envio</th>
+                        <th class="center">Menor Qtd</th>
+                        <th class="center">Maior Qtd</th>
+                        <th class="center">Menor $</th>
+                        <th class="center">Maior $</th>
+                        <th class="center">For</th>
+                        <th class="center">Cat</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let prod of lstProds" class="body-result">
+                    <tr *ngIf="(!showQuoteProdsOnly || (showQuoteProdsOnly && prod.qtdProductSupplier > 0))" class="tr-hover">
+                        <td class="center no-border no-back-color" [ngClass]="prod.productId > 0 ? '' : ' back-red'">
+                            {{prod.productErpCode}}
+                        </td>
+                        <td class="center no-border no-back-color">
+                            <a *ngIf="prod.productId > 0" mat-raised-button class="button-small" [href]="onOpenAnalysis(prod.productId)" target="_blank">{{prod.productId}}</a>
+                        </td>
+                        <td class="left col-60">{{prod.productName}}</td>
+                        <td class="center col-1">{{prod.unitOfMeasureAcronym}}</td>
+                        <td class="center no-border col-16" [ngClass]="prod.isDeadline ? 'back-blue' : prod.maxPrice > 0 ? 'back-purple' : prod.qtdProductSupplier > 0 ? 'back-red' : ''" [matTooltip]="!prod.isDeadline && prod.maxPrice > 0 ? 'Houve alguma alteração' : ''">
+                            <span class="spn-date-min">{{prod.startDate| date:'dd/MM/yy HH'}}h</span>
+                            <span class="spn-date-max">{{prod.endDate| date:'dd/MM/yy HH'}}h</span>
+                        </td>
+                        <td class="right">{{prod.quantitySend| number }}</td>
+                        <td class="right">{{prod.minQuantity| currency:'':''}}</td>
+                        <td class="right">{{prod.maxQuantity| currency:'':''}}</td>
+                        <td class="right" [ngClass]="prod.minPrice > 0 ? 'back-blue' : 'back-red'">{{prod.minPrice| currency:'':''}}</td>
+                        <td class="right">{{prod.maxPrice| currency:'':''}}</td>
+                        <td class="right">{{prod.qtdProductSupplier| number}}</td>
+                        <td class="right" [ngClass]="prod.qtdCatalog > 0 ? '' : 'back-red'">{{prod.qtdCatalog| number}}</td>
+                        <td *ngIf="prod.qtdCatalog > 0 && !prod.foundRegion" class="center no-border no-back-color color-error">
+                            <mat-icon class="icon-region" matTooltip="Região não atendida!">south_america</mat-icon>
+                        </td>
+                    </tr>
+                    <tr *ngIf="prod.foundRegion && (!showQuoteProdsOnly || (showQuoteProdsOnly && prod.qtdProductSupplier > 0))">
+                        <td class="no-border no-back-color"></td>
+                        <td class="no-border td-catalogo" colspan="11">
+                            <table class="table-sub">
+                                <thead>
+                                    <tr>
+                                        <th>Vigência Catálogo</th>
+                                        <th>Fornecedor</th>
+                                        <th>Referência</th>
+                                        <th>Produto</th>
+                                        <th>Un.</th>
+                                        <th>Marca</th>
+                                        <th>Estoque</th>
+                                        <th>Preço</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let p of prod.products">
+                                    <tr>
+                                        <td class="center no-border col-16">
+                                            <span *ngIf="prod.qtdCatalog > 0 && p.catalogPrice" class="spn-date-min">{{p.startDateCatalog| date:'dd/MM/yy HH'}}h</span>
+                                            <span *ngIf="prod.qtdCatalog > 0 && p.catalogPrice" class="spn-date-max">{{p.expirationDateCatalog| date:'dd/MM/yy HH'}}h</span>
+                                            <span *ngIf="prod.qtdCatalog <= 0 || !p.catalogPrice" class="color-error" style="color: #fff; font-weight: 500;">Não há catálogo!</span>
+                                        </td>
+                                        <td class="left">{{p.supplierDocument}} - {{p.supplierName}}</td>
+                                        <td class="left">{{p.referenceCode}}</td>
+                                        <td class="left">{{p.productSupplierName}}</td>
+                                        <td class="left">{{p.productSupplierNameAcronym}}</td>
+                                        <td class="left">{{p.brandName}}</td>
+                                        <td class="left">{{p.availableQuantity| currency:'':''}}</td>
+                                        <td class="left">{{p.catalogPrice| currency:'':''}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

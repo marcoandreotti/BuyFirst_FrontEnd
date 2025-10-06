@@ -1,0 +1,72 @@
+<div id="dialog-filter">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+        <div class="fl-row title">
+            <mat-icon class="header-icon" color="primary">search</mat-icon>
+            <h2 mat-dialog-title>{{titleModal}}</h2>
+        </div>
+    </div>
+    <div mat-dialog-content class="dialog-filter-corpo mat-app-background">
+
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutWrap="wrap">
+            <div class="div-container" fxFlex="20" fxFlex.xs="100" fxFlex.sm="100">
+                <button mat-button (click)="onClickSort('a')">
+                    <mat-icon
+                        [ngClass]="model.sort.active == data.column && model.sort.direction == 'asc' ? 'sort-acepted' : ''"
+                        color="primary">south</mat-icon>Ordem ascendente...
+                </button>
+                <br>
+                <button mat-button (click)="onClickSort('d')">
+                    <mat-icon
+                        [ngClass]="model.sort.active == data.column && model.sort.direction == 'desc' ? 'sort-acepted' : ''"
+                        color="primary">north</mat-icon>Ordem descendente...
+                </button>
+            </div>
+            <div class="div-container" fxFlex="80" fxFlex.xs="100" fxFlex.sm="100">
+                <app-form 
+                    *ngIf="data.column == 'productId' || data.column == 'companyCodeSac' || data.column == 'productErpCode'"
+                    [(form)]="idForm"
+                    [model]="modelIdFilter"
+                    [formRows]="formId"
+                    [useErrors]="false">
+                </app-form>
+                <app-form *ngIf="data.column == 'default' || data.column == 'buyerName'" [(form)]="defForm" [model]="modelDefaultFilter" [formRows]="formDef" [useErrors]="false" (onSubmit)="onDefSubmit()"></app-form>
+            </div>
+        </div>
+
+        <div *ngIf="data.column == 'default'" class="div-result">
+            <table class="table-info">
+                <tbody *ngFor="let f of model.productArguments">
+                    <tr>
+                        <th class="right col-15">Começa com...</th>
+                        <td class="left">{{ f.argument }}</td>
+                        <th class="center col-5">
+                            <button mat-icon-button color="warn" (click)="onDefRemoveFilter(f)"><mat-icon>delete</mat-icon></button>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="data.column == 'default'" class="div-result">
+            <table class="table-info">
+                <tbody *ngFor="let f of model.buyerName">
+                    <tr>
+                        <th class="right col-15">Começa com...</th>
+                        <td class="left">{{ f.argument }}</td>
+                        <th class="center col-5">
+                            <button mat-icon-button color="warn" (click)="onDefRemoveFilter(f)"><mat-icon>delete</mat-icon></button>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <mat-divider></mat-divider>
+
+    </div>
+    <div mat-dialog-actions class="dialog-filter-botoes mat-app-background">
+        <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="onCancel()">Cancelar</button>
+        <button class="large" mat-raised-button color="warn" mat-dialog-close (click)="onClearFilter()">Limpar filtro</button>
+        <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="onSubmit()">Aplicar</button>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+.input-control{
+    width: 100%;
+    position: relative;
+    height: 50px;
+}
+
+input {
+    width: 100%;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    height: 50px;
+    border: 1px solid rgb(206 206 206 / 60%);
+    position: absolute;
+    padding: 0px 0px 0px 60px;
+    box-sizing: border-box;
+}
+
+.input-control mat-icon{
+    position: absolute;
+    left: 20px;
+    top: 13px;
+}
+
+
+

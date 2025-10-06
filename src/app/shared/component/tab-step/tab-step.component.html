@@ -1,0 +1,9 @@
+<div class="breadcrumb fl-row">
+    <li *ngFor="let s of steps"><a href="#" [ngClass]="{'completed': s.completed}">
+            <div class="fl-col align-c content">
+                <mat-icon>{{s.completed ? 'task_alt' : 'radio_button_unchecked'}}</mat-icon>
+                <span>{{s.title}}</span>
+            </div>
+        </a>
+    </li>
+</div>

@@ -1,0 +1,69 @@
+<div class="bf-container crud">
+  <mat-card class="card-crud">
+    <mat-card-content>
+      <div fxLayout="column" fxLayoutGap="16px">
+        <div class="div-form" fxFlex="100">
+          <label class="label-div">Informações de Login</label>
+          <app-form [(form)]="userForm" [model]="model" [formRows]="form">
+          </app-form>
+        </div>
+        <div class="div-form space-top-div" fxFlex="100">
+          <label [ngClass]="isValidCompanyForm ? 'label-div': 'label-div error'">Informações de autorização</label>
+
+          <form *ngIf="!model.isBuyFirst" class="form-cadastro" [formGroup]='companyForm'>
+            <mat-form-field class="w100" appearance="outline">
+              <mat-label>Empresa</mat-label>
+              <input matInput placeholder="informe do cnpj ou um trecho do nome da empresa" [matAutocomplete]="auto" formControlName='companyInput'>
+            </mat-form-field>
+            <mat-spinner *ngIf="isLoading"></mat-spinner>
+            
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onCompanyAutocomplet($event)">
+              <mat-option *ngFor="let company of filteredCompanies" [value]="company">
+                <span>{{ company.name }}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </form>
+
+          <div>
+            <table class="table-company">
+              <tbody *ngFor="let company of model.companiesRoles">
+                <tr>
+                  <th class="company-identity">{{company.companyDocument }} - {{ company.companyName }}</th>
+                  <td *ngIf="!userIntegration">
+                    <mat-button-toggle-group #group="matButtonToggleGroup" [value]="company.roles" (change)="onRoleTypeChange(company, $event)" multiple>
+                      <mat-button-toggle value="Admin">Administrador</mat-button-toggle>
+                      <mat-button-toggle value="Purchaser">Comprador</mat-button-toggle>
+                      <mat-button-toggle value="Seller">Vendedor</mat-button-toggle>
+                      <mat-button-toggle value="Financy">Financeiro</mat-button-toggle>
+                    </mat-button-toggle-group>
+                  </td>
+                  <td *ngIf="userIntegration">
+                    <mat-button-toggle-group #group="matButtonToggleGroup" value="Integration">
+                      <mat-button-toggle value="IntegrationSystem" disabled>ERP. Integração</mat-button-toggle>
+                    </mat-button-toggle-group>
+                  </td>
+                  <td style="width: 5%;">
+                    <button *ngIf="!userIntegration" mat-button color="warn" (click)="onDelete(company.companyId)"><mat-icon>delete</mat-icon></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button *ngIf="!userIntegration" class="large" mat-raised-button color="primary" (click)="onSave()" [style.color]="'white'">
+        Salvar
+      </button>
+      <div *ngIf="userIntegration">
+        <mat-divider></mat-divider>
+        <p
+          style="text-align: center; font-style: italic; color: red; background-color: yellow; padding: 8px; border-radius: 6px;">
+          Os ajustes desse usuário só ocorrerão mediante a solicitação e analise do DBA!
+        </p>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

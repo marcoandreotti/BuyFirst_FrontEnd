@@ -1,0 +1,90 @@
+<div class="bf-container" *ngIf="!auth.isBuyer">
+	<app-grid *ngIf="sales$ != null"
+		(onFilter)="onSalesFilter($event)"
+		(pageChange)="onSalesPageEvent($event)"
+		(onChangeSorterValue)="changeSalesSorter($event)" 
+		[ableEdit]="false" 
+		[alwaysFilters]="true"
+		[columns]="cols" 
+		[displayedColumns]="displayedSalesColumns" 
+		[filterModel]="lastSalesFilter"
+		[filters]="Salesfilters" 
+		[itemMenus]="itemMenus" 
+		[modelIdentity]="modelIdentity" 
+		[pageIndex]="pageIndex"
+		[pageLength]="sales$.totalRecords" 
+		[pageSize]="pageSize" 
+		[rows]="sales$.data" 
+		[specialFilter]="true"
+		[title]="gridMySales" 
+		[useEditColumns]="false" 
+		[useSelect]="false" 
+		[useRegister]="false"
+		[useHeader]="false">
+	</app-grid>
+</div>
+
+<mat-tab-group dynamicHeight *ngIf="auth.isBuyer">
+	<mat-tab *ngIf="sales$ != null">
+		<ng-template mat-tab-label>
+			<mat-icon class="mat-icon-tabs" color="primary">real_estate_agent</mat-icon>
+			<span class="example-tab-text"> Vendas </span>
+		</ng-template>
+		<div class="bf-container">
+			<app-grid *ngIf="sales$ != null"
+				(onFilter)="onSalesFilter($event)"
+				(pageChange)="onSalesPageEvent($event)"
+				(onChangeSorterValue)="changeSalesSorter($event)" 
+				[ableEdit]="false" 
+				[alwaysFilters]="true"
+				[columns]="cols" 
+				[displayedColumns]="displayedSalesColumns" 
+				[filterModel]="lastSalesFilter"
+				[filters]="Salesfilters" 
+				[itemMenus]="itemMenus" 
+				[modelIdentity]="modelIdentity" 
+				[pageIndex]="pageIndex"
+				[pageLength]="sales$.totalRecords" 
+				[pageSize]="pageSize" 
+				[rows]="sales$.data" 
+				[specialFilter]="true"
+				[title]="gridMySales" 
+				[useEditColumns]="false" 
+				[useSelect]="false" 
+				[useRegister]="false"
+				[useHeader]="false">
+			</app-grid>
+		</div>
+	</mat-tab>
+	<mat-tab *ngIf="purchases$ != null">
+		<ng-template mat-tab-label>
+			<mat-icon class="mat-icon-tabs" color="primary">local_mall</mat-icon>
+			<span class="example-tab-text"> Compras </span>
+		</ng-template>
+		<div class="bf-container">
+			<app-grid *ngIf="purchases$ != null"
+				(onFilter)="onPurchasesFilter($event)"
+				(pageChange)="onPurchasesPageEvent($event)"
+				(onChangeSorterValue)="changePurchasesSorter($event)"
+				[ableEdit]="false" 
+				[alwaysFilters]="true" 
+				[columns]="colsBuyers"
+				[displayedColumns]="displayedPurchasesColumns" 
+				[filterModel]="lastPurchasesFilter"
+				[filters]="Purchasesfilters" 
+				[itemMenus]="itemMenus" 
+				[modelIdentity]="modelIdentity"
+				[pageIndex]="pageIndex" 
+				[pageLength]="purchases$.totalRecords" 
+				[pageSize]="pageSize"
+				[rows]="purchases$.data" 
+				[specialFilter]="true" 
+				[title]="gridMyPurchases" 
+				[useEditColumns]="false"
+				[useSelect]="false" 
+				[useRegister]="false" 
+				[useHeader]="false">
+			</app-grid>
+		</div>
+	</mat-tab>
+</mat-tab-group>

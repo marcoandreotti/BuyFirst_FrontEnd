@@ -1,0 +1,81 @@
+<mat-card class="mat-elevation-z4">
+   <mat-card-content>
+      <div fxLayout="column" fxLayoutGap="16px">
+         <div fxFlex="100">
+            <mat-checkbox class="div-title" color="primary">Fornecedor Tucano Pesados - SP</mat-checkbox>
+         </div>
+         <div fxFlex="100">
+            <mat-divider></mat-divider>
+         </div>
+         <div fxFlex="100">
+            <div fxLayout="row" fxLayout.sm="row wrap" fxLayout.xs="row wrap" fxLayoutGap="16px">
+               <div fxFlex="5" fxFlex.xs="10" fxFlex.sm="10">
+                  <div fxLayout="column" fxLayoutGap="8px">
+                     <div fxFlex>
+                        <mat-checkbox color="primary"></mat-checkbox>
+                     </div>
+                     <div fxFlex>
+                        <button mat-icon-button color="primary">
+                           <mat-icon>favorite_border</mat-icon>
+                        </button>
+                     </div>
+                     <div fxFlex>
+                        <button mat-icon-button color="warn">
+                           <mat-icon>delete</mat-icon>
+                        </button>
+                     </div>
+                  </div>                  
+               </div>
+               <div class="div-image" fxFlex="10" fxFlex.xs="76" fxFlex.sm="76">
+                  <div class="info-reference">2Z0/903133</div>
+                  <img style="width: 110px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFcRcxCjeLdKLgq3OAJTCbMxPa9yDdPz2vtOscvukuMUj96GdGTxbJIvaj7RNfMPWzZC8&usqp=CAU" alt="">
+               </div>
+               <div fxFlex="75" fxFlex.xs="100" fxFlex.sm="100">
+                  <div fxLayout="column" fxLayoutGap="16px">
+                     <div class="row-product" fxFlex="100">AMORTECEDOR TENSAO CORREIA VENTILADOR ALTERNADOR MICRO VW 18320</div>
+                     <div fxFlex="100">
+                        <div fxLayout="row" fxLayout-xs="column" fxLayout-sm="column" fxLayoutGap="16px">
+                           <div class="col-info"><mat-label class="label-info">Marca</mat-label>E</div>
+                           <div class="col-info"><mat-label class="label-info">Categoria</mat-label>Categoria ELETRICA</div>
+                           <div class="col-info"><mat-label class="label-info">SubCategoria</mat-label>SubCategoria ALTERNADOR</div>
+                        </div>
+                     </div>
+                     <div fxFlex="100">
+
+                        <div fxLayout="row wrap">
+                           <div fxFlex="20">
+                              <div fxLayout="column">
+                                 <div class="number-ranger">
+                                    <div fxLayout="row">
+                                       <button fxFlex="15" mat-icon-button large color="primary">
+                                          <mat-icon>add_circle_outline</mat-icon>
+                                       </button>
+                                       <div fxFlex="70">
+                                          <app-input-number [apenasValor]="true" [label]="'Quantidade'" [name]="'field_name'" [min]="1" [max]="55"
+                                             [align]="'right'">
+                                          </app-input-number>
+                                       </div>
+                                       <button fxFlex="15" mat-icon-button large color="warn">
+                                          <mat-icon>remove_circle_outline</mat-icon>
+                                       </button>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div fxFlex="80" align="end">
+                              <div class="total-card">
+                                 <h2> R$ 55,44</h2>
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+               </div>
+               
+            </div>
+         </div>
+         
+      </div>
+   </mat-card-content>
+</mat-card>

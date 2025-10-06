@@ -1,0 +1,15 @@
+<div class="bf-container crud">
+  <mat-card>
+    <div class="card-crud">
+      <h2>Digite abaixo os dados da Região</h2>
+
+      <div class="form-crud">
+        <app-form [(form)]="regionForm" [model]="model" [formRows]="formRegion"></app-form>
+
+        <div class="fl-row button-large justify-end">
+          <button class="large" mat-raised-button color="primary" (click)="save()" [style.color]="'white'">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

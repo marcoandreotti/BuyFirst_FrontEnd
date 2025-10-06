@@ -1,0 +1,43 @@
+<div class="bf-container crud">
+  <mat-card>
+    <div class="card-crud">
+      <h2><b>Cadastrar novo produto de venda</b></h2>
+      <div class="form-crud">
+        <app-form [(form)]="productForm" [model]="model" [formRows]="form"></app-form>
+
+        <div fxLayout="column" fxLayoutWrap="wrap" fxLayoutGap="20px">
+
+          <form [formGroup]="myForm">
+            <div *ngIf="!imageFiles || imageFiles.length < 5" flex="column" class="div-add-img">
+              <button mat-raised-button class="button-image-add" style="margin-top: 10px; margin-right: 10px;">
+                <mat-icon color="primary">add_a_photo</mat-icon>
+                <label (click)="fileInput.value = null">
+                  Click aqui para adicionar a imagem do produto [{{imageFiles.length}} / 5]
+                  <input #fileInput formControlName="file" type="file" accept=".jpeg, .jpg" style="display: none" (change)="onFileChange($event)" />
+                </label>
+              </button>
+            </div>
+          </form>
+
+          <div fxLayout="row">
+            <div class="div-img-container" *ngFor="let image of imageFiles">
+              <mat-card *ngIf="!image.deleted" class="background-image">
+                <button mat-flat-button class="button-delete" (click)="onRemoveImage(image)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <img [src]="image.uri" alt="" style="width: 100%; height: 100%;">
+              </mat-card>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <mat-card-actions align="end">
+        <div>
+          <button class="large" mat-raised-button color="primary" (click)="save()" [style.color]="'white'" [disabled]="isLoading">{{isLoading ? 'Enviando' : 'Salvar'}}</button>
+        </div>
+      </mat-card-actions>
+    </div>
+  </mat-card>
+</div>

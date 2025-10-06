@@ -1,0 +1,23 @@
+<div class="bf-container">
+  <app-grid *ngIf="produtos$ != null"
+    (onFilter)="onFilter($event)"
+    (pageChange)="onPageEvent($event)"
+    [ableEdit]="false"
+    [alwaysFilters]="true"
+    [columns]="cols"
+    [displayedColumns]="displayedColumns"
+    [filterModel]="lastFilter"
+    [filters]="filters"
+    [itemMenus]="itemMenus"
+    [modelIdentity]="modelIdentity"
+    [pageIndex]="pageIndex"
+    [pageLength]="produtos$.totalRecords"
+    [pageSize]="pageSize"
+    [rows]="produtos$.data"
+    [specialFilter]="true"
+    [title]="gridMinhasVendas"
+    [useEditColumns]="false"
+    [useSelect]="false"
+    [useRegister]="false">
+  </app-grid>
+</div>

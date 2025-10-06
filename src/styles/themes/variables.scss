@@ -1,0 +1,147 @@
+$desktop: 960px;
+$tablet: 768px;
+$mobile-large: 640px;
+$mobile: 480px;
+$mobile-small: 300px;
+
+// $bv-brand: (
+//     50 : var(--theme-primary-50),
+//     100 : var(--theme-primary-100),
+//     200 : var(--theme-primary-200),
+//     300 : var(--theme-primary-300),
+//     400 : var(--theme-primary-400),
+//     500 : var(--theme-primary-500),
+//     600 : var(--theme-primary-600),
+//     700 : var(--theme-primary-700),
+//     800 : var(--theme-primary-800),
+//     900 : var(--theme-primary-900),
+//     A100 : var(--theme-primary-A100),
+//     A200 : var(--theme-primary-A200),
+//     A400 : var(--theme-primary-A400),
+//     A700 : var(--theme-primary-A700),
+//     contrast: (
+//       50: var(--theme-primary-contrast-50),
+//       100: var(--theme-primary-contrast-100),
+//       200: var(--theme-primary-contrast-200),
+//       300: var(--theme-primary-contrast-300),
+//       400: var(--theme-primary-contrast-400),
+//       500: var(--theme-primary-contrast-500),
+//       600: var(--theme-primary-contrast-600),
+//       700: var(--theme-primary-contrast-700),
+//       800: var(--theme-primary-contrast-800),
+//       900: var(--theme-primary-contrast-900),
+//       A100: var(--theme-primary-contrast-A100),
+//       A200: var(--theme-primary-contrast-A200),
+//       A400: var(--theme-primary-contrast-A400),
+//       A700: var(--theme-primary-contrast-A700),
+//     )
+// );
+
+$bv-orange: (
+    50 : #fafafa,
+    100 : #f2f2f2,
+    200 : #eaeaea,
+    300 : #e1e1e1,
+    400 : #dadada,
+    500 : #d4d4d4,
+    600 : #cfcfcf,
+    700 : #c9c9c9,
+    800 : #c3c3c3,
+    900 : #b9b9b9,
+    A100 : #ffffff,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #fff8f8,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$bv-blue: (
+    50 : #e2ebfb,
+    100 : #b6cef5,
+    200 : #85aeef,
+    300 : #548de9,
+    400 : #3074e4,
+    500 : #0b5cdf,
+    600 : #0a54db,
+    700 : #084ad7,
+    800 : #0641d2,
+    900 : #0330ca,
+    A100 : #f2f4ff,
+    A200 : #bfcaff,
+    A400 : #8ca0ff,
+    A700 : #738aff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$bv-red: (
+    50 : #ffeae6,
+    100 : #ffcac0,
+    200 : #ffa696,
+    300 : #ff826c,
+    400 : #ff684d,
+    500 : #ff4d2d,
+    600 : #ff4628,
+    700 : #ff3d22,
+    800 : #ff341c,
+    900 : #ff2511,
+    A100 : #ffffff,
+    A200 : #fff9f8,
+    A400 : #ffc9c5,
+    A700 : #ffb1ac,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+
+
+// mandatory stuff for theming
+$bv-palette-primary: mat-palette($bv-blue);
+$bv-palette-accent:  mat-palette($bv-orange, A200, A100, A400);
+$bv-palette-warn:  mat-palette($bv-red);
+
+// include the custom theme components into a theme object
+$bv-theme: mat-light-theme($bv-palette-primary, $bv-palette-accent, $bv-palette-warn);

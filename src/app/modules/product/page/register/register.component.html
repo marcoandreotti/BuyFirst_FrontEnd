@@ -1,0 +1,53 @@
+<div class="bf-container crud">
+  <mat-card>
+    <div class="card-crud">
+      <h2><b>Cadastrar novo produto FindPart's</b></h2>
+      <h4>Digite abaixo os dados do produto</h4>
+
+      <div class="form-crud">
+        <app-form [(form)]="productForm" [model]="model" [formRows]="form">
+        </app-form>
+
+        <app-form
+          [(form)]="productFormReference"
+          [model]="modelRefence"
+          [formRows]="formReference"
+          [useErrors]="false"
+          (onSubmit)="formReferenceSubmit()"
+        >
+        </app-form>
+
+        <div class="grid-references scrolly">
+          <app-grid
+            [columns]="cols"
+            [displayedColumns]="displayedColumns"
+            [filters]="[]"
+            [rows]="rows"
+            [usePagination]="false"
+            [useSelect]="false"
+            [ableEdit]="false"
+            [useRegister]="false"
+            modelIdentity="referenceCode"
+            [useHeader]="false"
+            [itemMenus]="itemMenus"
+            [useEditColumns]="false"
+          >
+          </app-grid>
+          <hr>
+        </div>
+
+        <div class="fl-row button-large justify-end">
+          <button
+            class="large"
+            mat-raised-button
+            color="primary"
+            (click)="save()"
+            [style.color]="'white'"
+          >
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

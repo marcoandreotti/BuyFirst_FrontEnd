@@ -1,0 +1,29 @@
+<div class="row pagination">
+    <div class="col page-select">
+        <button *ngIf="!showGotoPage" class="small button-page-select" mat-button (click)="onClickShowGotoPage()">
+            <mat-icon>auto_stories</mat-icon>
+            Ir para
+        </button>
+        <mat-form-field *ngIf="showGotoPage">
+            <mat-label>Ir Para:</mat-label>
+            <mat-select [(ngModel)]="pageIndex" (ngModelChange)="updateGotoPage($event)">
+                <mat-option *ngFor="let page of (listGotoPages$ | async)" [value]="page.id">{{ page.description }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="col-md-auto">
+        <mat-paginator [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" [length]="pageLength" [pageSize]="pageSize"
+            (page)="pageEvent($event)" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+</div>
+
+
+
+<!-- <mat-paginator 
+    [pageIndex]="pageIndex"
+    [pageSizeOptions]="pageSizeOptions"
+    [length]="pageLength"
+    [pageSize]="pageSize"
+    (page)="pageEvent($event)"
+    showFirstLastButtons></mat-paginator> -->

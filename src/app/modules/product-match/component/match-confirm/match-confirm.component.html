@@ -1,0 +1,46 @@
+<div id="dialog-match-confirm">
+  <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+    <div class="fl-row title">
+      <mat-icon class="header-icon" color="primary">done</mat-icon>
+    </div>
+    <div class="fl-row title">
+      <h2>Deseja confirmar o match desse(s) produto(s)?</h2>
+      <div class="dvm-circle" color="primary">
+        Total de matches: {{ lstConfirmMatchs.length }}
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-content class="container">
+    <div class="scrollable-content">
+      <table class="table-products" *ngFor="let match of lstConfirmMatchs">
+        <tbody>
+          <tr>
+            <td>{{ match.productSupplier.companyName }}</td>
+            <td>{{ match.productSupplier.name }}</td>
+            <td>{{ match.productSupplier.referenceCode }}</td>
+            <td>{{ match.productSupplier.brandName }}</td>
+            <td>{{ match.productSupplier.unitOfMeasureAcronym }}</td>
+          </tr>
+          <tr>
+            <td colspan="5" class="td-divider">
+              <!-- <mat-icon class="divider-icon" color="primary">compare_arrows</mat-icon> -->
+              <mat-divider></mat-divider>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">{{ match.product.name }}</td>
+            <td>{{ match.product.referenceCode }}</td>
+            <td>{{ match.product.groupName + ' - ' + match.product.subGroupName }}</td>
+            <td>{{ match.product.unitOfMeasureAcronym }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div mat-dialog-actions class="dialog-match-confirm-botoes">
+    <button class="large" mat-raised-button color="lightgray" (click)="cancel()" mat-dialog-close>Cancelar</button>
+    <button class="large" mat-raised-button color="primary" [style.color]="'white'"
+      (click)="saveConfirmMatch()">Confirmar</button>
+  </div>
+</div>

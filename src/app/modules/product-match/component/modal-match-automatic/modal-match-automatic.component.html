@@ -1,0 +1,21 @@
+<div id="dialog-autom-match">
+   <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+      <div class="fl-row title">
+         <mat-icon class="header-icon" color="primary">app_registration</mat-icon>
+      </div>
+      <div class="fl-row title header-title">
+         <h2 mat-dialog-title>Executar Match Automático</h2>
+      </div>
+      <div class="fl-row title header-message">
+         Rotina que tenta criar <b>{{data.quantityRegisterNoMatch}}</b> {{ data.quantityRegisterNoMatch == 1 ? 'vínculo' : 'vínculos'}} entre os produtos FindParts x EMPRESAS DE VENDA
+      </div>
+   </div>
+   <div mat-dialog-content class="dialog-autom-match-corpo mat-app-background">
+      <div class="div-company-info">{{data.companyId}} - {{data.name}}</div>
+   </div>
+   <div mat-dialog-actions class="dialog-autom-match-botoes mat-app-background">
+      <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Cancelar</button>
+      <button class="large" mat-raised-button color="primary" [style.color]="'white'"
+         (click)="executeMatch()">Executar</button>
+   </div>
+</div>

@@ -1,0 +1,60 @@
+<div fxLayout="row" fxLayout.xs="column" fxLayoutWrap="wrap" fxLayoutGap="20px">
+	<div fxFlex="100" fxFlex.lt-md="100" fxFlex.lt-sm="70">
+		<mat-card class="reset-password">
+			<div class="form-group">
+				<h1>
+					<b>Redefinir sua senha</b>
+				</h1>
+				<h3>Preencha os campos abaixo para redefinir a senha.</h3>
+			</div>
+
+			<app-form [(form)]="resetForm" [model]="model" [formRows]="form"></app-form>
+			
+			<div class="form-group">
+				<div class="buttons-container">
+					<button mat-raised-button color="primary" class="button-reset-password" (click)="resetPassword()">ENVIAR</button>
+				</div>
+				<div class="buttons-container">
+					<a class="mat-raised-button button-senha" href="/#">
+						VOLTAR
+					</a>
+				</div>
+			</div>
+		</mat-card>
+	</div>
+</div>
+
+
+
+<!-- <div class="conteudo">
+	<div class="form-group">
+		<h1><b>{{ 'Lost.forgot1' | translate}} </b></h1>
+		<h1><b>{{ 'Lost.yourpass1' | translate}} </b></h1>
+		<h4>{{ 'Lost.instruction1' | translate}}</h4>
+	</div>
+	
+	<form [formGroup]="AlterarSenhaForm">
+	
+		<div class="form-group">
+			<h5>{{ 'Shared.password' | translate}}</h5>
+			<input type="password" class="form-control" [placeholder]="'Shared.password' | translate"
+				formControlName="password">
+			<app-control-messages [control]="v['password']"></app-control-messages>
+		</div>
+	
+		<div class="form-group">
+			<label class="d-block">
+				<h5>{{ 'Lost.confirmpassword' | translate}}</h5>
+				<input type="password" [placeholder]="'Lost.confirmpassword' | translate" class="form-control"
+					formControlName="confirmpassword">
+				<app-control-messages [control]="v['confirmpassword']"></app-control-messages>
+			</label>
+		</div>
+		
+		<div class="form-group">
+			<div class="buttons-container">
+				<button mat-raised-button color="primary">{{ 'Shared.change' | translate | uppercase }}</button>
+			</div>
+		</div>
+	</form>
+</div> -->

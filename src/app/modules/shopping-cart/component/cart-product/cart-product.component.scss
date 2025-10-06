@@ -1,0 +1,53 @@
+.div-title {
+   font-size: 18px;
+}
+
+.mat-checkbox {
+   width: 40px;
+   height: 40px;
+   text-align: center;
+   line-height: 40px;
+}
+
+.total-card {
+   h2 {
+      font-weight: 600;
+   }
+}
+
+.number-ranger {
+   button {
+      // margin-top: 10px;
+      padding-top: 6%;
+   }
+}
+
+.div-image {
+   text-align: center;
+
+   .info-reference {
+      margin-bottom: 5px;
+      font-size: small;
+      font-weight: 600;
+   }
+}
+
+.row-product {
+   font-size: small;
+   font-weight: 600;
+}
+
+.col-info {
+   color: var(--theme-primary-500);
+   font-size: small;
+   font-weight: 600;
+
+   .label-info {
+      font-size: 12px;
+      margin-top: 5px;
+      margin-left: 0;
+      margin-right: 10px;
+      transform: translateY(-1.59375em) scale(0.85);
+      font-weight: 300;
+   }
+}

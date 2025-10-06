@@ -1,0 +1,34 @@
+<mat-form-field class="w100" appearance="outline">
+  <mat-label>{{label}}</mat-label>
+
+
+  <input type="text" [placeholder]="placeHolder" aria-label="Number" matInput [formControl]="form"
+    [matAutocomplete]="auto" (keyup)="onChangeSelect(false)">
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onChangeSelect($event.option)'>
+    <mat-option *ngFor="let l of (useSearch ? (filteredList| async) : list)" [value]="l[value]" [id]="l">
+      <ng-container *ngIf="getTextOptions().length > 0; else oneOption">
+        <span *ngFor="let o of getTextOptions(), let io = index">
+          <ng-container *ngIf="io > 0 && io < getTextOptions().length">
+            -
+          </ng-container>
+          <ng-container *ngIf="getText(l, o).mask; else notMask">
+            {{l[o.name] | mask: getText(l, o).mask}}
+          </ng-container>
+          <ng-template #notMask>
+            {{l[o.name]}}
+          </ng-template>
+        </span>
+      </ng-container>
+      <ng-template #oneOption>
+        {{l[name]}}
+    </ng-template>
+    </mat-option>
+  </mat-autocomplete>
+
+
+
+
+
+
+
+</mat-form-field>

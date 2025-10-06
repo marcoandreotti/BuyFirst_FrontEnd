@@ -1,0 +1,43 @@
+<mat-form-field *ngIf="!useTime" class="example-full-width" appearance="outline">
+  <mat-label>{{label}}</mat-label>
+  <input *ngIf="formControl" matInput [formControl]="formControl" [placeholder]="placeHolder" [name]="name"
+    autocomplete="off" [matDatepicker]="pickerDate" autocomplete="off" [disabled]="disabled" appMaskDate>
+  <mat-datepicker-toggle matSuffix [for]="pickerDate">
+    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+  </mat-datepicker-toggle>
+  <button *ngIf="useRemove && formControl.value" matSuffix mat-icon-button type="button" aria-label="Clear"
+    (click)="formControl.setValue(null); $event.stopPropagation()">
+    <mat-icon color="primary">close</mat-icon>
+  </button>
+  <mat-datepicker #pickerDate></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field *ngIf="useTime" class="example-full-width" appearance="outline">
+  <mat-label>{{label}}</mat-label>
+  <input *ngIf="formControl" matInput [ngxMatDatetimePicker]="picker" [placeholder]="placeHolder" [formControl]="formControl"
+    autocomplete="off" [disabled]="disabled" ngDefaultControl appMaskDateTime>
+  <mat-datepicker-toggle matSuffix [for]="picker">
+    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+  </mat-datepicker-toggle>
+  <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds" [stepHour]="stepHour"
+    [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi" [enableMeridian]="enableMeridian"
+    [disableMinute]="disableMinute" [hideTime]="hideTime">
+    <ng-template>
+      <span>OK</span>
+    </ng-template>
+  </ngx-mat-datetime-picker>
+  <button *ngIf="useRemove && formControl.value" matSuffix mat-icon-button type="button" aria-label="Clear"
+    (click)="formControl.setValue(null); $event.stopPropagation()">
+    <mat-icon color="primary">close</mat-icon>
+  </button>
+</mat-form-field>
+
+<!-- <section *ngIf="formControlEndDate">
+  <mat-label>{{label}}</mat-label>
+  <mat-date-range-input [formGroup]="form" [rangePicker]="picker">
+    <input [readonly]="true" matStartDate [formControl]="formControl" [placeholder]="placeHolder">
+    <input [readonly]="true" matEndDate [formControl]="formControlEndDate" [placeholder]="placeHolderEndDate">
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</section> -->

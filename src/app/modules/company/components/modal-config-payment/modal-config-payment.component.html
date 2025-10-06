@@ -1,0 +1,60 @@
+<div mat-dialog id="dialog-config-payment">
+   <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+      <div class="fl-row title">
+         <mat-icon class="header-icon" color="primary">monetization_on</mat-icon>
+      </div>
+      <div class="fl-row title header-title">
+         <h2 mat-dialog-title *ngIf="data.id == null"><b>Vincular</b> condição de pagamento </h2>
+         <h2 mat-dialog-title *ngIf="data.id != null">Configurar a condição de pagamento </h2>
+      </div>
+      <div class="fl-row title header-message">
+         {{ infoPayment }}
+      </div>
+   </div>
+   <div mat-dialog-content class="dialog-config-payment-corpo mat-app-background">
+
+      <mat-tab-group dynamicHeight>
+         <mat-tab>
+            <ng-template mat-tab-label>
+               <mat-icon class="mat-icon-tabs" color="primary">percent</mat-icon>
+               <span class="example-tab-text">Percentual padrão</span>
+            </ng-template>
+            <app-form [(form)]="configForm" [model]="data" [formRows]="formConfig" [useErrors]="false" (onSubmit)="savePercent()"></app-form>
+         </mat-tab>
+      
+         <mat-tab *ngIf="data.id != null">
+            <ng-template mat-tab-label>
+               <mat-icon class="mat-icon-tabs" color="primary">bookmark_added</mat-icon>
+               <span class="example-tab-text">Condições especiais<span class="total-records">{{ !data.specialConditions ? 0 : data.specialConditions.length }}</span></span>
+            </ng-template>
+            
+            <div class="form-special-condition">
+               <div class="div-special-condition-opt">
+                  <h4>Tipo de Condição especial:</h4>
+                  <mat-radio-group aria-labelledby="radio-group-label" [(ngModel)]="specialConditionType">
+                     <mat-radio-button [value]="1" (change)="radioButtonChange($event)">Regiões</mat-radio-button>
+                     <mat-radio-button [value]="2" (change)="radioButtonChange($event)">CNPJ</mat-radio-button>
+                  </mat-radio-group>
+               </div>
+               <div class="div-special-condition-form">
+                  <app-form *ngIf="specialConditionType == 1" [(form)]="specialConditionFormRegion" [model]="modelspecial"
+                     [formRows]="formSpecialConditionRegion" [useErrors]="false" (onSubmit)="formSpecialConditionSubmit()"></app-form>
+                  <app-form *ngIf="specialConditionType == 2" [(form)]="specialConditionFormCnpj" [model]="modelspecial"
+                     [formRows]="formSpecialConditionCnpj" [useErrors]="false" (onSubmit)="formSpecialConditionSubmit()"></app-form>
+               </div>
+            </div>
+            
+            <app-grid *ngIf="data.specialConditions != null" [ableEdit]="false" [alwaysFilters]="true" [columns]="colsSpecialCondition"
+               [displayedColumns]="displayedColumnsSpecialCondition" [itemMenus]="itemMenusSpecialCondition"
+               [modelIdentity]="paymentConditionId" [rows]="data.specialConditions" [title]="gridSpecialCondition" [useFilters]="false"
+               [usePagination]="false" [useRegister]="false" [useSelect]="false">
+            </app-grid>
+                        
+         </mat-tab>
+      </mat-tab-group>
+
+   </div>
+   <div mat-dialog-actions class="dialog-config-payment-botoes mat-app-background">
+      <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Fechar</button>
+   </div>
+</div>

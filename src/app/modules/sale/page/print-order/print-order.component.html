@@ -1,0 +1,178 @@
+<button printTitle="Print Title" printSectionId="print-section" ngxPrint>
+  IMPRIMIR
+</button>
+<div id="print-section">
+  <div class="invoice-box">
+    <table cellpadding="0" cellspacing="0" style="width: 100%;">
+      <tr class="top">
+        <td colspan="2">
+          <table style="width: 100%;padding-bottom: 40px;">
+            <tr>
+              <td>
+                <img src="/assets/logo-findparts.png" style="width: 100%; max-width: 200px" />
+              </td>
+              <td style="text-align: right;">
+                Número do Pedido: {{model.orderId}}<br/>
+                Data/Hora do pedido: {{model.openingDate| date: 'dd/MM/yyyy HH:mm:ss'}}<br/>
+                Status: {{model.statuses[0].name}}<br/>
+              </td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+        <tr style="font-size: 21px;line-height: 45px;color: #333;font-weight: 600;background-color: #cbe5c5;">
+					<td colspan="2">Dados do cliente</td>
+				</tr>
+
+        <tr>
+          <td colspan="2">
+            <table style="width: 100%;padding-bottom: 40px;">
+              <tbody>
+                <tr>
+                  <th style="text-align: left;">Nome</th>
+                  <th style="text-align: left;">CNPJ</th>
+                  <th style="text-align: left;">Inscrição estadual</th>
+                </tr>
+                <tr>
+                 <td>{{model.buyer.name}}</td>
+                 <td>{{document}}</td>
+                 <td>{{model.buyer.stateRegistration}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+
+				<tr style="font-size: 21px;line-height: 45px;color: #333;font-weight: 600;background-color: #cbe5c5;">
+					<td colspan="2">Endereço de entrega</td>
+				</tr>
+
+        <tr>
+          <td colspan="2">
+            <table style="width: 100%;padding-bottom: 40px;">
+              <tbody>
+                <tr>
+                  <th style="text-align: left;">Rua</th>
+                  <th style="text-align: left;">Numero</th>
+                  <th style="text-align: left;">Complemento</th>
+                </tr>
+                <tr>
+                 <td>{{model.buyer.deliveryAddress.street}}</td>
+                 <td>{{model.buyer.deliveryAddress.number}}</td>
+                 <td>{{model.buyer.deliveryAddress.complement}}</td>
+                </tr>
+                <tr>
+                  <th style="text-align: left;">Bairro</th>
+                  <th style="text-align: left;">Cidade</th>
+                  <th style="text-align: left;">Cep</th>
+                  <th style="text-align: left;">UF</th>
+                </tr>
+                <tr>
+                 <td>{{model.buyer.deliveryAddress.neighborhood}}</td>
+                 <td>{{model.buyer.deliveryAddress.location}}</td>
+                 <td>{{model.buyer.deliveryAddress.zipCode}}</td>
+                 <td>{{model.buyer.deliveryAddress.stateAcronym}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+
+        <tr style="font-size: 21px;line-height: 45px;color: #333;font-weight: 600;background-color: #cbe5c5;">
+					<td colspan="2">Endereço de Cobrança</td>
+				</tr>
+
+        <tr>
+          <td colspan="2">
+            <table style="width: 100%;padding-bottom: 40px;">
+              <tbody>
+                <tr>
+                  <th style="text-align: left;">Rua</th>
+                  <th style="text-align: left;">Numero</th>
+                  <th style="text-align: left;">Complemento</th>
+                </tr>
+                <tr>
+                 <td>{{model.buyer.billingAddress.street}}</td>
+                 <td>{{model.buyer.billingAddress.number}}</td>
+                 <td>{{model.buyer.billingAddress.complement}}</td>
+                </tr>
+                <tr>
+                  <th style="text-align: left;">Bairro</th>
+                  <th style="text-align: left;">Cidade</th>
+                  <th style="text-align: left;">Cep</th>
+                  <th style="text-align: left;">UF</th>
+                </tr>
+                <tr>
+                 <td>{{model.buyer.billingAddress.neighborhood}}</td>
+                 <td>{{model.buyer.billingAddress.location}}</td>
+                 <td>{{model.buyer.billingAddress.zipCode}}</td>
+                 <td>{{model.buyer.billingAddress.stateAcronym}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+
+				<tr style="font-size: 21px;line-height: 45px;color: #333;font-weight: 600;background-color: #cbe5c5;">
+					<td colspan="2">Condições de pagamento</td>
+	   		</tr>
+
+         <tr>
+           <td colspan="2">
+             <table style="width: 100%;padding-bottom: 40px;">
+               <tbody>
+                 <tr>
+                   <th style="text-align: left;">Condição</th>
+                   <th style="text-align: left;">Tipo de vencimento</th>
+                   <th style="text-align: left;">Dias para pagamento</th>
+                   <th style="text-align: left;">Qtd. parcelas</th>
+                 </tr>
+                 <tr>
+                  <td>{{model.paymentCondition.name}}</td>
+                  <td>{{model.paymentCondition.maturityDateTypeDescription}}</td>
+                  <td>{{model.paymentCondition.daysByPayment}}</td>
+                  <td>{{model.paymentCondition.quantityInstallments}}</td>
+                 </tr>
+               </tbody>
+             </table>
+           </td>
+         </tr>
+
+				<tr style="font-size: 21px;line-height: 45px;color: #333;font-weight: 600;background-color: #cbe5c5;">
+					<td>Produtos adquiridos</td>
+
+					<td>Valor</td>
+				</tr>
+
+        <tr>
+          <td colspan="2">
+            <table style="width: 100%;padding-bottom: 40px;">
+              <tbody>
+                <tr>
+                  <th style="text-align: left;">Descrição</th>
+                  <th style="text-align: left;">Marca</th>
+                  <th style="text-align: left;">Qtd.</th>
+                  <th style="text-align: left;">Und. Medida</th>
+                  <th style="text-align: left;">Unitário</th>
+                  <th style="text-align: left;">Total</th>
+                </tr>
+                <tr *ngFor="let prod of model.products">
+                  <td class="text-left">{{prod.name}}</td>
+                  <td class="text-left">{{prod.brandName}}</td>
+                  <td class="text-left">{{prod.quantity| currency:'':''}}</td>
+                  <td class="text-left">{{prod.unitOfMeasureName}}</td>
+                  <td class="text-left">{{prod.price| currency:'':''}}</td>
+                  <td class="text-left">{{(prod.quantity * prod.price)| currency:'':''}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+				<tr class="total">
+          <td>Total do pedido</td>
+          <td style="text-align: right;">{{model.totalOrder| currency:'':''}}</td>
+				</tr>
+      </table>
+		</div>
+  </div>

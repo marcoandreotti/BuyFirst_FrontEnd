@@ -1,0 +1,37 @@
+<div class="bf-container crud">
+    <section>
+        <mat-button-toggle-group #group="matButtonToggleGroup" [value]="compnayType" (change)="onCompanyTypeChange(group.value)">
+            <mat-button-toggle value="0">Todos</mat-button-toggle>
+            <mat-button-toggle value="1">FindPart's</mat-button-toggle>
+            <mat-button-toggle value="2">Fornecedores</mat-button-toggle>
+            <mat-button-toggle value="3">Compradores</mat-button-toggle>
+            <mat-button-toggle value="4" disabled>Representantes</mat-button-toggle>
+            <mat-button-toggle value="5">Integradores</mat-button-toggle>
+        </mat-button-toggle-group>
+    </section>
+
+    <mat-card>
+        <mat-card-content>
+            <app-grid *ngIf="usuarios$ != null"
+                (onFilter)="onFilter($event)"
+                (pageChange)="pageEvent($event)"
+                [ableEdit]="true"
+                [alwaysFilters]="true"
+                [columns]="cols"
+                [displayedColumns]="displayedColumns"
+                [filterModel]="lastFilter"
+                [filters]="filters"
+                [itemMenus]="itemMenus"
+                [modelIdentity]="modelIdentity"
+                [pageIndex]="pageIndex"
+                [pageLength]="usuarios$.totalRecords"
+                [pageSize]="pageSize"
+                [rows]="usuarios$.data"
+                [specialFilter]="true"
+                [title]="gridUsers"
+                [totalRows]="usuarios$.totalRecords"
+                [useSelect]="false">
+            </app-grid>
+        </mat-card-content>
+    </mat-card>
+</div>

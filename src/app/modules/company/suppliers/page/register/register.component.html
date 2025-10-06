@@ -1,0 +1,297 @@
+<div *ngIf="model" class="bf-container crud">
+  <mat-card>
+    <mat-card-content>
+      <div class="card-crud">
+        <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)" dynamicHeight>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="mat-icon-tabs" color="primary">work_outline</mat-icon>
+              <span class="example-tab-text"> Dados </span>
+            </ng-template>
+            <app-form [(form)]="supplierForm" [model]="model" [formRows]="formSupplier"></app-form>
+          </mat-tab>
+
+          <!-- Endereços -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="mat-icon-tabs" color="primary">room</mat-icon>
+              <span class="example-tab-text">Endereços<span class="total-records no-match">{{ !addressesList ? 0 :
+                  addressesList.length }}</span>
+              </span>
+            </ng-template>
+            <app-grid *ngIf="addressesList != null" [ableEdit]="false" [alwaysFilters]="true" [columns]="colsAddress"
+              [displayedColumns]="displayedColumnsAddress" [itemMenus]="itemMenusAddress"
+              [topMenus]="topMenusAddress" [modelIdentity]="addressId" [rows]="addressesList" [title]="gridAddresses"
+              [useFilters]="false" [usePagination]="false" [useRegister]="false" [useSelect]="false">
+            </app-grid>
+          </mat-tab>
+
+          <!-- Contatos -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="mat-icon-tabs" color="primary">call</mat-icon>
+              <span class="example-tab-text">
+                Contatos<span class="total-records no-match">{{ !responsiblesList ? 0 : responsiblesList.length
+                  }}</span>
+              </span>
+            </ng-template>
+            <app-grid *ngIf="responsiblesList != null" [ableEdit]="false" [alwaysFilters]="true"
+              [columns]="colsResponsible" [displayedColumns]="displayedColumnsResponsible"
+              [itemMenus]="itemMenusResponsible" [topMenus]="topMenusResponsible" [modelIdentity]="responsible"
+              [rows]="responsiblesList" [title]="gridResponsible" [useFilters]="false" [usePagination]="false"
+              [useRegister]="false" [useSelect]="false">
+            </app-grid>
+          </mat-tab>
+
+          <!-- Regiões/atendimento -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="mat-icon-tabs" color="primary">map</mat-icon>
+              <span class="example-tab-text">
+                Regiões/atendimento<span class="total-records no-match">{{ !regionsList ? 0 : regionsList.length
+                  }}</span>
+              </span>
+            </ng-template>
+
+            <app-form [(form)]="regionForm" [model]="modelRefence" [formRows]="formRegion" [useErrors]="false"
+              (onSubmit)="formRegionSubmit()">
+            </app-form>
+
+            <app-grid *ngIf="regionsList != null" [ableEdit]="false" [alwaysFilters]="true" [columns]="colsRegion"
+              [displayedColumns]="displayedColumnsRegion" [itemMenus]="itemMenusRegion"
+              [topMenus]="topMenusRegion" [modelIdentity]="region" [rows]="regionsList" [title]="gridRegion"
+              [useFilters]="false" [usePagination]="false" [useRegister]="false" [useSelect]="false">
+            </app-grid>
+          </mat-tab>
+
+          <!-- Conds de pagto -->
+          <mat-tab *ngIf="editId">
+            <ng-template mat-tab-label>
+              <mat-icon class="mat-icon-tabs" color="primary">payments</mat-icon>
+              <span class="example-tab-text">Conds. pagamento</span>
+            </ng-template>
+            <div class="form-crud">
+
+              <mat-tab-group dynamicHeight>
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon class="mat-icon-tabs" color="primary">card_travel</mat-icon>
+                    <span class="example-tab-text">Negociação direta com a empresa vendedora</span>
+                  </ng-template>
+
+                  <mat-card class="card-payment" *ngFor="let rows of paymentsDirectLists">
+                    <mat-card-title>{{rows.name}}</mat-card-title>
+                    <mat-card-content>
+                      <div class="payment-type">
+                        <mat-card class="card-item-payment crud-grid-container">
+
+                          <div class="grid">
+                            <table class="mat-table table-scroll">
+                              <thead>
+                                <tr>
+                                  <th class="td-center">...</th>
+                                  <th>Nome</th>
+                                  <th>Tipo</th>
+                                  <th>Descrição</th>
+                                  <th>Dias p/Pagto</th>
+                                  <th>Qtd/Parcelas</th>
+                                  <th>Percentual</th>
+                                  <th class="td-center" style="width: 225px;">Ação</th>
+                                </tr>
+                              </thead>
+                              <tbody *ngFor="let row of rows.paymentConditions">
+                                <tr [class]="(row.id > 0 && row.active) ? 'tr-selected' : (row.id > 0 && !row.active) ? 'tr-unselected' : ''">
+                                  <td class="td-action">
+                                    <mat-icon *ngIf="(row.id == null)" color="warn" matTooltip="Não vinculado">remove</mat-icon>
+                                    <mat-icon *ngIf="(row.id > 0 && row.active)" color="primary" matTooltip="Vinculado">task_alt</mat-icon>
+                                    <mat-icon *ngIf="(row.id > 0 && !row.active)" color="warn" matTooltip="Vinculado e inativo" >radio_button_unchecked</mat-icon>
+                                  </td>
+                                  <td>{{row.name}}</td>
+                                  <td>{{row.maturityDateTypeName}}</td>
+                                  <td>{{row.maturityDateTypeDescription}}</td>
+                                  <td>{{row.daysByPayment}}</td>
+                                  <td>{{row.quantityInstallments}}</td>
+                                  <td>{{row.percentageOnPrice| currency:'':''}}</td>
+                                  <td class="td-action">
+                                    <button mat-raised-button class="shrink-2x btn-margin-3" [color]="(row.id > 0 && row.active) ? 'warn' : 'info'"
+                                      [style.color]="row.id == null ? 'var(--theme-primary-500)' :  (row.id > 0 && row.active) ? 'white' : ''"
+                                      (click)="paymentConditionActive(row)">{{
+                                      row.id == null ? 'Vincular' : (row.id > 0 && row.active) ? 'Inativar' : 'Ativar'}}
+                                    </button>
+                                    <button *ngIf="(row.id > 0 && row.active)" class="shrink-2x" mat-raised-button color="primary"
+                                      [style.color]="'white'" (click)="showModalConfigPayment(row)">
+                                      <mat-icon>settings</mat-icon>Configurar
+                                    </button>
+                                  </td>
+                                </tr>
+                                <tr *ngIf="row.specialConditions && row.specialConditions.length > 0">
+                                  <td class="td-right">
+                                    <mat-icon [ngClass]="(row.id > 0 && row.active) ? 'icon-special' : 'icon-special-inactive'">bookmark_added</mat-icon>
+                                  </td>
+                                  <td colspan="7" class="">
+                                    <table [ngClass]="(row.id > 0 && row.active) ? 'mat-table table-scroll table-special' : 'mat-table table-scroll table-special-inactive'">
+                                      <thead>
+                                        <th>Tipo</th>
+                                        <th>Conds. especial</th>
+                                        <th>Percentual</th>
+                                        <th>Data Inicial</th>
+                                        <th>Data Final</th>
+                                      </thead>
+                                      <tbody *ngFor="let srow of row.specialConditions">
+                                        <tr>
+                                          <td>{{srow.restrictType}}</td>
+                                          <td>{{srow.restrict}}</td>
+                                          <td>{{srow.percentageOnPrice| currency:'':''}}</td>
+                                          <td>{{srow.startDate| date:'dd/MM/yyyy'}}</td>
+                                          <td>{{srow.expirationDate| date:'dd/MM/yyyy'}}</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </mat-card>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </mat-tab>
+
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon class="mat-icon-tabs" color="primary">credit_card</mat-icon>
+                    <span class="example-tab-text">Meio de Pagamento</span>
+                  </ng-template>
+                  
+                  
+                  <mat-card class="card-payment" *ngFor="let rows of paymentsLists">
+                    <mat-card-title>{{rows.name}}</mat-card-title>
+                    <mat-card-content>
+                      <div class="payment-type">
+                        <mat-card class="card-item-payment crud-grid-container">
+
+                          <div class="grid">
+                            <table class="mat-table table-scroll">
+                              <thead>
+                                <tr>
+                                  <th class="td-center">...</th>
+                                  <th>Nome</th>
+                                  <th>Tipo</th>
+                                  <th>Descrição</th>
+                                  <th>Dias p/Pagto</th>
+                                  <th>Qtd/Parcelas</th>
+                                  <th>Percentual</th>
+                                  <th class="td-center" style="width: 225px;">Ação</th>
+                                </tr>
+                              </thead>
+                              <tbody *ngFor="let row of rows.paymentConditions">
+                                <tr [class]="(row.id > 0 && row.active) ? 'tr-selected' : (row.id > 0 && !row.active) ? 'tr-unselected' : ''">
+                                  <td class="td-action">
+                                    <mat-icon *ngIf="(row.id == null)" color="warn" matTooltip="Não vinculado">remove</mat-icon>
+                                    <mat-icon *ngIf="(row.id > 0 && row.active)" color="primary" matTooltip="Vinculado">task_alt</mat-icon>
+                                    <mat-icon *ngIf="(row.id > 0 && !row.active)" color="warn" matTooltip="Vinculado e inativo" >radio_button_unchecked</mat-icon>
+                                  </td>
+                                  <td>{{row.name}}</td>
+                                  <td>{{row.maturityDateTypeName}}</td>
+                                  <td>{{row.maturityDateTypeDescription}}</td>
+                                  <td>{{row.daysByPayment}}</td>
+                                  <td>{{row.quantityInstallments}}</td>
+                                  <td>{{row.percentageOnPrice| currency:'':''}}</td>
+                                  <td class="td-action">
+                                    <button mat-raised-button class="shrink-2x btn-margin-3" [color]="(row.id > 0 && row.active) ? 'warn' : 'info'"
+                                      [style.color]="row.id == null ? 'var(--theme-primary-500)' :  (row.id > 0 && row.active) ? 'white' : ''"
+                                      (click)="paymentConditionActive(row)">{{
+                                      row.id == null ? 'Vincular' : (row.id > 0 && row.active) ? 'Inativar' : 'Ativar'}}
+                                    </button>
+                                    <button *ngIf="(row.id > 0 && row.active)" class="shrink-2x" mat-raised-button color="primary"
+                                      [style.color]="'white'" (click)="showModalConfigPayment(row)">
+                                      <mat-icon>settings</mat-icon>Configurar
+                                    </button>
+                                  </td>
+                                </tr>
+                                <tr *ngIf="row.specialConditions && row.specialConditions.length > 0">
+                                  <td class="td-right">
+                                    <mat-icon [ngClass]="(row.id > 0 && row.active) ? 'icon-special' : 'icon-special-inactive'">bookmark_added</mat-icon>
+                                  </td>
+                                  <td colspan="7" class="">
+                                    <table [ngClass]="(row.id > 0 && row.active) ? 'mat-table table-scroll table-special' : 'mat-table table-scroll table-special-inactive'">
+                                      <thead>
+                                        <th>Tipo</th>
+                                        <th>Conds. especial</th>
+                                        <th>Percentual</th>
+                                        <th>Data Inicial</th>
+                                        <th>Data Final</th>
+                                      </thead>
+                                      <tbody *ngFor="let srow of row.specialConditions">
+                                        <tr>
+                                          <td>{{srow.restrictType}}</td>
+                                          <td>{{srow.restrict}}</td>
+                                          <td>{{srow.percentageOnPrice| currency:'':''}}</td>
+                                          <td>{{srow.startDate| date:'dd/MM/yyyy'}}</td>
+                                          <td>{{srow.expirationDate| date:'dd/MM/yyyy'}}</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </mat-card>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+
+
+
+                </mat-tab>
+              </mat-tab-group>
+
+            </div>
+          </mat-tab>
+
+          <!-- Restrições -->
+          <mat-tab *ngIf="editId">
+            <ng-template mat-tab-label>
+              <mat-icon class="mat-icon-tabs" color="warn">block</mat-icon>
+              <span class="example-tab-text">
+                Restrições<span class="total-records no-match">{{ !blackLists ? 0 : blackLists.length }}</span>
+              </span>
+            </ng-template>
+
+            <div class="form-restrict">
+              <div class="div-restrict-opt">
+                <h4>Forma de restrição:</h4>
+                <mat-radio-group aria-labelledby="radio-group-label" [(ngModel)]="restrictConditionType">
+                  <mat-radio-button [value]="1" (change)="radioButtonChange($event)">Regiões</mat-radio-button>
+                  <mat-radio-button [value]="2" (change)="radioButtonChange($event)">CNPJ</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div class="div-restrict-form">
+                <app-form *ngIf="restrictConditionType == 1" [(form)]="blackListFormRegion" [model]="modelRestrict"
+                  [formRows]="formBlackListRegion" [useErrors]="false" (onSubmit)="formBlackListSubmit()"></app-form>
+                <app-form *ngIf="restrictConditionType == 2" [(form)]="blackListFormCnpj" [model]="modelRestrict"
+                  [formRows]="formBlackListCnpj" [useErrors]="false" (onSubmit)="formBlackListSubmit()"></app-form>
+              </div>
+            </div>
+
+            <app-grid *ngIf="blackLists != null" [ableEdit]="false" [alwaysFilters]="true" [columns]="colsBlackList"
+              [displayedColumns]="displayedColumnsBlackList" [itemMenus]="itemMenusBlackList"
+              [modelIdentity]="modelBlackList" [rows]="blackLists" [title]="gridBlackList" [useFilters]="false"
+              [usePagination]="false" [useRegister]="false" [useSelect]="false">
+            </app-grid>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions *ngIf="selected.value < 4" align="end">
+      <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="save()">
+        Salvar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

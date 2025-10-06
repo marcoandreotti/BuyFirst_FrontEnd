@@ -1,0 +1,47 @@
+<div id="dialog-filter">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+        <div class="fl-row title">
+            <mat-icon class="header-icon" color="primary">supervised_user_circle</mat-icon>
+            <h2 mat-dialog-title>Problemas - empresas sem o código de grupo</h2>
+        </div>
+    </div>
+    <div mat-dialog-content class="dialog-filter-corpo mat-app-background">
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap="wrap" fxLayoutGap="16px">
+            <div fxFlex="60">
+                <table class="table-info">
+                    <thead>
+                        <tr>
+                            <th class="center">CNPJ</th>
+                            <th class="center">Empresa</th>
+                            <th class="center">Qtd Produtos Cotados</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let comp of lst">
+                        <tr class="tr-hover td-cursor" [ngClass]="comp.selected ? 'row-selectd' : ''" (click)="onSelectedRow(comp)">
+                            <td class="center">{{comp.document}}</td>
+                            <td class="center">{{comp.name}}</td>
+                            <td class="right">{{comp.qtdProducts}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div fxFlex="40">
+                <div class="div-container" fxLayout="column" fxLayoutWrap="wrap" fxLayoutGap="16px">
+                    <div class="center" fxFlex="30">
+                        <p>Selecione a(s) empresa(s) ao lado, informe o código do grupo abaixo e aplique o ajuste!</p>
+                    </div>
+                    <div fxFlex="40">
+                        <app-form [(form)]="codeForm" [model]="model" [formRows]="formCode" [useErrors]="false"></app-form>
+                    </div>
+                    <div class="center" fxFlex="30">
+                        <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="onSubmit()">Aplicar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div mat-dialog-actions class="dialog-filter-botoes mat-app-background">
+        <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="onCancel()">Cancelar</button>
+    </div>
+</div>

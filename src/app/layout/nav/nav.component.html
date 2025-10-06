@@ -1,0 +1,57 @@
+<nav class="mat-app-background" [ngClass]="{'notlogged': !auth}">
+
+    <div class="fl-row align-c">
+
+      <button id="btn-mobile" (click)="expand()" [class.expanded]="(isOpened$  | async)">
+        <span id="burger"></span>
+      </button >
+
+        <app-logo *ngIf="!auth" [ngClass]="{'logotipo': true}"></app-logo>
+        <div class="margin"></div>
+        <div *ngIf="backRoute$ | async as route" class="button-r-g" (click)="back(route)">
+            <mat-icon>arrow_back</mat-icon>
+        </div>
+        <h2 *ngIf="auth"><b>{{title$ | async}}</b></h2>
+    </div>
+
+    <!-- <div class="header-search" fxFlex="60">
+        <mat-form-field appearance="legacy" class="field-search">
+            <mat-label>Perquisar preços</mat-label>
+            <input matInput placeholder="Placeholder">
+        </mat-form-field>
+        <button mat-button color="primary" class="button-icon">
+            <mat-icon>search</mat-icon>
+        </button>
+    </div> -->
+
+    <div class="header-user">
+
+        <div class="user-options">
+
+            <div *ngIf="!routeLogin()" class="button-icon" (click)="toggleTheme()">
+                <mat-icon color="primary">dark_mode</mat-icon>
+            </div>
+
+            <!-- <div *ngIf="auth" class="button-icon notification" (click)="toggleNotification()">
+                <mat-icon color="primary"
+                    [matBadge]="countNotReadNot(notificacoes$ | async).length > 0 ? countNotReadNot(notificacoes$ | async).length : null"
+                    matBadgeColor="warn">notifications_active</mat-icon>
+                <app-notification [(notificationOpened)]="notificationOpened"></app-notification>
+            </div> -->
+
+            <div *ngIf="auth" class="button-icon user-info" [matMenuTriggerFor]="menu">
+                <mat-icon color="primary">account_circle</mat-icon>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="personalData()">
+                        <mat-icon>badge</mat-icon>
+                        <span>{{auth.firstName}}&nbsp;{{auth.lastName}}</span>
+                    </button>
+                    <button mat-menu-item (click)="logOut()">
+                        <mat-icon>logout</mat-icon>
+                        <span>{{ 'Login.logout' | translate }}</span>
+                    </button> 
+                </mat-menu>
+            </div>
+        </div>
+    </div>
+</nav>

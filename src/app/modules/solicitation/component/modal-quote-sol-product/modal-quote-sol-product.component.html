@@ -1,0 +1,77 @@
+<div id="dialog-sol-product">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+        <div class="fl-row title">
+            <mat-icon class="header-icon" color="primary">edit</mat-icon>
+            <h2 mat-dialog-title>Editando [{{model.productSearch}}]</h2>
+        </div>
+    </div>
+    <div mat-dialog-content class="dialog-sol-product-corpo mat-app-background">
+        <div class="div-container" fxLayout="column wrap" fxLayoutGap="16px">
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="60">
+                    <app-form [(form)]="prodForm" [model]="model" [formRows]="formProd"></app-form>
+
+                    <div class="add-addresses-form" [formGroup]="addressForm">
+                        <div *ngIf="listAddresses && listAddresses.length > 1">
+                            <table class="table-info">
+                                <thead>
+                                    <tr>
+                                        <th class="left">Endereço</th>
+                                        <th class="center">Quantidade</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody formArrayName="formAddressArray">
+                                    <tr *ngFor="let addForm of formAddressArray.controls; let i = index">
+                                        <td class="left">{{addForm.controls['concatAddress'].value}}</td>
+                                        <td [formGroup]="addForm" class="right col-25">
+                                            <mat-form-field appearance="outline" style="margin-bottom: -1.25em">
+                                                <input class="right" ngDefaultControl matInput currencyMask formControlName="quantity" name="quantity" autocomplete="off" [options]="getOptions()">
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <button mat-icon-button color="warn" (click)="addForm.controls['quantity'].setValue('0')"><mat-icon matListItemIcon>delete</mat-icon></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div fxFlex="25">
+                    <form class="form-cadastro" [formGroup]='brandSearchForm'>
+                        <mat-form-field class="w100" appearance="outline">
+                            <mat-label>Marcas</mat-label>
+                            <input matInput placeholder="Marcas" [matAutocomplete]="autoBrand"
+                                formControlName='brandSearchInput' required>
+                        </mat-form-field>
+                        <button mat-icon-button color="primary" *ngIf="showBrandAdd" class="button-imput-add"
+                            (click)="onAddBrand()" matTooltip="Caso queira pode adicionar mais Marcas">
+                            <mat-icon>add_box</mat-icon>
+                        </button>
+
+                        <mat-autocomplete #autoBrand="matAutocomplete" [displayWith]="brandDisplayFn"
+                            (optionSelected)="onSearchBrandAutocomplet($event)">
+                            <mat-option *ngFor="let brand of filteredBrands" [value]="brand">
+                                <span>{{ brand.name }}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </form>
+                    <div class="div-brands">
+                        <div class="div-brand" *ngFor="let qBrand of listBrands">
+                            <span>{{qBrand.brand.name}}</span>
+                            <button mat-icon-button color="warn" (click)="onRemoveBrand(qBrand)"><mat-icon
+                                    matListItemIcon>delete</mat-icon></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions class="dialog-sol-product-botoes mat-app-background">
+        <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Cancelar</button>
+        <button class="large" mat-raised-button color="primary" [style.color]="'white'"
+            (click)="onSubmit()">Atualizar</button>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="translator-container">
+
+    <div class="image">
+        <img [src]="'assets/' + current.image" />
+    </div>
+    <h4>{{current.name}}</h4>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>expand_more</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+        <button *ngFor="let l of languages" mat-menu-item>
+            <div (click)="changeLanguage(l)" class="translator-container">
+                <div class="image">
+                    <img [src]="'assets/' + l.image" />
+                </div>
+                <h4>{{l.name}}</h4>
+            </div>
+        </button>
+    </mat-menu>
+
+</div>

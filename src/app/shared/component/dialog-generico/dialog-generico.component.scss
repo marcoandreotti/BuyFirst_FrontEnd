@@ -1,0 +1,88 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+.custom-dialog-container .mat-dialog-container {
+    padding: 0px;
+}
+
+#dialog-generico {
+    min-height: 150px;
+    width: 500px;
+    white-space: break-spaces;
+    @media only screen and (max-width: $mobile) {
+        width: 100%;
+    }
+}
+
+#dialog-generico .header {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+#dialog-generico .header h2 {
+    margin: 0px;
+}
+
+#dialog-generico .header {
+    background-color: #aaaaaa;
+}
+
+#dialog-generico .header.aviso {
+    background-color: #f0ad4e;
+}
+
+#dialog-generico .header.info {
+    background-color: #5bc0de;
+}
+
+#dialog-generico .header.erro {
+    background-color: #ff4d2d;
+}
+
+#dialog-generico .header.sucesso {
+    background-color: var(--theme-primary-500);
+}
+
+#dialog-generico .dialog-generico-corpo {
+    display: flex;
+    justify-content: center;
+    padding: 40px 40px 0 40px;
+
+    h3 {
+        @media only screen and (max-width: $mobile) {
+            font-size: 20px;
+        }
+    }
+}
+
+#dialog-generico .dialog-generico-obs {
+    display: flex;
+    justify-content: left;
+    padding: 0 40px 0 40px;
+    color: tomato;
+    text-align: center;
+
+    h5 {
+        @media only screen and (max-width: $mobile) {
+            font-size: 16px;
+        }
+    }
+}
+
+#dialog-generico .dialog-generico-botoes {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#dialog-generico .botao-dialog-generico {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: transparent;
+}

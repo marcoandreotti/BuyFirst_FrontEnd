@@ -1,0 +1,53 @@
+<div id="dialog-code">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+        <div class="fl-row title">
+            <mat-icon class="header-icon" color="primary">qr_code_scanner</mat-icon>
+            <h2 mat-dialog-title>Agrupar/Unificar</h2>
+        </div>
+    </div>
+    <div mat-dialog-content class="dialog-code-corpo mat-app-background">
+        <div fxLayout="row" fxLayoutGap="16px">
+            <div class="col-filter" fxFlex="70">
+                <app-form [(form)]="productForm" [model]="modelProduct" [formRows]="formProduct"></app-form>
+            </div>
+            <div class="col-filter" fxFlex="30">
+                <app-form [(form)]="refsForm" [model]="modelReferences" [formRows]="formRefs"></app-form>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div *ngIf="this.lstProds" class="div-result">
+            <table class="table-info">
+                <thead>
+                    <tr>
+                        <th class="center">ID BF</th>
+                        <th class="center">Produto</th>
+                        <th class="center">Grupo</th>
+                        <th class="center">SubGrupo</th>
+                        <th class="center">UM</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let prod of lstProds">
+                    <tr class="tr-hover">
+                        <td class="right td-cursor" (click)="onSelectedProd(prod.productId)">{{ prod.productId }}</td>
+                        <td class="left" (click)="onSelectedRow(prod)">
+                            <p>{{prod.name}}</p>
+                            <p class="p-codes" *ngIf="prod.supplierCodes">{{prod.supplierCodes}}</p>
+                        </td>
+                        <td class="left">{{ prod.groupName }}</td>
+                        <td class="left">{{ prod.subGroupName }}</td>
+                        <td class="center">{{ prod.unitOfMeasureAcronym }}</td>
+                        <td *ngIf="prod.quantityMatchesSupplier > 0" matTooltip="Match Fornecedor">
+                            <mat-icon>share</mat-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div mat-dialog-actions class="dialog-code-botoes mat-app-background">
+        <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="onCancel()">Cancelar</button>
+        <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="onSubmit()">Aplicar</button>
+    </div>
+</div>

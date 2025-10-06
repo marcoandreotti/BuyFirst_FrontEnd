@@ -1,0 +1,264 @@
+<div class="bf-container" fxLayout="column" fxLayoutGap="16px">
+   <div fxFlex="100">
+      <mat-tab-group [selectedIndex]="selectedTab.value" (selectedIndexChange)="selectedTab.setValue($event)" dynamicHeight>
+         <!-- TAB - NOMATCH -->
+         <mat-tab>
+            <ng-template mat-tab-label>
+               <mat-icon color="darkgray">flaky</mat-icon>
+               <span> Fila não atendidos <span class="total-records no-match">{{totalRecords}}</span> </span>
+            </ng-template>
+            <ng-template matTabContent>
+               <div fxLayout="column" fxLayoutGap="16px">
+                  <div fxFlex="15">
+                     <div fxLayout="row" fxLayoutGap="16px">
+                        <div fxFlex="80">
+                           <app-form [(form)]="filterForm" [model]="modelFilter" [formRows]="formFilter"
+                              [useErrors]="false" (onSubmit)="onFilter()"></app-form>
+                        </div>
+                        <div fxFlex="20">
+                           <button class="button-act-match" mat-button type="button" (click)="showModalConfig()">
+                              <mat-icon color="primary">search</mat-icon>
+                              Configurar pesquisa
+                           </button>
+                           <button class="button-act-match" mat-button *ngIf="companySelected" type="button"
+                              (click)="showModalMatchAutom()">
+                              <mat-icon color="primary">app_registration</mat-icon>
+                              Match Automático
+                           </button>
+                           <button class="button-act-match" mat-button *ngIf="companySelected" type="button"
+                              (click)="goAnalysisMatch()">
+                              <mat-icon color="primary">find_replace</mat-icon>
+                              Analise Match's
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+                  <div fxFlex="50" class="scrollable-content">
+                     <table class="table-info">
+                        <thead>
+                           <tr>
+                              <th class="left " colspan="2">
+                                 <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                 </mat-checkbox>&nbsp;<span>({{this.selection.selected.length}})</span> - Empresa
+                              </th>
+                              <th class="center">Código</th>
+                              <th class="center col-35">Produto</th>
+                              <th class="center">Marca</th>
+                              <th class="center">Un.</th>
+                              <th class="center" *ngIf="this.selection.selected.length == 0">...</th>
+                           </tr>
+                        </thead>
+                        <tbody *ngFor="let prod of dataSource.data">
+                           <tr>
+                              <td class="center no-border">
+                                 <mat-checkbox [color]="prod.active ? 'primary' : 'warn'"
+                                    (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(prod) : null"
+                                    [checked]="selection.isSelected(prod)"></mat-checkbox>
+                              </td>
+                              <td class="left col-35">{{prod.companyName}}</td>
+                              <td class="center">{{prod.referenceCode}}</td>
+                              <td class="left">{{prod.name}}</td>
+                              <td class="left">{{prod.brandName}}</td>
+                              <td class="center">{{prod.unitOfMeasureAcronym}}</td>
+                              <td class="right no-border" *ngIf="this.selection.selected.length == 0">
+                                 <div class="div-table-act">
+                                    <button mat-icon-button matTooltip="Procurar produto BF" color="primary"
+                                       (click)="showSearchModal(prod)" *ngIf="prod.active">
+                                       <mat-icon>manage_search</mat-icon>
+                                    </button>
+                                    <button mat-icon-button matTooltip="Resolver com match automático" color="primary"
+                                       (click)="onResolve(prod)" *ngIf="prod.active">
+                                       <mat-icon>compare</mat-icon>
+                                    </button>
+                                    <button mat-raised-button [color]="prod.active ? 'warn' : 'info'"
+                                       [style.color]="prod.active ? 'white' : ''" (click)="onActive(prod)">{{
+                                       prod.active ?
+                                       'Inativar' : 'Ativar'}}</button>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <div fxFlex="20" *ngIf="totalRecords > getConfigMatch().totalRegister">
+                     <div class="col page-select">
+                        <button *ngIf="!showGotoPage" class="small button-page-select" mat-button
+                           (click)="onClickShowGotoPage()">
+                           <mat-icon>auto_stories</mat-icon>
+                           Ir para
+                        </button>
+
+                        <mat-form-field *ngIf="showGotoPage">
+                           <mat-label>Ir Para:</mat-label>
+                           <mat-select [(ngModel)]="noMatch_pageIndex" (ngModelChange)="updateManualPage($event)">
+                              <mat-option *ngFor="let page of (listPages$ | async)" [value]="page.id">{{
+                                 page.description
+                                 }}</mat-option>
+                           </mat-select>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-auto">
+                        <mat-paginator [length]="totalRecords" [pageIndex]="noMatch_pageIndex"
+                           [pageSize]="getConfigMatch().totalRegister" aria-label="Select page"
+                           (page)="pageNoMatchEvent($event)" showFirstLastButtons>
+                        </mat-paginator>
+                     </div>
+                  </div>
+                  <div *ngIf="this.selection.selected.length > 0" class="div-act" fxFlex="15" align="end">
+                     <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="onResolveAll()" >Resolver todos</button>
+                     <button class="large" mat-raised-button color="warn" [style.color]="'white'" (click)="onActiveAll()">Ativar ou Inativar todos</button>
+                  </div>
+               </div>
+            </ng-template>
+         </mat-tab>
+
+         <!-- TAB - RESOLVE -->
+         <mat-tab>
+            <ng-template mat-tab-label>
+               <mat-icon color="primary">compare_arrows</mat-icon>
+               <span> À Resolver <span class="total-records result">{{totalExecutMatch}}</span> </span>
+            </ng-template>
+            <ng-template matTabContent>
+               <mat-card>
+                  <mat-card-content>
+                     <div class="scrollable-content">
+                        <table mat-table [dataSource]="resolveDataSource" multiTemplateDataRows
+                           class="spacing-table mat-table-scroll small-scroll">
+
+                           <ng-container matColumnDef="companyName">
+                              <th mat-header-cell *matHeaderCellDef> Empresa </th>
+                              <td mat-cell *matCellDef="let data"> {{data.companyName}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="name">
+                              <th mat-header-cell *matHeaderCellDef> Produto </th>
+                              <td mat-cell *matCellDef="let data"> {{data.name}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="referenceCode">
+                              <th mat-header-cell *matHeaderCellDef> Código </th>
+                              <td mat-cell *matCellDef="let data"> {{data.referenceCode}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="brandName">
+                              <th mat-header-cell *matHeaderCellDef> Marca </th>
+                              <td mat-cell *matCellDef="let data"> {{data.brandName}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="unitOfMeasureAcronym">
+                              <th mat-header-cell *matHeaderCellDef> Un. </th>
+                              <td mat-cell *matCellDef="let data"> {{data.unitOfMeasureAcronym}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="actions">
+                              <th mat-header-cell *matHeaderCellDef class="centered"> ... </th>
+                              <td mat-cell *matCellDef="let row">
+                                 <button mat-raised-button color="lightgray" class="button-margin">Desfazer</button>
+                              </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="expandedDetail">
+                              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns_Resolve.length">
+                                 <mat-radio-group [name]="element.productSupplierId" ngModel required #gender="ngModel">
+                                    <table class="spacing-table mat-table-scroll small-scroll table-resolve">
+                                       <thead>
+                                          <tr>
+                                             <th style="width: 38%;">Produto</th>
+                                             <th>Código</th>
+                                             <th>Grupo</th>
+                                             <th>SubGrupo</th>
+                                             <th style="width: 5%; text-align: center">Un.</th>
+                                             <th style="width: 3%; text-align: center">Score</th>
+                                             <th style="width: 3%; text-align: center">Distancia</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody *ngFor="let data of element.productMatchs">
+                                          <tr (click)="selectResolveRow(element.productSupplierId, data)"
+                                             [ngClass]="data.selected ? 'row-selected' : ''">
+                                             <td class="cell-resolve" style="width: 38%;">{{ data.name }}</td>
+                                             <td class="cell-resolve">{{data.referenceCode}}</td>
+                                             <td class="cell-resolve">{{data.groupName}}</td>
+                                             <td class="cell-resolve">{{data.subGroupName}}</td>
+                                             <td class="cell-resolve center" style="width: 5%;">
+                                                {{data.unitOfMeasureAcronym}}
+                                             </td>
+                                             <td class="cell-resolve cell-resolve-score center bold">{{data.score}}</td>
+                                             <td class="cell-resolve cell-resolve-distance center bold">
+                                                {{data.distance}}</td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                 </mat-radio-group>
+                              </td>
+                           </ng-container>
+                           <tr mat-header-row *matHeaderRowDef="displayedColumns_Resolve; sticky: true"
+                              class="tableHeaderRow"></tr>
+                           <tr mat-row *matRowDef="let element; columns: displayedColumns_Resolve;"
+                              class="example-element-row spaceUnder"></tr>
+                           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row">
+                           </tr>
+                        </table>
+                     </div>
+                  </mat-card-content>
+                  <mat-card-actions align="end">
+                     <button class="large" mat-raised-button color="primary" [style.color]="'white'"
+                        (click)="onSaveMatch()">Salvar Match's</button>
+                  </mat-card-actions>
+               </mat-card>
+            </ng-template>
+         </mat-tab>
+
+         <!-- TAB - PROBLEM -->
+         <mat-tab>
+            <ng-template mat-tab-label>
+               <mat-icon color="warn">warning_amber</mat-icon>
+               <span> Problemas <span class="total-records warning">{{totalWarningMatch}}</span> </span>
+            </ng-template>
+            <ng-template matTabContent>
+               <mat-card>
+                  <mat-card-content>
+                     <div class="scrollable-content">
+                        <table mat-table [dataSource]="problemDataSource" multiTemplateDataRows
+                           class="spacing-table mat-table-scroll small-scroll">
+
+                           <ng-container matColumnDef="companyName">
+                              <th mat-header-cell *matHeaderCellDef> Empresa </th>
+                              <td mat-cell *matCellDef="let data"> {{data.companyName}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="name">
+                              <th mat-header-cell *matHeaderCellDef> Produto </th>
+                              <td mat-cell *matCellDef="let data"> {{data.name}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="referenceCode">
+                              <th mat-header-cell *matHeaderCellDef> Código </th>
+                              <td mat-cell *matCellDef="let data"> {{data.referenceCode}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="brandName">
+                              <th mat-header-cell *matHeaderCellDef> Marca </th>
+                              <td mat-cell *matCellDef="let data"> {{data.brandName}} </td>
+                           </ng-container>
+
+                           <ng-container matColumnDef="message">
+                              <th mat-header-cell *matHeaderCellDef> Mensagem </th>
+                              <td mat-cell *matCellDef="let data" class="font-warning"> {{data.message}} </td>
+                           </ng-container>
+
+                           <tr mat-header-row *matHeaderRowDef="displayedColumns_Problem; sticky: true"
+                              class="tableHeaderRow"></tr>
+                           <tr mat-row *matRowDef="let element; columns: displayedColumns_Problem;"
+                              class="example-element-row spaceUnder">
+                           </tr>
+                        </table>
+                     </div>
+                  </mat-card-content>
+               </mat-card>
+            </ng-template>
+         </mat-tab>
+      </mat-tab-group>
+   </div>
+</div>

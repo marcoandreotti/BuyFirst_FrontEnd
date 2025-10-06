@@ -1,0 +1,24 @@
+<div class="bf-container">
+  <app-grid *ngIf="paymentType$ != null"
+  (onFilter)="onFilter($event)"
+  (pageChange)="onPageEvent($event)"
+  [alwaysFilters]="true"
+  [columns]="cols"
+  [displayedColumns]="displayedColumns"
+  [filterModel]="lastFilter"
+  [filters]="filters"
+  [itemMenus]="itemMenus"
+  [modelIdentity]="modelIdentity"
+  [pageIndex]="pageIndex"
+  [pageLength]="paymentType$.totalRecords"
+  [pageSize]="pageSize"
+  [rows]="paymentType$.data"
+  [specialFilter]="true"
+  [title]="gridPayment"
+  [useSelect]="false"
+  [expandedRows]="paymentCondition$"
+  [expandedElement]="expandedElementIndex"
+  (onExpandItem)="onExpandItem($event)"
+  (onCloseExpandItem)="onCloseExpandItem($event)">
+</app-grid>
+</div>

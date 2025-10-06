@@ -1,0 +1,127 @@
+nav {
+  height: 8vh;
+  width: 100vw;
+  max-width: 100%;
+  background: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+  border-bottom: 1px solid lightgray;
+}
+
+nav svg {
+    fill: #5bb26e;
+}
+
+nav app-logo {
+  margin-left: 20px;
+}
+
+nav app-translator {
+  margin-right: 20px;
+}
+
+nav .header-user {
+  display: flex;
+  align-items: center;
+}
+
+nav .nav-logo {
+  display: flex;
+}
+
+.nav-logged-in-user {
+    height: 140px;
+}
+
+.nav-logged-in-user .header-buttons {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.nav-logged-in-user .empresa-logo {
+    height: 36px;
+}
+
+.nav-logged-in-user .logo-separator {
+    margin: 0px 15px;
+    border-left: 2px solid #5bb26e;
+}
+
+.nav-logged-in-user .header-search {
+    width: 300px;
+    height: 48px;
+}
+
+.nav-logged-in-user .nav-itens {
+    display: flex;
+    justify-content: left;
+    height: 100%;
+    margin-right: 2vw;
+}
+
+.nav-logged-in-user .nav-itens .nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+    height: 100%;
+    width: 105px;
+}
+
+.nav-logged-in-user .nav-itens .nav-link svg {
+    margin-right: 4px;
+}
+
+.nav-logged-in-user .nav-itens .nav-link.active {
+    box-sizing: border-box;
+    border-bottom: 3px solid #5bb26e;
+}
+
+::ng-deep .mat-tooltip {
+    color: white;
+    background-color: black;
+    margin-top: -70px;
+}
+
+.nav-menu {
+    display: none;
+}
+
+@media (max-width: 1070px) {
+
+  .nav-logged-in-user {
+    height: 100px;
+    border-bottom: 0.2px solid #888888;
+  }
+  
+  .nav-logged-in-user .logo-separator {
+    margin: 0px 15px;
+    border-left: 2px solid #5bb26e;;
+  }
+  
+  .nav-logged-in-user .nav-itens {
+    display: flex;
+    height: 100px;
+    width: 100%;
+  }
+  
+  .nav-logged-in-user .nav-itens .nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+    width: 90px;
+  }
+  
+  .nav-logged-in-user .nav-itens .nav-link.active {
+    box-sizing: border-box;
+    border-bottom: 3px solid #5bb26e;;
+  }  
+  
+}

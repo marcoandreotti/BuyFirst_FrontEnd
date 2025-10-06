@@ -1,0 +1,40 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.crud-grid-options {
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 3px 0px;
+   
+
+.options{
+    @media only screen and (max-width: $mobile) {
+        justify-content: flex-end !important;
+    }
+}
+}
+
+.module {
+    height: 40px !important;
+    @media only screen and (max-width: $mobile) {
+        height: 25px !important;
+    }
+}
+
+.title-row {
+    margin-bottom: 8px !important;
+}
+
+.title {
+    margin: 8px 0px !important;
+    font-weight: bold;
+}
+
+h1 {
+    @media only screen and (max-width: $mobile) {
+        font-size: 20px !important;
+    }
+}

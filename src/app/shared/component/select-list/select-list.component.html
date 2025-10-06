@@ -1,0 +1,48 @@
+<div class="linha">
+  <div class="container-disponiveis">
+    <h4><b>{{tituloDisponiveis}}</b></h4>
+    <div class="pesquisaItem">
+      <div class="form-row" fxLayout="row" fxLayout.xs="column" fxFlexFill fxLayoutGap="20px">
+        <div [fxFlex]="100">
+          <mat-form-field class="w100" appearance="outline">
+            <mat-label>Pesquisar {{tituloDisponiveis}}</mat-label>
+            <input matInput [(ngModel)]="pesquisaDisponivel">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="items">
+      <div *ngFor="let item of disponiveis" class="item">
+        <h6 *ngFor="let paramItem of parametros; let i = index;">
+          {{i > 0 ? " • " : ""}}{{paramItem.mask ? (item[paramItem.name] | mask: paramItem.mask) : item[paramItem.name]}} 
+        </h6>
+        <div class="btnAcao addItem" (click)="addItem($event, item)">
+          <mat-icon>arrow_forward</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-selecionados">
+    <h4><b>{{tituloSelecionados}}</b></h4>
+    <div class="pesquisaItem">
+      <div class="form-row" fxLayout="row" fxLayout.xs="column" fxFlexFill fxLayoutGap="20px">
+        <div [fxFlex]="100">
+          <mat-form-field class="w100" appearance="outline">
+            <mat-label>Pesquisar {{tituloSelecionados}}</mat-label>
+            <input matInput [(ngModel)]="pesquisaSelecionados">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="items">
+      <div *ngFor="let item of selecionados" class="item">
+        <h6 *ngFor="let paramItem of parametros; let i = index;">
+          {{i > 0 ? " • " : ""}}{{paramItem.mask ? (item[paramItem.name] | mask: paramItem.mask) : item[paramItem.name]}} 
+        </h6>
+        <div class="btnAcao removerItem" (click)="removerItem($event, item)">
+          <mat-icon>arrow_back</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

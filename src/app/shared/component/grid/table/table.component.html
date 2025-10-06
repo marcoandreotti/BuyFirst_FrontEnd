@@ -1,0 +1,210 @@
+<div #gridTable class="table-scroll" (scroll)="menuPosTop = 0">
+    <mat-table
+        [ngClass]="{'mat-table-scroll small-scroll': displayedColumns.length > 15 || scroll, 'mat-notselect': ((!useSelect && !( displayedColumns.length > 15 || scroll)) && !haveExpanded) }"
+        cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="tableDrop($event)"
+        [dataSource]="dataSource" matSort (matSortChange)="changeSorter($event)">
+
+        <ng-container *ngIf="haveExpanded" matColumnDef="expanded" sticky>
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <div class="fl-row align-c pointer" (click)="OnExpandItem(element);$event.stopPropagation();">
+                    <mat-icon color="primary">{{element[modelIdentity] == expandedElement ? 'close' : 'add'}}
+                    </mat-icon>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container *ngIf="useSelect" matColumnDef="select" sticky>
+
+            <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+                <h4 class="select-margin">({{selectedRows.length}})</h4>
+            </mat-header-cell>
+
+            <mat-cell *matCellDef="let row">
+                <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                    (change)="$event ? selectRow(row) : null" [checked]="selection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+            </mat-cell>
+
+        </ng-container>
+
+        <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.name">
+            <div *ngIf="column.showSort">
+                <mat-header-cell [ngClass]="{'centered': column.input, 'decimal':column.decimal || column.alignEnd}"
+                    *matHeaderCellDef mat-sort-header cdkDrag cdkDragLockAxis="x"
+                    [arrowPosition]="column.decimal || column.alignEnd ? 'before' : 'after'">
+                    <b>{{ column.title }}</b>
+                </mat-header-cell>
+            </div>
+            <div *ngIf="!column.showSort">
+                <mat-header-cell [ngClass]="{'centered': column.input, 'decimal':column.decimal || column.alignEnd}"
+                    *matHeaderCellDef cdkDrag cdkDragLockAxis="x">
+                    <b>{{ column.title }}</b>
+                </mat-header-cell>
+            </div>
+
+            <mat-cell [ngClass]="{'centered': column.input, 'decimal':column.decimal || column.alignEnd}"
+                *matCellDef="let element, let i = index">
+
+                <ng-container *ngIf="column.showFavorite">
+                    <mat-icon color="primary">{{getElementValue(element, column).value ? 'favorite' : 'favorite_border'}}</mat-icon>
+                </ng-container>
+
+                <ng-container *ngIf="!column.showFavorite && !column.input">
+
+                    <ng-container *ngIf="getElementValue(element, column).mask">{{
+                        getElementValue(element, column).value
+                        | mask: getElementValue(element, column).mask}}
+                    </ng-container>
+                    <ng-container *ngIf="!getElementValue(element, column).mask">
+                        {{getElementValue(element,
+                        column).value}}
+                    </ng-container>
+
+                </ng-container>
+
+                <ng-container *ngIf="!column.showFavorite && column.input">
+                    <div class="input-container">
+
+                        <div *ngIf="loadingColumn  && i == loadingColumn.index && column.name == loadingColumn.column"
+                            class="loading-container flex-center-container">
+                            <mat-spinner diameter="20"></mat-spinner>
+                        </div>
+
+                        <input *ngIf="column.inputMask" (click)="$event.stopPropagation();" currencyMask
+                            class="input-value mat-app-background" [ngModel]="element[column.name]"
+                            [options]="column.inputMaskOptions"
+                            (ngModelChange)="changeColumnValue($event, column.name, element, i)">
+
+                        <input *ngIf="!column.inputMask" (click)="$event.stopPropagation();" type="number"
+                            class="input-value mat-app-background"
+                            [value]="element[column.name] == 0 ? null : element[column.name]"
+                            (change)="changeColumnValue($event, column.name, i)">
+
+
+                    </div>
+                </ng-container>
+
+            </mat-cell>
+
+        </ng-container>
+
+        <ng-container matColumnDef="menu" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation();" [matMenuTriggerFor]="menuRow"
+                #t="matMenuTrigger">
+                <mat-icon>more_vert</mat-icon>
+            </td>
+        </ng-container>
+
+        <ng-container *ngIf="actionButtons && actionButtons.length > 0" matColumnDef="action" stickyEnd>
+            <mat-header-cell [ngClass]="'centered'" *matHeaderCellDef><b>...</b></mat-header-cell>
+            <!-- <th mat-header-cell *matHeaderCellDef></th> -->
+            <td mat-cell *matCellDef="let element" style="border-bottom-color: transparent;">
+                <button *ngFor="let m of actionButtons" mat-raised-button [color]="m.color" [style.color]="m.styleColor"
+                    (click)="saveClicked() && m.action(hoveredRow)">
+                    <mat-icon *ngIf="m.icon" class="icon-button">{{m.icon}}</mat-icon>
+                    <span>{{m.name}}</span>
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container *ngIf="haveExpanded" matColumnDef="expandedDetail">
+            <mat-cell *matCellDef="let element">
+                <div *ngIf="expandedElement == element.element[modelIdentity] && expandedRows" class="second-grid">
+                    <ng-container *ngIf="expandedRows.length == 0">
+                        <h4><b>Nenhum(a) {{getExpandled().title}} encontrado(a).</b></h4>
+                    </ng-container>
+                    <ng-container *ngIf="expandedRows.length > 0">
+
+                        <ng-container *ngIf="useTwoLevel">
+
+                            <ng-container *ngFor="let row of expandedRows, let i = index">
+                                <div class="expanded-item fl-row align-c">
+                                    <div class="button-icon-sm"
+                                        (click)="OnExpandItemSecond(row, i);$event.stopPropagation();">
+                                        <mat-icon>
+                                            {{i == expandedElementSecond ? 'expand_more' : 'chevron_right'}}
+                                        </mat-icon>
+                                    </div>
+                                    <h4><b>{{row[getExpandled().expandledDisplayColumns[0]]}}</b></h4>
+                                </div>
+                                <div *ngIf="i == expandedElementSecond" class="expand-container">
+                                    <ng-container *ngIf="expandedRowsSecond.length == 0">
+                                        <h4><b>Nenhum(a) {{getExpandled().titleSecond}} encontrado(a).</b></h4>
+                                    </ng-container>
+                                    <ng-container *ngIf="expandedRowsSecond.length > 0">
+                                        <app-grid [title]="getExpandled().titleSecond"
+                                            [columns]="getExpandled().expandledColumnsSecond"
+                                            [displayedColumns]="getExpandled().expandledDisplayColumnsSecond"
+                                            [rows]="expandedRowsSecond" [useHeader]="false" [useEditColumns]="false"
+                                            [usePagination]="false" [useSelect]="false" [ableEdit]="false"
+                                            [scroll]="false" [useRegister]="false" [havePadding]="false">
+                                        </app-grid>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+
+
+
+                        </ng-container>
+
+                        <ng-container *ngIf="useTwoLevel == null || !useTwoLevel">
+                            <app-grid [title]="getExpandled().title" [columns]="getExpandled().expandledColumns"
+                                [displayedColumns]="getExpandled().expandledDisplayColumns" [rows]="expandedRows"
+                                [useHeader]="false" [useEditColumns]="false" [usePagination]="false" [useSelect]="false"
+                                [ableEdit]="false" [scroll]="false" [useRegister]="false" [havePadding]="false"
+                                [itemMenus]="getExpandled()?.expandledColumnsItemsMenu">
+                            </app-grid>
+                        </ng-container>
+
+
+                    </ng-container>
+
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true" class="tableHeaderRow" #tableHeaderRow>
+        </mat-header-row>
+
+        <mat-row matRipple *matRowDef="let row; columns: getDisplayedColumns();"
+            (mouseenter)="$event.stopPropagation();itemOver($event, row)" (mouseleave)="$event.stopPropagation();"
+            [ngClass]="{'selected': (useSelect && selection.isSelected(row)) || (row[modelIdentity] == lastClickedId)}"
+            (click)="selection.toggle(row)" [class.expanded]="expandedElement && expandedElement == row[modelIdentity]">
+        </mat-row>
+
+        <ng-container *ngIf="haveExpanded">
+            <mat-row class="expanded-row"
+                *matRowDef="let row; let i = index; columns: ['expandedDetail']; when: isExpansionDetailRow"
+                [@detailExpand]="expandedElement && expandedElement == row.element[modelIdentity] ? 'expanded' : 'collapsed'"
+                style="overflow: hidden">
+            </mat-row>
+        </ng-container>
+
+    </mat-table>
+
+    <div *ngIf="ableEdit || (itemMenus && itemMenus.length > 0)" [ngClass]="{'show': menuPosTop != 0}" class="menu-row"
+        [style.top.px]="menuPosTop" [style.height.px]="menuHeight" [matMenuTriggerFor]="menuRow" #t="matMenuTrigger">
+        <mat-icon color="primary">more_vert</mat-icon>
+    </div>
+
+    <mat-menu #menuRow="matMenu">
+
+        <button *ngIf="ableEdit" (click)="saveClicked() && openEdit()" mat-menu-item>
+            <mat-icon>edit</mat-icon>
+            <span>Editar</span>
+        </button>
+
+        <button *ngFor="let m of itemMenus" (click)="saveClicked() && m.action(hoveredRow)" mat-menu-item>
+            <mat-icon>{{m.icon}}</mat-icon>
+            <span>{{m.name}}</span>
+        </button>
+    </mat-menu>
+
+</div>

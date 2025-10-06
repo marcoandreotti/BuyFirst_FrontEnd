@@ -1,0 +1,27 @@
+<div class="bf-container">
+    <app-grid *ngIf="solicitations$ != null"
+    (onFilter)="onFilter($event)"
+    (pageChange)="onPageEvent($event)"
+    (onChangeSorterValue)="changeSorter($event)"
+    [alwaysFilters]="true"
+    [columns]="cols"
+    [displayedColumns]="displayedColumns"
+    [filterModel]="lastFilter"
+    [filters]="filters"
+    [itemMenus]="itemMenus"
+    [modelIdentity]="modelIdentity"
+    [pageIndex]="pageIndex"
+    [pageLength]="solicitations$.totalRecords"
+    [pageSize]="pageSize"
+    [rows]="solicitations$.data"
+    [specialFilter]="true"
+    [title]="gridQuoteSolicitations"
+    [useSelect]="false"
+    [useEditColumns]="false"
+    [useRegister]="false"
+    [ableEdit]="false"
+    [itemMenus]="itemMenus"
+    [topMenus]="topMenus">
+  </app-grid>
+</div>
+  

@@ -1,0 +1,50 @@
+<div id="dialog-upload-sol-products">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+       <div class="fl-row title">
+          <mat-icon class="header-icon" color="primary">file_upload</mat-icon>
+       </div>
+       <div class="fl-row title header-title">
+          <h2 mat-dialog-title>Importar produtos para cotação</h2>
+       </div>
+       <div class="fl-row title header-message">
+         <button mat-button color="primary" (click)="onExporteTemplate()">Click aqui para baixar o arquivo csv de exemplo.</button>
+       </div>
+       <div class="fl-row title header-message">
+         Click no botão abaixo para procurar/selecionar o arquivo csv. 
+       </div>
+    </div>
+    <div mat-dialog-content class="dialog-upload-sol-products-corpo mat-app-background">
+       <label class="mat-focus-indicator large mat-raised-button mat-button-base mat-primary label-button"
+          (click)="fileInput.value = null">
+          Procurar
+          <input #fileInput type="file" accept=".csv" style="display: none" (change)="chooseFile(fileInput.files)" />
+       </label>
+ 
+       <div *ngIf="selectedFile">
+          <div class="d-flex justify-content-between flex-wrap bg-light text text-primary">
+             <div><span>Arquivo:</span>&nbsp;{{ selectedFile.name }}</div>
+             <div><span>Tamanho:</span>&nbsp;{{ humanFileSize(selectedFile.size) }}</div>
+          </div>
+          <div *ngIf="uploading" class="mt-2">
+             <ngb-progressbar type="success" showValue="true" [value]="uploadProgress"></ngb-progressbar>
+          </div>
+       </div>
+       <div *ngIf="errorMsg" class="text-danger">
+          {{ errorMsg }}
+       </div>
+    </div>
+    <div mat-dialog-actions class="dialog-upload-sol-products-botoes mat-app-background">
+       <button *ngIf="!uploading" class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Cancelar</button>
+ 
+       <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="upload()">
+          <span>Upload</span>
+       </button>
+ 
+       <button *ngIf="uploading" class="large" mat-raised-button color="primary" [style.color]="'white'" disabled>
+          Processando
+          <loading-bar></loading-bar>
+       </button>
+ 
+    </div>
+ </div>
+ 

@@ -1,0 +1,43 @@
+<div class="bf-container crud">
+  <mat-card class="card-crud">
+    <mat-card-content *ngIf="model">
+      <div fxLayout="column" fxLayoutGap="16px">
+
+        <div class="div-form" fxFlex="100">
+          <label class="label-div">Dados do login: <span class="spn-email">{{model.email}}</span></label>
+          <app-form [(form)]="userForm" [model]="model" [formRows]="formUser"></app-form>
+        </div>
+
+        <div class="div-form space-top-div" fxFlex="100">
+          <label class="label-div">Dados Pessoais</label>
+          <div>
+            <app-form [(form)]="personalForm" [model]="model.personData" [formRows]="formPersonal"></app-form> 
+          </div>
+        </div>
+
+        <div class="div-form space-top-div" fxFlex="100">
+          <label class="label-div">Informações de autorização</label>
+          <div>
+            <table class="table-company" cellspacing="3">
+              <tbody *ngFor="let company of model.companiesRoles">
+                <tr>
+                  <th class="company-identity">{{company.companyDocument }} - {{ company.companyName }}</th>
+                  <td fxLayout="row">
+                    <div *ngFor="let role of company.roles">
+                      <span class="spn-role">{{role}}</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="save()">
+        Salvar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

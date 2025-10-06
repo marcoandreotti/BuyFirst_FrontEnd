@@ -1,0 +1,27 @@
+.mat-card-title {
+  width: 100%;
+  display: inline;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+
+  .mat-icon {
+    font-size: 40px;
+  }
+}
+
+ @media (max-width: 600px) {
+   .mat-card-title {
+     padding: 200px;
+   }
+ }
+
+.mat-card-actions {
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px;
+
+  .mat-icon {
+    margin-right: 10px;
+  }
+}

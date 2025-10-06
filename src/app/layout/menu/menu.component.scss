@@ -1,0 +1,255 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 70px;
+  transition: width ease-in-out 0.2s;
+  z-index: 700;
+  box-shadow: 3px 20px 7px #c7c7c773;
+  border-right: 1px solid whitesmoke;
+
+  @media only screen and (max-width: $mobile) {
+    transition: left ease-in-out 0.2s;
+    width: 350px;
+    left: -350px;
+  }
+}
+
+.modules {
+  padding: 11px;
+  display: none;
+
+  @media only screen and (max-width: $mobile) {
+    display: flex;
+    padding: 0px;
+  }
+}
+
+.user-container {
+  display: none;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 23px 0px 11px;
+  align-items: center;
+
+  @media only screen and (max-width: $mobile) {
+    display: flex;
+  }
+}
+
+.user {
+  h4,
+  h5 {
+    margin: 0 !important;
+  }
+}
+
+.menu-itens {
+  flex: 1;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+@media (max-width: $mobile){
+  .menu-itens {
+    overflow-y: scroll;
+    height: 100px;
+  }
+}
+
+.menu-itens:hover {
+  overflow-y: auto;
+}
+
+.menu .item {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 10px 0px;
+  padding-left: 23px;
+  cursor: pointer;
+}
+
+.menu .item.fechar {
+  height: 45px !important;
+}
+
+.menu .item.btn {
+  height: 45px !important;
+}
+
+.menu .item.btn mat-icon {
+  color: #bbbbbb;
+}
+
+.menu .active {
+  background: mat-color($bv-palette-primary);
+}
+
+.menu .item.btn.active h4 {
+  font-weight: bold;
+  color: white;
+}
+
+.menu .item.btn.active mat-icon {
+  color: white;
+}
+
+.menu.expanded {
+  width: 300px;
+
+  @media only screen and (max-width: $mobile) {
+    left: 0;
+  }
+}
+
+.menu.dark {
+  box-shadow: none !important;
+}
+
+.menu .item h4 {
+  margin: 0px 0px 0px 20px !important;
+  opacity: 0;
+}
+
+.menu app-logo {
+  margin: 10px;
+  opacity: 0;
+  display: none;
+}
+
+.menu.expanded app-logo {
+  opacity: 1;
+  display: block;
+  transition: all 0.2s ease 0.5s;
+}
+
+.menu-background {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #ffffffbd;
+  position: absolute;
+
+  display: none;
+  z-index: 101;
+  opacity: 0;
+}
+
+.menu-background.expanded {
+  display: block;
+  opacity: 1;
+}
+
+.menu.expanded .item .label {
+  opacity: 1;
+  transition: all 0.2s ease 0.5s;
+}
+
+.menu .submenu {
+  width: 220px;
+  position: fixed;
+  left: 70px;
+  display: none;
+  clear: both;
+  box-shadow: -4px 12px 8px #c7c7c773;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding-bottom: 20px;
+
+  @media only screen and (max-width: $mobile) {
+    display: none !important;
+  }
+}
+
+.submenu-itens {
+  max-height: 437px;
+  overflow-y: scroll;
+}
+
+.desktop-toggle {
+  @media only screen and (max-width: $mobile) {
+    display: none !important;
+  }
+}
+
+.menu .submenu.dark {
+  box-shadow: none !important;
+}
+
+.menu .sub-item.active {
+  padding-left: 40px;
+}
+
+.menu .sub-item {
+  width: 100%;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 40px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.menu .sub-item:hover {
+  color: mat-color($bv-palette-primary) !important;
+}
+
+.menu .submenu .sub-header {
+  width: 100%;
+  padding: 20px;
+  height: 40px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.menu .sub-item h4 {
+  margin: 0px 0px 0px 20px !important;
+}
+
+.menu .sub-header h4 {
+  margin: 0px !important;
+}
+
+.menu .sub-item:hover {
+  background: rgb(206 206 206 / 60%);
+}
+
+.opened {
+  display: block !important;
+}
+
+.menu.expanded .submenu {
+  left: 300px;
+}
+
+.logout {
+  width: 100%;
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  height: 40px;
+  cursor: pointer;
+  box-sizing: border-box;
+  margin-left: 23px;
+
+  @media(max-width: $mobile){
+    display: flex;
+  }
+}
+
+.icone {
+  margin-right: 20px;
+}

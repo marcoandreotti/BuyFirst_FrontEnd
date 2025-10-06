@@ -1,0 +1,74 @@
+<div fxLayout="row" fxLayout.xs="column" fxLayoutWrap="wrap" fxLayoutGap="20px">
+  <div fxFlex="100" fxFlex.lt-md="100" fxFlex.lt-sm="70">
+    <mat-card class="login">
+      <div class="form-group">
+        <h1>
+          <span class="login-hello">{{ "Login.hello" | translate }}</span>
+          <span class="login-welcome">{{ "Login.welcome" | translate }}</span>
+        </h1>
+        <h3>{{ "Login.instruction" | translate }}</h3>
+      </div>
+
+      <form #myForm="ngForm" (ngSubmit)="login()">
+        <div class="form-inputs">
+          <div class="form-group">
+            <mat-form-field appearance="outline">
+              <mat-label>
+                {{ "Shared.email" | translate }}
+              </mat-label>
+              <input type="text" [placeholder]="'Shared.email' | translate" matInput [(ngModel)]="emailText"
+                id="emailInput" name="emailInput" email="true" required #emailInput="ngModel" />
+            </mat-form-field>
+            <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="alert alert-danger">
+              <mat-error *ngIf="emailInput.errors.required">
+                O e-mail é obrigatório.
+              </mat-error>
+              <mat-error *ngIf="emailInput.errors.email">
+                Formato de e-mail inválido.
+              </mat-error>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <mat-form-field appearance="outline">
+              <mat-label>
+                {{ "Shared.password" | translate }}
+              </mat-label>
+
+              <input [type]="passwordType" [placeholder]="'Shared.password' | translate" matInput
+                [(ngModel)]="passwordText" id="passwordInput" name="passwordInput" required #passwordInput="ngModel" />
+              <mat-icon class="pointer" color="primary" matSuffix
+                (click)="passwordType = passwordType == 'text' ? 'password' : 'text'">remove_red_eye</mat-icon>
+            </mat-form-field>
+
+            <div *ngIf=" passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)"
+              class="alert alert-danger">
+              <mat-error *ngIf="passwordInput.errors.required">
+                A senha é obrigatório.
+              </mat-error>
+            </div>
+          </div>
+        </div>
+
+        <span class="terms">
+          <mat-checkbox color="primary" [value]="termsChecked" (change)="termsChange()"></mat-checkbox>
+          <a mat-button href="https://buyfirst.com.br/termoaceite.pdf" target="_blank">Li e aceito os <b>termos e condições de
+              uso</b></a>
+        </span>
+
+        <div class="form-group">
+          <div class="buttons-container">
+            <button mat-raised-button color="primary" class="button-login" type="submit" [disabled]="!termsChecked">
+              {{ "Shared.enter" | translate | uppercase }}
+            </button>
+          </div>
+          <div class="buttons-container">
+            <a class="mat-raised-button button-senha" href="/#/auth/esqueceu-senha">
+              ESQUECI MINHA SENHA
+            </a>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

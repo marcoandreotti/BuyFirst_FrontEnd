@@ -1,0 +1,201 @@
+<div class="bf-container">
+    <div *ngIf="model" class="div-container" fxLayout="column" fxLayoutWrap="wrap" fxLayoutGap="16px">
+        <div fxFlex="30" fxFlex.xs="100" fxFlex.sm="100" fxFlex.xl="30" fxFlex.md="30">
+            <div class="div-left div-info">
+                <label>Cotação</label>
+                <span class="spn-text">{{model.quoteSolId}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label>Gerada em</label>
+                <span class="spn-text">{{model.openingDate| date:'dd/MM/yyyy HH:mm'}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label>Empresa</label>
+                <span class="spn-text">{{model.buyerName}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label>Extimada para</label>
+                <span class="spn-text" [ngClass]="calculateTimeDiff(model.expectedDate) >= 0 ? 'limit-on' : 'limit-off'">{{model.expectedDate| date:'dd/MM/yyyy HH:mm'}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label>Conds. Pagto</label>
+                <span class="spn-text">{{model.paymentCondition.paymentCondition.paymentType.name}} - {{model.paymentCondition.paymentCondition.name}}</span>
+            </div>
+            <!-- <div class="div-right" *ngIf="model.phase >= 40">
+                <button mat-raised-button>Exportar CSV <mat-icon>upload</mat-icon></button>
+            </div> -->
+            <div class="div-right" *ngIf="model.phase >= 40" (click)="showActives = !showActives">
+                <button mat-raised-button [ngClass]="!showActives ? 'error': ''">{{showActives ? 'Esconder recusados' : 'Mostrar recusados'}} <mat-icon color="primary">{{showActives ? 'disabled_visible' : 'recommend'}}</mat-icon></button>
+            </div>
+        </div>
+
+        <div class="div-scrollable" fxFlex="70" fxFlex.xs="100" fxFlex.sm="100" fxFlex.xl="70" fxFlex.md="70">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="center">Categoria</th>
+                        <th class="left">Marca(s)</th>
+                        <th class="left">Produto</th>
+                        <th class="center">UN.</th>
+                        <th class="center">Qtd.</th>
+                        <th class="center col-13"></th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let prod of model.products">
+                    <tr *ngIf="prod.phase < 99 || showActives" [ngClass]="prod.phase >= 99 ? 'tr-inactive' : prod.showDeliveryAddresses || prod.showProductRetries ? 'tr-selected' : ''">
+                        <td [ngClass]="prod.phase < 99 && (prod.productRetries && prod.productRetries.length > 0) ? 'left td-important' : 'left'">{{prod.groupSearch}}</td>
+                        <td [ngClass]="prod.phase < 99 && (prod.productRetries && prod.productRetries.length > 0) ? 'left td-important' : 'left'" [ngClass]="productRetries && productRetries.length > 0 ? 'td-selected' : ''">{{prod.brandSearch}}</td>
+                        <td class="left" [ngClass]="productRetries && productRetries.length > 0 ? 'td-selected' : ''">{{prod.productSearch}}</td>
+                        <td class="center" [ngClass]="productRetries && productRetries.length > 0 ? 'td-selected' : ''">{{prod.unitOfMeasureAcronym}}</td>
+                        <td [ngClass]="prod.phase < 99 && (prod.productRetries && prod.productRetries.length > 0) ? 'right td-important' : 'right'" [style.font-size]="prod.showProductRetries ? 'large' : ''">{{prod.quantity| currency:'':''}}</td>
+                        <td *ngIf="prod.productRetries.length > 0" class="center menu-action">
+                            <button mat-icon-button class="right-9" color="primary" (click)="onShowRetry(prod)">
+                                <mat-icon *ngIf="!prod.showProductRetries">search</mat-icon>
+                                <mat-icon *ngIf="prod.showProductRetries">manage_search</mat-icon>
+                                <span class="span-length">[{{prod.productRetries.length}}]</span>
+                            </button>
+                            <button mat-icon-button class="right-9" (click)="onShowDeliveryAddresses(prod)">
+                                <mat-icon *ngIf="!prod.showDeliveryAddresses">local_shipping</mat-icon>
+                                <mat-icon *ngIf="prod.showDeliveryAddresses">fork_right</mat-icon>
+                                <span class="span-length">[{{prod.deliveryAddresses.length <= 0 ? '1' : prod.deliveryAddresses.length}}]</span>
+                            </button>
+                            
+                            <button *ngIf="prod.phase < 99"  mat-icon-button color="warn" matTooltip="NÃO QUERO ESSE!" (click)="onProdInactive(prod)">
+                                <mat-icon>power_rounded</mat-icon>
+                            </button>
+                            <button *ngIf="prod.phase == 99" mat-icon-button color="primary" matTooltip="REATIVAR!" (click)="onProdActive(prod)">
+                                <mat-icon color="warn">electrical_services</mat-icon>
+                            </button>
+
+                        </td>
+                        <td *ngIf="!prod.productRetries || prod.productRetries.length <= 0" class="center td-no-result">
+                            Sem retorno...
+                        </td>
+                    </tr>
+                    <tr class="no-border" [ngClass]="prod.phase >= 99 ? 'tr-inactive' : ''" *ngIf="prod.showDeliveryAddresses && (prod.phase < 99 || (prod.phase >= 99 && showActives))">
+                        <td colspan="6" class="td-result">
+                            <table class="table-result">
+                                <thead>
+                                    <tr [ngClass]="prod.phase >= 99 ? 'tr-inactive' : ''" >
+                                        <th class="left">Endereço</th>
+                                        <th class="center">Quantidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="prod.deliveryAddresses && prod.deliveryAddresses.length > 0">
+                                    <tr *ngFor="let ad of prod.deliveryAddresses" [ngClass]="prod.phase >= 99 ? 'tr-inactive' : ''" >
+                                        <td class="left">{{ad.concatAddress}}</td>
+                                        <td class="right" [ngClass]="prod.phase < 99 ? 'td-important' : ''">{{ad.quantity| currency:'':''}}</td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="!prod.deliveryAddresses || prod.deliveryAddresses.length <= 0">
+                                    <tr [ngClass]="prod.phase >= 99 ? 'tr-inactive' : ''" >
+                                        <td class="left">{{concatDeliveryAddres}}</td>
+                                        <td class="right" [ngClass]="prod.phase < 99 ? 'td-important' : ''">{{prod.quantity| currency:'':''}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="no-border" *ngIf="prod.showProductRetries && (prod.phase < 99 || (prod.phase >= 99 && showActives))">
+                        <td colspan="6" class="td-result">
+                            <table class="table-result">
+                                <tr [ngClass]="prod.phase >= 99 ? 'tr-inactive' : ''" >
+                                    <th *ngIf="prod.phase < 99" class="center col-1"></th>
+                                    <th class="left">Fornecedor</th>
+                                    <th class="center">Data</th>
+                                    <th class="center">Ref.</th>
+                                    <th class="left">Produto</th>
+                                    <th class="center">UN.</th>
+                                    <th class="left">Marca</th>
+                                    <th class="center">Qtd.</th>
+                                    <th class="center">V.Unitário</th>
+                                    <th class="center">Impostos</th>
+                                    <th class="center">Prazo</th>
+                                </tr>
+                                <tbody>
+                                    <tr *ngFor="let ret of prod.productRetries" [ngClass]="prod.phase >= 99 || (showActives && ret.phase >= 99) ? 'tr-inactive' : !showActives && ret.phase >= 99 ? 'tr-invisible' : ''">
+                                        <td class="center no-border" [ngClass]="ret.phase < 99 ? 'td-important' : ''" *ngIf="model.phase >= 40 && prod.phase < 99">
+                                            <button mat-icon-button *ngIf="ret.phase < 99" [matMenuTriggerFor]="menuAction" [style.color]="'#fff'" matTooltip="Classificar!">
+                                                <mat-icon *ngIf="ret.winner" class="icon-rank" matTooltip="Vencedor - Melhor compra">military_tech</mat-icon>
+                                                <mat-icon *ngIf="!ret.winner" class="icon-action">swipe_up</mat-icon>
+                                             </button>
+                                             <mat-menu #menuAction="matMenu">
+                                                <button mat-menu-item *ngIf="!ret.winner" (click)="onFirstRetry(prod, ret)">
+                                                   <mat-icon>military_tech</mat-icon>
+                                                   <span>Colocar como vencedor!</span>
+                                                </button>
+                                                <mat-divider *ngIf="!ret.winner"></mat-divider>
+                                                <button mat-menu-item (click)="onInactive(prod, ret)">
+                                                    <mat-icon color="warn">power_rounded</mat-icon>
+                                                   <span>NÃO QUERO ESSE!</span>
+                                                </button>
+                                             </mat-menu>
+                                             
+                                             <button mat-icon-button matTooltip="REATIVAR!" [style.color]="'#fff'" *ngIf="ret.phase >= 99" (click)="onActive(prod, ret)">
+                                                <mat-icon color="warn">electrical_services</mat-icon>
+                                            </button>
+
+                                        </td>
+                                        <td class="center no-border td-important" *ngIf="model.phase < 40">
+                                            <mat-icon *ngIf="ret.winner" class="icon-rank" matTooltip="Vencedor - Melhor compra">military_tech</mat-icon>
+                                        </td>
+                                        
+                                        <td class="center" *ngIf="model.phase >= 40" [ngClass]="prod.phase < 99 && ret.winner ? 'td-important' : ''">{{ret.supplier.tradingName}}</td>
+                                        <!-- <td class="center hidden-value" *ngIf="model.phase < 40" [ngClass]="ret.winner ? 'td-important' : ''">EMPRESA FORNECEDORA</td> -->
+                                        <td class="center hidden-value" *ngIf="model.phase < 40" [ngClass]="ret.winner ? 'td-important' : ''">* * *</td>
+                                        
+                                        <td class="center">{{ret.openingDate| date:'dd/MM/yyyy HH:mm'}}</td>
+                                        <td class="center">{{ret.referenceCode}}</td>
+                                        <td class="left">
+                                            {{ret.productName}}
+                                            <p *ngIf="ret.productNote" class="p-note">{{ret.productNote}}</p>
+                                        </td>
+                                        <td class="center">{{ret.unitOfMeasure.acronym}}</td>
+                                        <td class="left" *ngIf="ret.brandNote" class="td-brand-note">{{ret.brandNote}}</td>
+                                        <td class="left" *ngIf="!ret.brandNote">{{ret.brandName}}</td>
+
+                                        <td class="right" [ngClass]="prod.phase < 99 && ret.winner ? 'td-important' : ''">
+                                            <span [ngClass]="ret.quantity == prod.quantity ? 'spn-qtd-equals' : ret.quantity > prod.quantity ? 'spn-qtd-major' : 'spn-qtd-minor'">
+                                                {{ret.quantity| currency:'':''}}
+                                                <span *ngIf="ret.quantity > prod.quantity" class="spn-ico-major">+</span>
+                                                <span *ngIf="ret.quantity < prod.quantity" class="spn-ico-minor">-</span>
+                                            </span>
+                                        </td>
+
+                                        <td class="right" *ngIf="model.phase >= 40" [ngClass]="prod.phase < 99 && ret.winner ? 'td-important' : ''">{{ret.price| currency:'':''}}</td>
+                                        <td class="right hidden-value" *ngIf="model.phase < 40">***</td>
+
+                                        <td class="right" *ngIf="model.phase >= 40" [ngClass]="prod.phase < 99 && ret.winner ? 'td-important' : ''">{{ret.taxes| currency:'':''}}</td>
+                                        <td class="right hidden-value" *ngIf="model.phase < 40">**</td>
+
+                                        <td class="center" [ngClass]="prod.phase < 99 && ret.winner ? 'td-important' : ''">{{ret.deliveryTime}} dia{{ret.deliveryTime > 1 ? '(s)' : ''}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="no-border tr-separate" *ngIf="prod.phase < 99 || showActives"><td colspan="6"></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="div-footer" fxFlex="30" fxFlex.xs="100" fxFlex.sm="100" fxFlex.xl="30" fxFlex.md="30">
+            <div class="div-right" *ngIf="model.phase >= 40 && !isEditing">
+                <button mat-raised-button (click)="onOrderSummary()">Resumo do pedido</button>
+            </div>
+            <div class="div-right" *ngIf="model.phase >= 40 && isEditing">
+                <button mat-raised-button color="primary" [style.color]="'white'" (click)="onSaveAdjusts()">Salvar Ajustes</button>
+            </div>
+            <div class="div-right" *ngIf="model.phase >= 40">
+                <button mat-raised-button color="warn" [style.color]="'white'" (click)="onRebuildRanking()">Refazer Ranking <mat-icon>refresh</mat-icon></button>
+            </div>
+
+            <div class="div-right" *ngIf="model.phase < 40">
+                <button mat-raised-button color="warn" [style.color]="'white'" (click)="onInterruptWait()">Interromper espera</button>
+            </div>
+        </div>
+    </div>
+</div>

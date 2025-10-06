@@ -1,0 +1,22 @@
+<div class="bf-container">
+  <app-grid *ngIf="groups$ != null"
+     (onFilter)="onFilter($event)"
+     (pageChange)="onPageEvent($event)"
+     [alwaysFilters]="true"
+     [columns]="cols"
+     [displayedColumns]="displayedColumns"
+     [filterModel]="lastFilter"
+     [filters]="filters"
+     [itemMenus]="itemMenus"
+     [modelIdentity]="modelIdentity"
+     [usePagination]="false"
+     [rows]="groups$"
+     [specialFilter]="true"
+     [title]="gridGroups"
+     [useSelect]="false"
+     [expandedElement]="expandedElementIndex"
+     [expandedRows]="subGroups$"
+     (onExpandItem)="onExpandItem($event)"
+     (onCloseExpandItem)="onCloseExpandItem($event)">
+  </app-grid>
+</div>

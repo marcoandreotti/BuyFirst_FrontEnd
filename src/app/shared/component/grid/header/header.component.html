@@ -1,0 +1,62 @@
+<div class="crud-grid-options-container">
+
+    <div class="modules mobile-flex space-between fl-row align-c" *ngIf="topMenus.length > 0">
+        <div *ngFor="let topMenu of topMenus" [ngClass]="{'dark': (isDark$ | async), 'active': topMenu.selected}"
+            (click)="topMenu.action && topMenu.action()" class="button-icon fl-row align-c">
+            <mat-icon color="{{topMenu.color ? topMenu.color : 'primary'}}">{{topMenu.icon}}</mat-icon>
+            <h4>{{topMenu.name}}</h4>
+        </div>
+    </div>
+
+    <div class="crud-grid-options fl-row align-c" [ngClass]="{'options':topMenus.length == 0}">
+
+        <h1 class="title" *ngIf="topMenus.length == 0">{{title}}</h1>
+
+        <div class="modules desktop-flex fl-row align-c" *ngIf="topMenus.length > 0">
+            <div *ngFor="let topMenu of topMenus" [ngClass]="{'dark': (isDark$ | async), 'active': topMenu.selected}"
+            (click)="topMenu.action && topMenu.action()" class="button-icon fl-row align-c">
+                <mat-icon color="{{topMenu.color ? topMenu.color : 'primary'}}">{{topMenu.icon}}</mat-icon>
+                <h4>{{topMenu.name}}</h4>
+            </div>
+        </div>
+
+        <div class="fl-row align-c">
+
+            <ng-container *ngFor="let o of getOptions(), let i = index">
+
+                <ng-container *ngIf="o.menu && o.menu.length == 0">
+                    <div [matTooltip]="o.hint ? o.name : ''" (click)="o.action && o.action()"
+                        class="button-icon fl-row align-c">
+                        <mat-icon *ngIf="o.icon" color="primary"
+                            [matBadge]="o.icon == 'tune' ? (haveFilters ? 'X' : null) : null" matBadgeColor="warn">
+                            {{o.icon}}
+                        </mat-icon>
+                        <h4 class="desktop" *ngIf="!o.hint">{{o.name}}</h4>
+                        <h4 class="mobile" *ngIf="o.mobileHint != null && o.mobileHint">{{o.name}}</h4>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="o.menu && o.menu.length > 0">
+
+                    <div [matTooltip]="o.hint ? o.name : ''" class="button-icon fl-row"
+                        [matMenuTriggerFor]="menuOptions">
+                        <mat-icon *ngIf="o.icon" color="primary">{{o.icon}}</mat-icon>
+                        <h4 *ngIf="!o.hint">{{o.name}}</h4>
+                    </div>
+
+                    <mat-menu #menuOptions="matMenu">
+                        <button *ngFor="let m of o.menu" (click)="m.action && m.action()" mat-menu-item>
+                            <mat-icon>{{m.icon}}</mat-icon>
+                            <span>{{m.name}}</span>
+                        </button>
+                    </mat-menu>
+
+                </ng-container>
+
+            </ng-container>
+
+        </div>
+
+    </div>
+
+</div>

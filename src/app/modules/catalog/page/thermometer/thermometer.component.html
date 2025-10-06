@@ -1,0 +1,310 @@
+<div class="bf-container">
+  <div *ngIf="data$" fxLayout="column" fxLayoutGap="16px">
+    <div class="div-row" fxFlex="100">
+
+      <div fxLayout="column" fxLayoutGap="16px">
+        <!-- CATALOGO -->
+        <div class="div-box" fxFlex="100">
+          <label [ngClass]="!data$.active ? 'label-title error' : 'label-title success'">Catálogo: <span class="span-info">{{ data$.catalogId}} - <b>{{ data$.name}}</b></span></label>
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <th class="right c-10">Ativo:</th>
+                <td [ngClass]="!data$.active ? 'left level-3' : 'left level-1'"><b>{{ data$.active ? 'SIM' : 'NÃO'}}</b></td>
+                <td class="right c-10">
+                  <button mat-icon-button aria-label="Ação">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <th class="right">Vigência:</th>
+                <td [ngClass]="data$.diffVigence < 0 ? 'left level-3' : data$.diffVigence <= 5 ? 'left level-2' : 'left level-1'"><b>{{ data$.startDate| date:'dd/MM/yyy'}}</b> à <b>{{ data$.expirationDate| date:'dd/MM/yyy'}}</b></td>
+                <td *ngIf="data$.diffVigence < 999" class="center">{{ data$.diffVigence }} Dia(s)</td>
+                <td *ngIf="data$.diffVigence >= 999" class="center">Vitálicio</td>
+              </tr>
+
+              <tr>
+                <th class="right">Restrições:</th>
+                <td class="left" colspan="2" *ngIf="!data$.blackLists || data$.blackLists.length <= 0">Não há restrições configuradas</td>
+                <td colspan="2" *ngIf="data$.blackLists && data$.blackLists.length > 0" class="td-subinfo">
+                  <table>
+                    <tbody>
+                      <tr *ngFor="let r of data$.blackLists">
+                        <th class="right c-10">{{ r.restrictType }}:</th>
+                        <td class="left">{{ r.restrictText }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="right">Condições:</th>
+                <td class="left" colspan="2" *ngIf="!data$.payments || data$.payments.length <= 0">Não há Condições de pagamento sobrepostas</td>
+                <td colspan="2" *ngIf="data$.payments && data$.payments.length > 0" class="td-subinfo">
+                  <table>
+                    <tbody *ngFor="let p of data$.payments">
+                      <tr>
+                        <th class="right c-10">Tipo:</th>
+                        <td class="left">{{ p.description }}</td>
+                        <th class="right c-10">Percentual:</th>
+                        <td class="left">{{ p.percentageOnPrice| currency:'':'' }}%</td>
+                        <th class="right c-10">Ativo:</th>
+                        <td [ngClass]="!p.paymentTypeActive || !p.paymentConditionActive ? 'center level-3' : 'center level-1'" class="center">{{ !p.paymentTypeActive || !p.paymentConditionActive ? 'NÃO' : 'SIM' }}</td>
+                      </tr>
+                      <tr *ngIf="p.specialConditions">
+                        <th class="th-box right c-10" [colspan]="p.specialConditions.length">Especial:</th>
+                        <td colspan="5" class="td-subinfo">
+                          <table>
+                            <tbody>
+                              <tr *ngFor="let s of p.specialConditions">
+                                <th class="right c-10">{{ s.restrictType }}:</th>
+                                <td class="left">{{ s.restrictText }}</td>
+                                <th class="right c-10">Percentual:</th>
+                                <td class="left">{{ s.percentageOnPrice| currency:'':'' }}%</td>
+                                <th class="right">Vigência:</th>
+                                <td [ngClass]="s.diffVigence < 0 ? 'left level-3' : s.diffVigence <= 5 ? 'left level-2' : 'left level-1'"><b>{{ s.startDate| date:'dd/MM/yyy'}}</b> à <b>{{ s.expirationDate| date:'dd/MM/yyy'}}</b></td>
+                                <td *ngIf="s.diffVigence < 999" class="center">{{ s.diffVigence }} Dia(s)</td>
+                                <td *ngIf="s.diffVigence >= 999" class="center">Vitálicio</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- FORNECEDOR -->
+        <div class="div-box" fxFlex="100">
+          <label [ngClass]="!data$.supplier.active ? 'label-title error' : 'label-title success'">Fornecedor: <span class="span-info">{{ data$.supplier.supplierId }} - <b> {{ data$.supplier.document }} - {{ data$.supplier.name }}</b>
+            <mat-icon [ngClass]="data$.supplier.contractAccepted ? 'icon-title ico-success' : 'icon-title ico-error'" [matTooltip]="data$.supplier.contractAccepted ? 'CONTRATO ACEITO!' : 'CONTRATO NÃO ACEITO'">gavel</mat-icon></span></label>
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <th class="right c-10">Ativo:</th>
+                <td colspan="2" [ngClass]="!data$.supplier.active ? 'left level-3' : 'left level-1'">{{ data$.supplier.active ? 'SIM' : 'NÃO'}}</td>
+                <td class="right">
+                  <button mat-icon-button aria-label="Ação">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <th class="right">Responsáveis:</th>
+                <td colspan="3" class="left level-3" *ngIf="!data$.supplier.responsibles || data$.supplier.responsibles.length <= 0">Não há responsavel cadastrado</td>
+                <td colspan="3"  class="td-subinfo" *ngIf="data$.supplier.responsibles && data$.supplier.responsibles.length > 0">
+                  <table>
+                    <tbody>
+                      <tr *ngFor="let r of data$.supplier.responsibles">
+                        <th class="right c-10">Nome:</th>
+                        <td class="left">{{ r.name }}</td>
+                        <th class="right c-10">Telefone:</th>
+                        <td class="left">{{ r.cellphone }}</td>
+                        <th class="right c-10">Email:</th>
+                        <td [ngClass]="!r.email ? 'left level-3' : 'left level-1'">{{ !r.email ? 'EMAIL NAO INSERIDO!' : r.email }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="right">Regiões:</th>
+                <td colspan="3" *ngIf="!data$.supplier.regionsTarget">Não há restrições alvos</td>
+                <td colspan="3" *ngIf="data$.supplier.regionsTarget" class="td-subinfo">
+                  <table>
+                    <tbody>
+                      <tr *ngFor="let r of data$.supplier.regionsTarget">
+                        <td class="left">{{ r.region.name }} - {{ r.region.stateAcronym}}</td>
+                        <th class="right c-10">Ativo:</th>
+                        <td [ngClass]="!r.region.active ? 'left level-3' : 'left level-1'">{{ r.region.active ? 'SIM' : 'NÃO'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="right">Condições:</th>
+                <td class="left level-3" colspan="2" *ngIf="!data$.supplier.payments || data$.supplier.payments.length <= 0">Não há Condições de pagamento configuradas</td>
+                <td colspan="2" *ngIf="data$.supplier.payments && data$.supplier.payments.length > 0" class="td-subinfo">
+                  <table>
+                    <tbody *ngFor="let p of data$.supplier.payments">
+                      <tr>
+                        <th class="right c-10">Tipo:</th>
+                        <td class="left">{{ p.description }}</td>
+                        <th class="right c-10">Percentual:</th>
+                        <td class="left">{{ p.percentageOnPrice| currency:'':'' }}%</td>
+                        <th class="right c-10">Ativo:</th>
+                        <td [ngClass]="!p.paymentTypeActive || !p.paymentConditionActive ? 'left level-3' : 'left level-1'" class="left">{{ !p.paymentTypeActive || !p.paymentConditionActive ? 'NÃO' : 'SIM' }}</td>
+                      </tr>
+                      <tr *ngIf="p.specialConditions && p.specialConditions.length > 0">
+                        <th class="th-box c-10" [colspan]="p.specialConditions.length">Especial:</th>
+                        <td colspan="5" class="td-subinfo">
+                          <table>
+                            <tbody>
+                              <tr *ngFor="let s of p.specialConditions">
+                                <th class="right c-10">{{ s.restrictType }}:</th>
+                                <td class="left">{{ s.restrictText }}</td>
+                                <th class="right c-10">Percentual:</th>
+                                <td class="left">{{ s.percentageOnPrice| currency:'':'' }}%</td>
+
+                                <th class="right">Vigência:</th>
+                                <td [ngClass]="s.diffVigence < 0 ? 'left level-3' : s.diffVigence <= 5 ? 'left level-2' : 'left level-1'"><b>{{ s.startDate| date:'dd/MM/yyy'}}</b> à <b>{{ s.expirationDate| date:'dd/MM/yyy'}}</b></td>
+                                <td class="center">{{ s.diffVigence }} Dia(s)</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="right">Restrições:</th>
+                <td colspan="3" *ngIf="!data$.supplier.blackLists || data$.supplier.blackLists.length <= 0">Não há restrições configuradas</td>
+                <td colspan="3" *ngIf="data$.supplier.blackLists && data$.supplier.blackLists.length > 0" class="td-subinfo">
+                  <table>
+                    <tbody>
+                      <tr *ngFor="let r of data$.supplier.blackLists">
+                        <th class="right c-10">{{ r.restrictType }}:</th>
+                        <td class="left">{{ r.restrictText }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PRODUTOS -->
+        <div class="div-box" fxFlex="100" *ngFor="let cp of data$.catalogProducts">
+          <label [ngClass]="!cp.active ? 'label-title error' : 'label-title success'">Produto: <span class="span-info">{{ cp.productSupplier.productSupplierId }} - {{ cp.productSupplier.name }}  [ {{ cp.productSupplier.unitOfMeasure.name }} - {{ cp.productSupplier.unitOfMeasure.acronym }} ]</span></label>
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <th class="right c-10">Ativo:</th>
+                <td colspan="2" [ngClass]="!cp.active ? 'left level-3' : 'left level-1'">{{ cp.active ? 'SIM' : 'NÃO'}}</td>
+                <td class="right">
+                  <button mat-icon-button aria-label="Ação">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <th rowspan="3" class="right">Informações:</th>
+                <td colspan="3" class="td-subinfo">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td class="right" style="display: flex;" *ngIf="cp.product.moviment">
+                          <button mat-raised-button class="button-small" (click)="onOpenAnalysis(cp.product.productId)">{{ cp.product.productId }}</button>
+                        </td>
+                        <td class="center error" style="display: flex;" *ngIf="!cp.product.moviment">
+                          {{ cp.product.productId }}
+                        </td>
+                        <td class="left">
+                          {{ cp.product.name }}  <span [ngClass]="cp.product.unitOfMeasure.acronym != cp.productSupplier.unitOfMeasure.acronym ? 'level-2' : 'level-1'">[ {{ cp.product.unitOfMeasure.name }} - {{ cp.product.unitOfMeasure.acronym }} ]</span>
+                        </td>
+                        <th class="right">Grupo:</th>
+                        <td [ngClass]="!cp.product.subGroup.group.active ? 'left level-3' : 'left level-1'">{{ cp.product.subGroup.group.name }}</td>
+                        <th class="right">SubGrupo:</th>
+                        <td [ngClass]="!cp.product.subGroup.active ? 'left level-3' : 'left level-1'">{{ cp.product.subGroup.name }}</td>
+                        <th>Refs:</th>
+                        <td>cp.product.references.length</td>
+                        <th class="right">Ativo:</th>
+                        <td colspan="2" [ngClass]="!cp.product.active ? 'left level-3' : 'left level-1'">{{ cp.product.active ? 'SIM' : 'NÃO'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <td colspan="3" class="td-subinfo">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th class="right c-10">Marca:</th>
+                        <td [ngClass]="!cp.productSupplier.brand.active ? 'left level-2' : 'left level-1'">{{ cp.productSupplier.brand.name }}</td>
+                        <th rowspan="2" class="right c-10">Prazo:</th>
+                        <td class="left">{{ cp.deliveryTime }}</td>
+                        <th class="right c-10">Qtd:</th>
+                        <td class="left">{{ cp.availableQuantity }}</td>
+                        <th class="right c-10">Preço:</th>
+                        <td class="left">{{ cp.price| currency:'':'' }}</td>
+                        <th class="right c-10">Tipo:</th>
+                        <td class="left">{{ cp.typeText }}</td>
+                        <th class="right c-20">Prod.Forn. Ativo:</th>
+                        <td colspan="2" [ngClass]="!cp.productSupplier.active ? 'left level-3' : 'left level-1'">{{ cp.productSupplier.active ? 'SIM' : 'NÃO'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+
+              <tr class="row-movs" *ngIf="cp.product.moviment">
+                <th rowspan="3" class="right c-10">Movimentações:</th>
+                <td colspan="3" class="td-subinfo">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th class="right">Grupos:</th>
+                        <td class="right">{{ cp.product.moviment.qtdCompanyCodeSac }}</td>
+
+                        <th class="right">Compradores:</th>
+                        <td class="right">{{ cp.product.moviment.qTdBuyer }}</td>
+
+                        <th class="right">QTd.NF's:</th>
+                        <td class="right">{{ cp.product.moviment.qtdInvoice }}</td>
+
+                        <th class="right">Qtd.Prods:</th>
+                        <td class="right">{{ cp.product.moviment.qtdProduct }}</td>
+
+                        <th class="right">Período:</th>
+                        <td class="center">{{ cp.product.moviment.minInvoiceDate| date:'dd/MM/yy' }}<br>{{ cp.product.moviment.maxInvoiceDate| date:'dd/MM/yy' }}</td>
+
+                        <th class="right">Mínimo:</th>
+                        <td class="right">{{ cp.product.moviment.minUnitaryValue| currency:'':'' }}</td>
+
+                        <th class="right">Médio:</th>
+                        <td class="right">{{ cp.product.moviment.avgUnitaryValue| currency:'':'' }}</td>
+
+                        <th class="right">Máximo:</th>
+                        <td class="right">{{ cp.product.moviment.maxUnitaryValue| currency:'':'' }}</td>
+                       
+                        <th class="right">Ultimo:</th>
+                        <td class="right">{{ cp.product.moviment.lastUnitaryValue| currency:'':'' }}</td>
+                        
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr class="row-movs" *ngIf="!cp.product.moviment">
+                <th rowspan="3" class="right c-10 error">Movimentações:</th>
+                <td colspan="3" class="td-subinfo error">Não há vinculo com compradores!</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        
+      </div>
+
+    </div>
+
+  </div>
+</div>

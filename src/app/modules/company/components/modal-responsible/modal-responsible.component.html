@@ -1,0 +1,19 @@
+<div id="dialog-responsible">
+  <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+     <div class="fl-row title">
+        <mat-icon class="header-icon" color="primary">perm_identity</mat-icon>
+     </div>
+     <div class="fl-row title header-title">
+        <h2 mat-dialog-title>Dados de Contato</h2>
+     </div>
+  </div>
+  <div mat-dialog-content class="dialog-responsible-corpo mat-app-background">
+     <app-form [(form)]="responsibleForm" [model]="data" [formRows]="formResponsible" [useErrors]="false"></app-form>
+  </div>
+  <div mat-dialog-actions class="dialog-responsible-botoes mat-app-background">
+     <button class="large" mat-raised-button color="lightgray" mat-dialog-close
+        (click)="cancel()">Cancelar</button>
+     <button class="large" mat-raised-button color="primary" [style.color]="'white'"
+        (click)="saveResponsible()">Confirmar</button>
+  </div>
+</div>

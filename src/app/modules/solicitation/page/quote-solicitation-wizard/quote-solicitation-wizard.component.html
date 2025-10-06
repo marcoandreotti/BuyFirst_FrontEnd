@@ -1,0 +1,275 @@
+<div class="bf-container">
+    <div *ngIf="model" class="div-container" fxLayout="column wrap" fxLayoutGap="16px">
+        <div *ngIf="selectedAddress" fxFlex [style.display]="!showExpanded ? '' : 'none'">
+            <div class="div-left div-info">
+                <label>Empresa</label>
+                <span class="spn-text">{{model.buyerName}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label [ngClass]="isMinorDate(model.expectedDate) ? 'abel-error' : ''">Tempo para o retorno</label>
+                <span class="spn-text">{{model.expectedDate| date:'dd/MM/yyyy HH:mm'}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label [ngClass]="!paymentSelectdText ? 'label-error' : ''">Conds. Pagto</label>
+                <span class="spn-text">{{paymentSelectdText}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label>CEP</label>
+                <span class="spn-text">{{selectedAddress.zipCode}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label>Endereço</label>
+                <span class="spn-text">{{selectedAddress.street}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label>Nro</label>
+                <span class="spn-text">{{selectedAddress.number}}</span>
+            </div>
+            <div class="div-divider"></div>
+            <div class="div-left div-info">
+                <label>Cidade</label>
+                <span class="spn-text">{{selectedAddress.location}} / <b>{{selectedAddress.stateAcronym}}</b></span>
+            </div>
+            <div *ngIf="!model.phase || model.phase <= 10" class="div-right">
+                <button mat-flat-button (click)="onShowExpanded()">
+                    <mat-icon>{{showExpanded ? 'compress' : 'edit'}}</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div fxFlex [style.display]="showExpanded ? '' : 'none'">
+            <div fxLayout="row wrap" fxLayoutGap="16px">
+                <div [fxFlex]="!model.phase || model.phase <= 10 ? '95' : '100'">
+                    <app-form [(form)]="quoteForm" [model]="model" [formRows]="formQuote"></app-form>
+                </div>
+                <div *ngIf="!model.phase || model.phase <= 10" fxFlex="1">
+                    <button mat-flat-button (click)="onShowExpanded()">
+                        <mat-icon>{{showExpanded ? 'compress' : 'edit'}}</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="showExpanded && model.buyerId > 0 && selectedAddress && (!modelSolProd || !modelSolProd.deliveryAddresses || modelSolProd.deliveryAddresses.length < 1)"
+            class="div-form" fxFlex>
+            <label class="label-div">Endreço para entrega (padrão)</label>
+            <mat-card style="margin-top: 10px;">
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <div *ngIf="listAddress.length > 1" class="div-form-action" fxFlex="5">
+                        <button mat-raised-button
+                            (click)="stepAddresses(-1)"><mat-icon>arrow_back_ios</mat-icon></button>
+                    </div>
+                    <div [fxFlex]="listAddress.length > 1 ? 90 : 100">
+                        <div class="div-left div-info">
+                            <label>CEP</label>
+                            <span class="spn-text">{{selectedAddress.zipCode}}</span>
+                        </div>
+                        <div class="div-divider"></div>
+                        <div class="div-left div-info">
+                            <label>Endereço</label>
+                            <span class="spn-text">{{selectedAddress.street}}</span>
+                        </div>
+                        <div class="div-divider"></div>
+                        <div class="div-left div-info">
+                            <label>Nro</label>
+                            <span class="spn-text">{{selectedAddress.number}}</span>
+                        </div>
+                        <div class="div-divider"></div>
+                        <div class="div-left div-info">
+                            <label>Bairro</label>
+                            <span class="spn-text">{{selectedAddress.neighborhood}}</span>
+                        </div>
+                        <div class="div-divider"></div>
+                        <div class="div-left div-info">
+                            <label>Complemento</label>
+                            <span class="spn-text">{{selectedAddress.complement}}</span>
+                        </div>
+                        <div class="div-divider"></div>
+                        <div class="div-left div-info">
+                            <label>Cidade</label>
+                            <span class="spn-text">{{selectedAddress.location}} /
+                                <b>{{selectedAddress.stateAcronym}}</b></span>
+                        </div>
+                    </div>
+                    <div *ngIf="listAddress.length > 1" class="div-form-action" fxFlex="5">
+                        <button mat-raised-button
+                            (click)="stepAddresses(1)"><mat-icon>arrow_forward_ios</mat-icon></button>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+        <div *ngIf="model.buyerId > 0 && (!model.phase || model.phase <= 10)" class="div-form" fxFlex>
+            <div class="label-div">
+                <label>Incluir itens para cotação</label>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="60">
+                    <form class="form-cadastro" [formGroup]='searchForm'>
+                        <mat-form-field class="w100" appearance="outline">
+                            <mat-label>Produto</mat-label>
+                            <input matInput placeholder="Produto" [matAutocomplete]="auto" formControlName='searchInput' required>
+                        </mat-form-field>
+
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                            (optionSelected)="onSearchAutocomplet($event)">
+                            <mat-option *ngFor="let prod of filteredProducts" [value]="prod">
+                                <span>{{ prod.name }}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </form>
+
+                    <app-form [(form)]="solForm" [model]="modelSolProd" [formRows]="formSol" [useErrors]="false"></app-form>
+
+                    <div *ngIf="modelSolProd && modelSolProd.deliveryAddresses && modelSolProd.deliveryAddresses.length > 0">
+                        <table class="table-info">
+                            <thead>
+                                <tr>
+                                    <th class="left">Endereço</th>
+                                    <th class="center">Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let ad of modelSolProd.deliveryAddresses">
+                                <tr>
+                                    <td class="left">{{ad.concatAddress}}</td>
+                                    <td class="right">{{ad.quantity| currency:'':''}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div fxFlex="25">
+                    <form class="form-cadastro" [formGroup]='brandSearchForm'>
+                        <mat-form-field class="w100" appearance="outline">
+                            <mat-label>Marcas</mat-label>
+                            <input matInput placeholder="Marcas" [matAutocomplete]="autoBrand" formControlName='brandSearchInput' required>
+                        </mat-form-field>
+                        <button mat-icon-button color="primary" *ngIf="showBrandAdd" class="button-imput-add"
+                            (click)="onAddBrand()" matTooltip="Caso queira pode adicionar mais Marcas">
+                            <mat-icon>add_box</mat-icon>
+                        </button>
+
+                        <mat-autocomplete #autoBrand="matAutocomplete" [displayWith]="brandDisplayFn"
+                            (optionSelected)="onSearchBrandAutocomplet($event)">
+                            <mat-option *ngFor="let brand of filteredBrands" [value]="brand">
+                                <span>{{ brand.name }}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </form>
+                    <div class="div-brands">
+                        <div class="div-brand" *ngFor="let qBrand of listBrands">
+                            <span>{{qBrand.brand.name}}</span>
+                            <button mat-icon-button color="warn" (click)="onRemoveBrand(qBrand)"><mat-icon matListItemIcon>delete</mat-icon></button>
+                        </div>
+                    </div>
+                </div>
+                <div fxFlex="15">
+                    <div fxLayout="column wrap" fxLayoutGap="16px">
+                        <div class="div-action" fxFlex="25">
+                            <button mat-raised-button (click)="showModalUpload()" color="default"><mat-icon>upload_file</mat-icon> Importar Csv</button>
+                        </div>
+                        <div class="div-action" fxFlex="25">
+                            <button *ngIf="lstAllAddress && lstAllAddress.length > 1" mat-raised-button
+                                (click)="showModalAddresses()" color="default"
+                                matTooltip="Define entregas para outras localidades"><mat-icon>local_shipping</mat-icon>
+                                Endereços</button>
+                            <p *ngIf="!lstAllAddress || lstAllAddress.length <= 1" class="p-center">...</p>
+                        </div>
+                        <div class="div-action" fxFlex="25">
+                            <button mat-raised-button (click)="onSubmitProduct()" color="primary"
+                                [style.color]="'white'"><mat-icon>add</mat-icon> Adicionar Item</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="listSol && listSol.length > 0" class="div-form" fxFlex>
+            <label class="label-div">Itens</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="100">
+                    <div class="grid-products scrolly">
+                        <table class="table-master">
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>Produto</th>
+                                    <th>Qtd.</th>
+                                    <th>Ref.</th>
+                                    <th>Marca(s)</th>
+                                    <th>UN.</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let prod of listSol">
+                                <tr [ngClass]="prod.phase > 10 ? 'tr-disabled' : ''">
+                                    <td [ngClass]="!prod.groupSearch ? 'td-not-found' : ''">{{prod.groupSearch}}</td>
+                                    <td>{{prod.productSearch}}</td>
+                                    <td class="right">{{prod.quantity| currency:'':''}}</td>
+                                    <td>{{prod.referenceCodeSearch}}</td>
+                                    <td>
+                                        <div *ngFor="let qBrand of prod.brands">
+                                            <span>{{qBrand.brand.name}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{prod.unitOfMeasureAcronym}}</td>
+                                    <td class="no-border center" [ngClass]="prod.phase <= 10 ? 'col-10' : 'col-1'">
+                                        <button *ngIf="prod.phase <= 10" mat-icon-button color="primary"
+                                            (click)="onEdit(prod)" matTooltip="Editar">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <button *ngIf="prod.phase <= 10" mat-icon-button color="warn"
+                                            (click)="onDelete(prod)" matTooltip="Deletar esse produto!">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                        <button *ngIf="prod.phase > 99" mat-icon-button color="primary"
+                                            (click)="onUndo(prod)" matTooltip="Reativar esse produto!">
+                                            <mat-icon>radar</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="prod.deliveryAddresses && prod.deliveryAddresses.length > 0">
+                                    <td class="no-border"></td>
+                                    <td colspan="5" class="body-result">
+                                        <table class="table-info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="left">Endereço</th>
+                                                    <th class="center">Quantidade</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody *ngFor="let ad of prod.deliveryAddresses">
+                                                <tr>
+                                                    <td class="left">{{ad.concatAddress}}</td>
+                                                    <td class="right">{{ad.quantity| currency:'':''}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td class="no-border"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!model.phase || model.phase <= 10" fxFlex>
+            <div class="div-right">
+                <button mat-raised-button *ngIf="editId > 0 && canProcess" color="warn" [style.color]="'white'"
+                    (click)="onProcessQuoteSol()" [disabled]="isLoading">{{isLoading ? 'Processar cotação...' :
+                    'Processar cotação'}}</button>
+            </div>
+            <div class="div-right">
+                <button mat-raised-button *ngIf="!canProcess && listSol && listSol.length > 0" color="primary"
+                    [style.color]="'white'" (click)="onSubmitQuoteSol()" [disabled]="isLoading">{{isLoading ? 'Salvando
+                    dados...' : 'Salvar
+                    cotação'}}</button>
+            </div>
+        </div>
+    </div>
+</div>

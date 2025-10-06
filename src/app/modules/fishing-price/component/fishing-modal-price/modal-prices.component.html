@@ -1,0 +1,32 @@
+<div id="dialog-prices">
+   <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+      <div class="fl-row title">
+         <mat-icon class="header-icon" color="primary">paid</mat-icon>
+      </div>
+      <div class="fl-row title">
+         <h3>Preços e condições para: <span>{{ model.productSupplierName }}</span></h3>
+      </div>
+   </div>
+
+   <div mat-dialog-content class="container">
+      <div class="scrollable-content">
+         <app-grid *ngIf="model.prices != null"
+            [ableEdit]="false"
+            [alwaysFilters]="false"
+            [columns]="cols"
+            [displayedColumns]="displayedColumns"
+            [useHeader]="false"
+            [modelIdentity]="catalogProductPriceId"
+            [rows]="model.prices"
+            [scroll]="false"
+            [title]="prices"
+            [useEditColumns]="false"
+            [usePagination]="false"
+            [useRegister]="false"
+            [useSelect]="false">
+         </app-grid>
+      </div>
+   </div>
+   <div mat-dialog-actions class="dialog-prices-botoes">
+      <button class="large" mat-raised-button color="lightgray" (click)="cancel()" mat-dialog-close>Fechar</button>
+</div>

@@ -1,0 +1,125 @@
+<div class="bf-container" fxLayout="column" fxLayoutGap="16px">
+    <div fxFlex="10">
+        <div fxLayout="row" fxLayoutGap="16px">
+            <div class="col-filter" fxFlex="45">
+                <mat-button-toggle-group #group="matButtonToggleGroup" [value]="rdoShowResult"
+                    (change)="radioButtonChange(group)">
+                    <mat-button-toggle value="1">Todos</mat-button-toggle>
+                    <mat-button-toggle value="2">Unificados</mat-button-toggle>
+                    <mat-button-toggle value="3">Não unificados</mat-button-toggle>
+                </mat-button-toggle-group>
+                <mat-slide-toggle class="left-10" [(ngModel)]="showSupplierCodes" color="primary">Mostrar códigos</mat-slide-toggle>
+            </div>
+            <div class="col-action" fxFlex="35">
+                <app-form [(form)]="argumentForm" [model]="modelArgument" [formRows]="formArgument"></app-form>
+            </div>
+            <div class="col-action" fxFlex="5">
+                <button mat-raised-button class="button-menu-top" (click)="onRefreshProds()" matTooltip="Limpa seleção e efetua a busca novamente!">
+                    <mat-icon>bolt</mat-icon>
+                </button>
+            </div>
+            <div class="col-action" fxFlex="5">
+                <button mat-raised-button class="button-menu-top" (click)="onSelectAll()" matTooltip="Seleciona todos os registros exibidos abaixo!">
+                    <mat-icon>checklist</mat-icon>
+                </button>
+            </div>
+            <div class="col-action" fxFlex="5">
+                <button mat-raised-button class="button-menu-top" (click)="onClearAll()" color="warn" matTooltip="Limpa todos os filtros! (Trará todos os registros!)">
+                    <mat-icon>do_not_touch</mat-icon>
+                </button>
+            </div>
+            <div class="col-action" fxFlex="5">
+                <button mat-raised-button class="button-menu-top" (click)="onExportCsv()" matTooltip="Download do resultado em arquivo CSV!">
+                    <mat-icon>file_download</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="scrollable-content" [fxFlex]="!existsSelected ? '84' : '79'">
+        <table class="table-info">
+            <thead>
+                <tr>
+                    <th class="right col-5">
+                        <button mat-button (click)="showModalFilter('productId')">
+                            <mat-icon>search</mat-icon>ID BF
+                            <mat-icon *ngIf="sort.active == 'productId'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                    <th class="left col-70">
+                        <button mat-button (click)="showModalFilter('default')">
+                            <mat-icon>search</mat-icon>Produto
+                            <mat-icon *ngIf="sort.active == 'default' || sort.active == 'name'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                    <th class="center">
+                        <button mat-button (click)="onSort('groupName')">Grupo
+                            <mat-icon *ngIf="sort.active == 'groupName'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                    <th class="center">
+                        <button mat-button (click)="onSort('subGroupName')">SubGrupo
+                            <mat-icon *ngIf="sort.active == 'subGroupName'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                    <th class="center">
+                        <button mat-button (click)="onSort('unitOfMeasureAcronym')">Un.
+                            <mat-icon *ngIf="sort.active == 'unitOfMeasureAcronym'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                    <th class="center">
+                        <button mat-button (click)="onSort('quantityGroupCompanies')">Qtd Grupo
+                            <mat-icon *ngIf="sort.active == 'quantityGroupCompanies'">{{iconSort}}</mat-icon>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let prod of lstProds">
+                <tr class="tr-hover" [ngClass]="prod.selected ? 'row-selectd' : ''">
+                    <td class="right" style="display: flex;">
+                        <button mat-raised-button class="button-small"
+                            (click)="onOpenAnalysis(prod)">{{prod.productId}}</button>
+                        <button mat-icon-button class="button-small-icon" (click)="onExportDetailCsv(prod.productId)">
+                            <mat-icon>file_download</mat-icon>
+                        </button>
+                    </td>
+                    <td class="left td-cursor" (click)="onSelectedRow(prod)">
+                        <p>{{prod.name}}</p>
+                        <p *ngIf="showSupplierCodes" class="p-codes">{{prod.supplierCodes}}</p>
+                    </td>
+                    <td class="left">{{prod.groupName}}</td>
+                    <td class="left">{{prod.subGroupName}}</td>
+                    <td class="center">{{prod.unitOfMeasureAcronym}}</td>
+                    <td class="right">{{prod.quantityGroupCompanies}}</td>
+                    <td *ngIf="prod.quantityMatchesSupplier > 0"
+                        [ngClass]="!prod.matchError ? 'center' : 'center color-error'" matTooltip="Match Fornecedor">
+                        <mat-icon>share</mat-icon>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="existsSelected" align="end" fxFlex="5">
+        <button mat-raised-button color="warn" class="right-5" (click)="onRemoveItems()">Excluir item(ns)</button>
+        <button mat-raised-button color="primary" [style.color]="'white'" (click)="onGroupProducts()">Agrupar/Unificar</button>
+    </div>
+    <div class="row pagination" *ngIf="totalRecords > pageSize" fxFlex="6">
+        <div class="col page-select">
+            <button *ngIf="!showGotoPage" class="small button-page-select" mat-button (click)="onClickShowGotoPage()">
+                <mat-icon>auto_stories</mat-icon>
+                Ir para
+            </button>
+
+            <mat-form-field *ngIf="showGotoPage">
+                <mat-label>Ir Para:</mat-label>
+                <mat-select [(ngModel)]="pageIndex" (ngModelChange)="onUpdateManualPage($event)">
+                    <mat-option *ngFor="let page of listPages$" [value]="page.id">{{ page.description }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-auto">
+            <mat-paginator [length]="totalRecords" [pageIndex]="pageIndex" [pageSize]="pageSize"
+                aria-label="Select page" (page)="onPageEvent($event)" showFirstLastButtons>
+            </mat-paginator>
+        </div>
+    </div>
+</div>

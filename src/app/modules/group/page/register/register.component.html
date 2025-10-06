@@ -1,0 +1,34 @@
+<div class="bf-container crud">
+  <mat-card>
+    <div class="card-crud">
+      <h2>Digite abaixo os dados para o grupo de produtos</h2>
+
+      <div class="form-crud">
+        <app-form [(form)]="groupForm" [model]="model" [formRows]="formRowGroup">
+        </app-form>
+
+        <div *ngIf="editId > 0">
+          <hr>
+          <app-form [(form)]="subgroupForm" [model]="modelSubgroup" [formRows]="formRowSubgroup" [useErrors]="false"
+            (onSubmit)="formSubgroupSubmit()">
+          </app-form>
+
+          <div *ngIf="subgroup$ != null" class="grid-references">
+            <app-grid [columns]="cols" [displayedColumns]="displayedColumns" [filters]="[]" [rows]="subgroup$.data"
+              [usePagination]="false" [useSelect]="false" [ableEdit]="false" [useRegister]="false"
+              [modelIdentity]="subgroupId" [itemMenus]="itemMenus" [useHeader]="false" [itemMenus]="itemMenus"
+              [useEditColumns]="false">
+            </app-grid>
+          </div>
+          <hr>
+        </div>
+
+        <div class="fl-row button-large justify-end">
+          <button class="large" mat-raised-button color="primary" (click)="save()" [style.color]="'white'">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

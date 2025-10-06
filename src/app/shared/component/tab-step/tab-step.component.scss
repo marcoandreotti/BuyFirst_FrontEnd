@@ -1,0 +1,95 @@
+.breadcrumb {
+  list-style: none;
+  overflow-y: hidden;
+  max-width: 1024px;
+  overflow-x: auto;
+
+  @media (min-width: 1024px) and (max-width: 1366px) {
+    max-width: 768px;
+  }
+
+  mat-icon {
+    margin-bottom: 5px;
+  }
+}
+
+.breadcrumb li {
+  float: left;
+}
+
+.breadcrumb li a {
+  color: white;
+  text-decoration: none;
+  padding: 15px 0 15px 55px;
+  background: #acacac;
+  position: relative;
+  display: block;
+  float: left;
+  text-align: center;
+  min-width: 150px;
+
+  span {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 12px;
+  }
+}
+
+.breadcrumb li a.completed {
+  background: #5bb26e;
+}
+
+.breadcrumb li a:after {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid #acacac;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  left: 100%;
+  z-index: 2;
+}
+
+.breadcrumb li a:before {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid #ededed;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  margin-left: 8px;
+  left: 100%;
+  z-index: 1;
+}
+
+.breadcrumb li a.completed:after {
+  border-left-color: #5bb26e;
+}
+
+.breadcrumb li:first-child a {
+  padding-left: 20px;
+}
+
+.breadcrumb li:last-child a {
+  padding-right: 20px;
+}
+
+.breadcrumb li:last-child a:after {
+  border: none;
+}
+
+.breadcrumb li:last-child a:before {
+  border: none;
+}
+
+.breadcrumb li a .content {
+  text-align: center;
+}

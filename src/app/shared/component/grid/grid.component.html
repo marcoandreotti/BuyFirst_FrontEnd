@@ -1,0 +1,44 @@
+<div class="crud-grid-container"
+    [ngClass]="{'telacheia mat-app-background': fullScreen, 'padding-crud': havePadding, 'background-crud': havePadding || fullScreen }">
+    <div class="crud-grid-container">
+
+        <app-header *ngIf="useHeader" [title]="title" [options]="options" [alwaysFilters]="alwaysFilters"
+            [topMenus]="topMenus" [filterLength]="filters.length" [filterEvent]="filterEvent"
+            [haveFilters]="haveFilters">
+        </app-header>
+
+        <app-filters *ngIf="useFilters" [filters]="filters" [alwaysFilters]="alwaysFilters" [filterModel]="filterModel"
+            [specialFilter]="specialFilter" [opened]="openedFilters" (onFilter)="onFilterComponent($event)"
+            [filterEvent]="filterEvent" [useMargin]="dashboards == null || dashboards.length == 0"></app-filters>
+
+        <app-dashboard *ngIf="dashboards && dashboards.length > 0" [dashboards]="dashboards"></app-dashboard>
+
+        <div class="grid">
+            <app-table [itemMenus]="itemMenus" [actionButtons]="actionButtons" [title]="title" [displayedColumns]="displayedColumns" [columns]="columns"
+                [rows]="paginedRows" [ableEdit]="ableEdit" [modelIdentity]="modelIdentity"
+                [onChangePaginedRows]="onChangePaginedRows" [useSelect]="useSelect" [scroll]="scroll"
+                [loadingColumn]="loadingColumn" (onChangeColumnValue)="onChangeColumnValueTable($event)"
+                (onChangeSorterValue)="changeSorter($event)" (onExpandItem)="OnExpandItem($event)"
+                (onCloseExpandItem)="OnCloseExpandItem($event)" [expandedElement]="expandedElement"
+                [expandedRows]="expandedRows" (onExpandItemSecond)="OnExpandItemSecond($event)"
+                (onCloseExpandItemSecond)="OnCloseExpandItemSecond($event)"
+                [expandedElementSecond]="expandedElementSecond" [expandedRowsSecond]="expandedRowsSecond"
+                [fullScreen]="fullScreen" [useTwoLevel]="useTwoLevel" (onSelectItem)="onSelectItem($event)"
+                (onRemoveItem)="onRemoveItem($event)" [selectedRows]="selectedRows">
+            </app-table>
+        </div>
+
+        <app-pagination *ngIf="usePagination && !gridLoading && pageLength > pageSize"
+            (onPageEvent)="pageEvent($event)"
+            [length]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageLength]="pageLength"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            [title]="title" 
+            ></app-pagination>
+
+        <app-columns *ngIf="getColumns() && useEditColumns" [opened]="openColumnsConfig" [columns]="columns"
+            [displayedColumns]="displayedColumns"></app-columns>
+
+    </div>

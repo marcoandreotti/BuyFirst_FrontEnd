@@ -1,0 +1,19 @@
+<div class="bf-container crud">
+  <app-grid *ngIf="brand$ != null"
+  (onFilter)="onFilter($event)"
+  (pageChange)="onPageEvent($event)"
+  [alwaysFilters]="true"
+  [columns]="cols"
+  [displayedColumns]="displayedColumns"
+  [filterModel]="lastFilter"
+  [filters]="filters"
+  [modelIdentity]="modelIdentity"
+  [pageIndex]="pageIndex"
+  [pageLength]="brand$.totalRecords"
+  [pageSize]="pageSize"
+  [rows]="brand$.data"
+  [specialFilter]="true"
+  [title]="gridBrand"
+  [useSelect]="false">
+</app-grid>
+</div>

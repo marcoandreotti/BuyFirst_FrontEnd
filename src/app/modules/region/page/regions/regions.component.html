@@ -1,0 +1,19 @@
+<div class="bf-container crud">
+  <app-grid *ngIf="regions$ != null"
+  (onFilter)="onFilter($event)"
+  (pageChange)="onPageEvent($event)"
+  [alwaysFilters]="true"
+  [columns]="cols"
+  [displayedColumns]="displayedColumns"
+  [filterModel]="lastFilter"
+  [filters]="filters"
+  [modelIdentity]="modelIdentity"
+  [pageIndex]="pageIndex"
+  [pageLength]="regions$.totalRecords"
+  [pageSize]="pageSize"
+  [rows]="regions$.data"
+  [specialFilter]="true"
+  [title]="gridRegions"
+  [useSelect]="false">
+</app-grid>
+</div>

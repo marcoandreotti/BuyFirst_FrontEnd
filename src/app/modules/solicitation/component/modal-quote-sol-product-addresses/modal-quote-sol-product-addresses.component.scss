@@ -1,0 +1,93 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.custom-dialog-container .mat-dialog-container {
+    padding: 0px;
+}
+
+#dialog-address {
+    min-height: 150px;
+    width: 800px;
+    white-space: break-spaces;
+
+    @media only screen and (max-width: $mobile) {
+        width: 100%;
+    }
+}
+
+#dialog-address .header {
+    width: 100%;
+    height: 80px;
+    display: inline-table;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+#dialog-address .header .title {
+    margin: 3px;
+    align-items: center;
+    justify-content: center;
+}
+
+#dialog-address .header .title .mat-icon {
+    font-size: 80px;
+    width: auto;
+    height: auto;
+}
+
+.header-message {
+    text-align: center;
+    font-size: small;
+}
+
+#dialog-address .header {
+    background-color: transparent;
+    color: #000;
+}
+
+#dialog-address .header.aviso {
+    background-color: #f0ad4e;
+}
+
+#dialog-address .header.info {
+    background-color: #5bc0de;
+}
+
+#dialog-address .header.erro {
+    background-color: #ff4d2d;
+}
+
+#dialog-address .header.sucesso {
+    background-color: var(--theme-primary-500);
+}
+
+#dialog-address .dialog-address-corpo {
+    justify-content: center;
+    padding: 20px 40px 0 20px;
+    overflow-y: auto;
+    min-height: 150px;
+    max-height: 400px;
+
+
+    h3 {
+        @media only screen and (max-width: $mobile) {
+            font-size: 20px;
+        }
+    }
+}
+
+#dialog-address .dialog-address-botoes {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#dialog-address .botao-dialog-address {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: transparent;
+}

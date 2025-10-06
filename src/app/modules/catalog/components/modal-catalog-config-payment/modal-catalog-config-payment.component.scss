@@ -1,0 +1,132 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+.custom-dialog-container .mat-dialog-container {
+  padding: 0px;
+}
+
+#dialog-config-payment {
+  min-height: 150px;
+  width: 1000px;
+  white-space: break-spaces;
+  @media only screen and (max-width: $mobile) {
+    width: 100%;
+  }
+}
+
+#dialog-config-payment .header {
+  width: 100%;
+  height: 80px;
+  display: inline-table;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+#dialog-config-payment .header .title {
+  margin: 3px;
+  align-items: center;
+  justify-content: center;
+}
+
+#dialog-config-payment .header .title .mat-icon {
+  font-size: 80px;
+  width: auto;
+  height: auto;
+}
+
+.header-message {
+  text-align: center;
+  font-size: small;
+}
+
+#dialog-config-payment .header {
+  background-color: transparent;
+  color: #000;
+}
+
+#dialog-config-payment .header.aviso {
+  background-color: #f0ad4e;
+}
+
+#dialog-config-payment .header.info {
+  background-color: #5bc0de;
+}
+
+#dialog-config-payment .header.erro {
+  background-color: #ff4d2d;
+}
+
+#dialog-config-payment .header.sucesso {
+  background-color: var(--theme-primary-500);
+}
+
+#dialog-config-payment .dialog-config-payment-corpo {
+  // display: flex;
+  justify-content: center;
+  padding: 10px 0 0 40px;
+
+  h3 {
+    @media only screen and (max-width: $mobile) {
+      font-size: 20px;
+    }
+  }
+}
+
+#dialog-config-payment .dialog-config-payment-botoes {
+  padding: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#dialog-config-payment .botao-dialog-config-payment {
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+/*------------------*/
+.example-tab-text {
+  vertical-align: middle;
+  font-size: 17px;
+  padding-top: 5px;
+}
+
+.mat-radio-button {
+  margin-left: 7px;
+}
+
+.form-special-condition {
+  margin-top: 10px;
+}
+
+h4 {
+  margin-bottom: 15px !important;
+}
+
+.div-special-condition-opt {
+  width: 30%;
+  float: left;
+}
+
+.div-special-condition-form {
+  width: 70%;
+  float: right;
+}
+
+.total-records {
+    font-size: smaller;
+    padding: 2px;
+    border: #c7c7c7 solid 0.1rem;
+    border-radius: 4px;
+    margin-left: 5px;
+}
+
+.mat-icon-tabs {
+    font-size: 1.1rem;
+    height: 12px;
+    font-weight: 700;
+}
+

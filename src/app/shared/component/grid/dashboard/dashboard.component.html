@@ -1,0 +1,66 @@
+<div *ngIf="!loadingDashs" class="dashboard fl-row align-c">
+
+    <mat-card [@chatOpened]="chartOpened ? 'expanded' : 'collapsed'" class="chart-container">
+
+        <div class="fl-row align-c">
+
+            <div class="flex1">
+
+                <div class="chart chart-margin">
+                    <h4 class="dash-title"><b>Total de à Pagar</b></h4>
+                    <ngx-charts-advanced-pie-chart [scheme]="chartOneColors" [results]="chartOne" [gradient]="false">
+                    </ngx-charts-advanced-pie-chart>
+                </div>
+
+                <div class="chart ">
+                    <h4 class="dash-title"><b>Total de Débitos</b></h4>
+                    <ngx-charts-advanced-pie-chart [scheme]="chartTwoColors" [results]="chartTwo" [gradient]="false">
+                    </ngx-charts-advanced-pie-chart>
+                </div>
+
+            </div>
+
+            <div class="flex1 chart-border">
+
+                <div class="chart">
+                    <h4 class="dash-title"><b>Gráfico</b></h4>
+                    <ngx-charts-bar-vertical [scheme]="chartThreeColors" [results]="chartThree" [xAxis]="showXAxis"
+                        [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                        legendPosition="below">
+                    </ngx-charts-bar-vertical>
+                </div>
+
+            </div>
+        </div>
+    </mat-card>
+
+    <div class="dashboard-data" (wheel)="onWheel($event)">
+        <div fxLayout="row" fxLayout.xs="column" fxFlexFill fxLayoutGap="20px">
+            <div *ngFor="let d of dashboardsElements, let i = index" [fxFlex]="100">
+                <mat-card class="dash-card">
+                    <div class="dash-container">
+                        <div class="fl-row align-c space-between">
+                            <mat-icon class="dash-value" [style.color]="d.color != 'primary' ? d.color : ''">
+                                {{d.icon}}</mat-icon>
+                            <h2 [style.color]="d.color != 'primary' ? d.color : ''" class="dash-value"><b>
+                                    R$ {{retornaValorFormatado(d.valorTotal)}}</b></h2>
+                        </div>
+                        <div class="fl-row align-c space-between">
+                            <h4 class="dash-title">Total de {{d.nomeGrupo}}</h4>
+                            <h3 [style.color]="d.color != 'primary' ? d.color : ''" class="dash-value">
+                                <b>{{d.quantidade}}</b>
+                            </h3>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-button" (click)="chartOpened = !chartOpened">
+        <mat-icon>{{chartOpened ? 'close' : 'insert_chart'}}</mat-icon>
+    </div>
+
+
+</div>

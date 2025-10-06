@@ -1,0 +1,23 @@
+<div class="bf-container">
+   <app-grid *ngIf="catalogProducts$ != null"
+      (onFilter)="onFilter($event)"
+      (pageChange)="onPageEvent($event)"
+      (onChangeSorterValue)="changeSorter($event)"
+      [alwaysFilters]="false"
+      [columns]="cols"
+      [displayedColumns]="displayedColumns"
+      [filterModel]="lastFilter"
+      [filters]="filters"
+      [itemMenus]="itemMenus"
+      [modelIdentity]="modelIdentity"
+      [pageIndex]="pageIndex"
+      [pageLength]="catalogProducts$ ? catalogProducts$.totalRecords : 0"
+      [pageSize]="pageSize"
+      [rows]="catalogProducts$ ? catalogProducts$.data : null"
+      [specialFilter]="true"
+      [title]="gridCatalogos"
+      [useSelect]="false"
+      [topMenus]="auth.isBuyFirst ? topMenus : []"
+      [ableEdit]="catalogStatus$.overallStatus.alias != 'CAT_CANCEL' && catalogStatus$.overallStatus.alias != 'CAT_FINALIZAD'">
+   </app-grid>
+</div>

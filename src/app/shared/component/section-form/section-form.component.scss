@@ -1,0 +1,102 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.active > section > app-section-form > .section {
+  display: block;
+}
+
+.section {
+  display: none;
+  margin-top: 30px;
+  margin-bottom: 60px;
+
+  &:last-of-type {
+    margin-bottom: 0px;
+  }
+
+  .tituloSection {
+    margin-bottom: 50px;
+
+    h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    p {
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+
+  .linha {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin: 10px -15px 0;
+
+    .campo {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 0px 20px 20px;
+
+      &.alinhaFim {
+        align-items: flex-end;
+      }
+
+      .mat-form-field-infix {
+        width: 100%;
+        // padding: 10px 0;
+      }
+    }
+  }
+
+  .mat-error {
+    position: absolute;
+    font-size: 12px;
+    bottom: 0px;
+    left: 30px;
+  }
+
+  input,
+  label {
+    display: block;
+    width: 100%;
+  }
+
+  label {
+    // font-size: 12px;
+    padding-bottom: 12px;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+  }
+
+  select {
+    width: 100%;
+  }
+
+  input::placeholder {
+    font-size: 12px;
+  }
+
+  mat-radio-button {
+    padding-right: 10px;
+  }
+
+  input,
+  select {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .linha {
+    flex-wrap: wrap;
+  }
+}

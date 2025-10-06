@@ -1,0 +1,17 @@
+<div id="dialog-brand">
+   <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+      <div class="fl-row title">
+         <mat-icon class="header-icon" color="primary">tab</mat-icon>
+      </div>
+      <div class="fl-row title header-title">
+         <h2 mat-dialog-title>Cadastro de Marca</h2>
+      </div>
+   </div>
+   <div mat-dialog-content class="dialog-brand-corpo mat-app-background">
+      <app-form [(form)]="brandForm" [model]="model" [formRows]="formBrand"></app-form>
+   </div>
+   <div mat-dialog-actions class="dialog-brand-botoes mat-app-background">
+      <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Cancelar</button>
+      <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="save()">Salvar</button>
+   </div>
+</div>

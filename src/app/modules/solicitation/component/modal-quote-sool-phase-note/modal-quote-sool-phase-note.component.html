@@ -1,0 +1,16 @@
+<div id="dialog-phase">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+       <div class="fl-row title">
+          <mat-icon class="header-icon" color="primary">description</mat-icon>
+          <h2 mat-dialog-title>Adicione o motivo dessa ação</h2>
+       </div>
+    </div>
+    <div mat-dialog-content class="dialog-phase-corpo mat-app-background">
+        <app-form [(form)]="noteForm" [model]="modelNote" [formRows]="formNote"></app-form>
+    </div>
+    <div mat-dialog-actions class="dialog-phase-botoes mat-app-background">
+       <!-- <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Cancelar</button> -->
+       <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="onSubmit()">Adicionar</button>
+    </div>
+ </div>
+ 

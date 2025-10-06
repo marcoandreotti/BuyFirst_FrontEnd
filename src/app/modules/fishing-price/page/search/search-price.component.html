@@ -1,0 +1,107 @@
+<div class="bf-container">
+   <div class="form-search">
+      <div class="form-container">
+         <app-fishing-form
+            (onSubmit)="onSubmitPesquisar($event)"
+            (onButtonToggleChange)="onButtonToggleSubmit($event)"
+            (onShoppingCartCLick)="onShoppingCartSubmit()"
+            (onDeleteAllShoppingCartCLick)="onDeleteAllShoppingCartSubmit()"
+            (onFavoriteCLick)="onFavoriteSubmit()"
+            (onDeleteAllFavoriteCLick)="onDeleteAllFavoriteSubmit()"
+            [totalShoppingCart]="totalShoppingCart"
+            [totalFavorite]="totalFavorite"
+            [selectedButtonToggleVal]="selectedButtonToggleVal"
+            [showTypesGrid]="true"
+            >
+         </app-fishing-form>
+      </div>
+   </div>
+   <div class="result-search" style="padding-bottom: 69px !important;">
+      <div fxLayout="row wrap" fxLayoutGap="16px grid" *ngIf="offers$ != null && selectedButtonToggleVal == 'cards'">
+        <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.xl="20%" fxFlex.md="25%" *ngFor="let m of offers$.data, let i = index"> 
+            <mat-card class="mat-elevation-z4" class="fishing-card">
+               <button class="favorit-buton" mat-mini-fab color="lightgray" (click)="onFavorite(m)">
+                  <mat-icon>{{m.favorite ? 'favorite' : 'favorite_border'}}</mat-icon>
+               </button>
+               <mat-card-header>
+                  <mat-card-title>{{ m.referenceCode }}</mat-card-title>
+                  <mat-card-subtitle>{{ m.productSupplierName }}</mat-card-subtitle>
+               </mat-card-header>
+               <img mat-card-image
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFcRcxCjeLdKLgq3OAJTCbMxPa9yDdPz2vtOscvukuMUj96GdGTxbJIvaj7RNfMPWzZC8&usqp=CAU"
+                  alt="">
+               <mat-card-content>
+                  <div class="container-body">
+                     <div *ngIf="auth.isBuyFirst" class="body-info">
+                        <mat-label class="label-info">Fornecedor</mat-label>
+                        {{ m.companyName }}
+                     </div>
+                     <div class="body-info">
+                        <mat-label class="label-info">Marca</mat-label>
+                        {{ m.brandName }}
+                     </div>
+                     <div class="body-info">
+                        <mat-label class="label-info">Categoria</mat-label>
+                        {{ m.groupName }}
+                     </div>
+                     <div class="body-info">
+                        <mat-label class="label-info">SubCategoria</mat-label>
+                        {{ m.subGroupName }}
+                     </div>
+                     <div class="body-info">
+                        <mat-label class="label-info">Quantitade mínima</mat-label>
+                        {{ m.salesMinimumQuantity }}
+                     </div>
+                  </div>
+               </mat-card-content>
+               <div class="mat-card-price">
+                  <div class="fishing-price">R$ {{ m.lowestPrice | currency:'':'' }}</div>
+               </div>
+               <mat-card-actions fxLayout="row" fxLayoutAlign="end">
+                  <button fxFlex="50%" fxFlex.xs="100%" mat-button mat-raised-button color="lightgray" [style.color]="'var(--theme-primary-500)'" (click)="onShowPrices(m)">
+                     <mat-icon color="primary">paid</mat-icon>
+                     Condições
+                  </button>
+                  <button fxFlex="50%" fxFlex.xs="100%" mat-button mat-raised-button [color]="m.shoppingCart ? 'warn' : 'primary'" [style.color]="'white'" (click)="onShoppingCart(m)">
+                     <mat-icon>{{m.shoppingCart ? 'remove_shopping_cart' : 'add_shopping_cart'}}</mat-icon>
+                     {{m.shoppingCart ? 'Remover' : 'Comprar'}}
+                  </button>
+               </mat-card-actions>
+            </mat-card>
+         </div>
+      </div>
+
+      <!-- ---------------- -->
+      <app-grid *ngIf="offers$ != null  && selectedButtonToggleVal == 'list'" 
+         (pageChange)="onPageEvent($event)"
+         [ableEdit]="false"
+         [alwaysFilters]="true"
+         [columns]="cols"
+         [displayedColumns]="displayedColumns"
+         [filters]="[]"
+         [itemMenus]="itemMenus"
+         [modelIdentity]="modelIdentity"
+         [pageLength]="onlyFavorites ? totalFavorite : onlyShoppinCarts ? totalShoppingCart : offers$?.totalRecords && 0"
+         [rows]="offers$.data"
+         [specialFilter]="true"
+         [title]="gridfishingPrices"
+         [useEditColumns]="false"
+         [useHeader]="false"
+         [useFilters]="false"
+         [usePagination]="false"
+         [useRegister]="false"
+         [useSelect]="false"
+         [useSelect]="false">
+      </app-grid>
+   </div>
+   <div class="result-paginator">
+      <mat-paginator *ngIf="offers$ != null"
+         [pageIndex]="pageIndex"
+         [pageSizeOptions]="[25, 50, 100]"
+         [length]="onlyFavorites ? totalFavorite : onlyShoppinCarts ? totalShoppingCart : offers$.totalRecords"
+         [pageSize]="pageSize"
+         (page)="onPageEvent($event)"
+         showFirstLastButtons>
+      </mat-paginator>
+   </div>
+</div>

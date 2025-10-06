@@ -1,0 +1,38 @@
+<div id="dialog-address">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+       <div class="fl-row title">
+          <mat-icon class="header-icon" color="primary">local_shipping</mat-icon>
+          <h2 mat-dialog-title>Endereços para entrega</h2>
+       </div>
+    </div>
+    <div mat-dialog-content class="dialog-address-corpo mat-app-background">
+        <div class="add-lessons-form" [formGroup]="addressForm">
+            <ng-container formArrayName="formAddressArray">
+                <ng-container *ngFor="let addForm of formAddressArray.controls; let i = index">
+                    <div class="lesson-form-row" [formGroup]="addForm">
+                        <div fxLayout="row wrap" fxLayoutGap="5px">
+                            <div fxFlex="75">
+                                <mat-form-field class="w100" appearance="outline" style="margin-bottom: -1.25em">
+                                    <mat-label>Endereço</mat-label>
+                                    <input matInput formControlName="concatAddress" readonly="true">
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="20">
+                                <mat-form-field class="w100" appearance="outline" style="margin-bottom: -1.25em">
+                                    <mat-label>Quantidade</mat-label>
+                                    <input ngDefaultControl matInput currencyMask formControlName="quantity"
+                                     placeholder="Quantidade" name="quantity" autocomplete="off" [options]="getOptions()">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+    <div mat-dialog-actions class="dialog-address-botoes mat-app-background">
+       <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Cancelar</button>
+       <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="onSubmitAddresses()">Confirmar</button>
+    </div>
+ </div>
+ 

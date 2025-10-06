@@ -1,0 +1,148 @@
+<form *ngIf="form != null" class="form-cadastro" [formGroup]="form">
+
+    <div *ngFor="let formRow of formRows, let row_i = index" [style.marginTop]="formRow.marginTop" fxLayout="row"
+        fxLayout.xs="column" fxFlexFill fxLayoutGap="20px" [fxLayoutAlign]="formRow.right ? 'end' : 'start'"
+        [ngClass]="{'align-c': !useErrors}">
+
+        <div *ngFor="let field of formRow.fields, let i = index" [fxFlex]="field.size" class="field-mobile">
+
+
+            <ng-container *ngIf="field.slider">
+                <app-input-slider [form]="f(field.name)" [name]="field.name" [label]="field.label"
+                    [min]="field.slidermin" [max]="field.slidermax" [step]="field.sliderstep" [value]="field.value"
+                    (input)="onInputChange($event)">
+                </app-input-slider>
+            </ng-container>
+
+            <ng-container *ngIf="!field.slider">
+
+                <ng-container *ngIf="field.number">
+                    <app-input-number [label]="field.label" [name]="field.name" [type]="field.numberType" [control]="f(field.name)" [placeHolder]="field.placeholder">
+                    </app-input-number>
+                </ng-container>
+
+                <ng-container *ngIf="!field.number">
+
+                    <ng-container *ngIf="field.checkBox">
+                        <app-slide-toggle [formControl]="f(field.name)" [name]="field.name"  [label]="field.label" [value]="field.value" [disabled]="field.disabled">
+                        </app-slide-toggle>
+                    </ng-container> 
+
+                    <ng-container *ngIf="!field.checkBox">
+
+                        <ng-container *ngIf="field.select && field.useSearch">
+                            <app-mat-select appearance="outline" [label]="field.label" [list]="field.list | async"
+                                [form]="f(field.name)" [value]="field.value"  [nameObject]="field.name"  [name]="field.selectName"
+                                [options]="field.options" [useRemove]="field.useRemove" [useAddEntity]="field.useAddEntity" [disabled]="field.disabled"
+                                (onAddEntity)="field.onAddEntity(field.name)">
+                            </app-mat-select>
+                        </ng-container>
+
+                        <ng-container *ngIf="field.select && !field.useSearch">
+                            <mat-form-field class="w100" appearance="outline">
+                                <mat-label *ngIf="field.label">{{field.label}}</mat-label>
+                                <mat-select [formControl]="f(field.name)" [disabled]="field.disabled">
+                                    <mat-option *ngFor="let list of (field.list | async)" [value]="list[field.value]">
+                                        {{list[field.selectName]}}
+                                    </mat-option>
+                                </mat-select>
+                                <button *ngIf="field.useRemove && f(field.name).value" matSuffix mat-icon-button
+                                    type="button" aria-label="Clear"
+                                    (click)="f(field.name).setValue(null); $event.stopPropagation()">
+                                    <mat-icon color="primary">close</mat-icon>
+                                </button>
+                                <button *ngIf="field.useAddEntity" matSuffix mat-icon-button type="button" aria-label="Add"
+                                    (onAddEntity)="field.onAddEntity(field.name); $event.stopPropagation()">
+                                    <mat-icon color="primary">add_box</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="field.date && field.useHour && !field.range">
+                            <app-input-date [label]="field.label" [formControl]="f(field.name)" [placeholder]="field.placeholder"
+                            [useRemove]="field.useRemove" [useTime]="field.useHour" [disabled]="field.disabled"></app-input-date>
+                        </ng-container>
+
+                        <ng-container *ngIf="field.date && !field.useHour && !field.range">
+                            <mat-form-field *ngIf="!field.hour" class="w100" appearance="outline">
+                                <mat-label *ngIf="field.label">{{field.label}}</mat-label>
+
+                                <input *ngIf="field.disabled" [matDatepicker]="picker" [formControl]="f(field.name)" [placeholder]="field.placeholder" [readonly]="true"
+                                    [value]="field.value" disabled matInput>
+
+                                <input *ngIf="!field.disabled" [matDatepicker]="picker" [formControl]="f(field.name)"
+                                    [placeholder]="field.placeholder" [readonly]="true" [value]="field.value" matInput>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                               
+                                <button *ngIf="field.useRemove && f(field.name).value" matSuffix mat-icon-button type="button"
+                                    aria-label="Clear" (click)="f(field.name).setValue(null); $event.stopPropagation()">
+                                    <mat-icon color="primary">close</mat-icon>
+                                </button>
+
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="field.date && !field.useHour && field.range">
+                            <mat-form-field class="w100" appearance="outline">
+                                <mat-label *ngIf="field.label">{{field.label}}</mat-label>
+                                <mat-date-range-input [formGroup]="form" [rangePicker]="picker">
+                                    <input [readonly]="true" matStartDate [formControl]="f(field.name)" placeholder="De">
+                                    <input [readonly]="true" matEndDate [formControl]="f(field.name + 'end')"
+                                        placeholder="Até">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                                <button *ngIf="f(field.name + 'end').value &&  !field.disbled" matSuffix mat-icon-button type="button"
+                                    aria-label="Clear"
+                                    (click)="f(field.name).setValue(null);f(field.name + 'end').setValue(null); $event.stopPropagation()">
+                                    <mat-icon color="primary">close</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="!field.select && !field.date && !field.textArea">
+                            <mat-form-field class="w100" appearance="outline">
+                                <mat-label *ngIf="field.label">{{field.label}}</mat-label>
+    
+                                <input *ngIf="field.disabled && (field.mask == null || field.mask.length == 0)"
+                                    [formControl]="f(field.name)" [placeholder]="field.placeholder" matInput [type]="field.passwordType ? 'password' : 'text'" [maxlength]="field.maxLength" disabled>
+                                <input *ngIf="field.disabled && (field.mask != null && field.mask.length > 0)"
+                                    [formControl]="f(field.name)" [placeholder]="field.placeholder" [mask]="field.mask" [showMaskTyped]="true" [validation]="false" matInput disabled>
+
+                                <input *ngIf="!field.disabled && (field.mask == null || field.mask.length == 0)"
+                                    [formControl]="f(field.name)" [placeholder]="field.placeholder" matInput [type]="field.passwordType ? 'password' : 'text'" [maxlength]="field.maxLength">
+                                <input *ngIf="!field.disabled && (field.mask != null && field.mask.length > 0)"
+                                    [formControl]="f(field.name)" [placeholder]="field.placeholder" [mask]="field.mask" [showMaskTyped]="true" [validation]="false" matInput>
+                                </mat-form-field>
+
+                        </ng-container>
+
+                        <ng-container *ngIf="field.textArea">
+                            <mat-form-field class="w100" appearance="outline">
+                              <mat-label>{{field.label}}<span *ngIf="textAreaCount > 0" > - {{textAreaCount}} / {{field.maxLength}}</span></mat-label>
+                              <textarea matInput [rows]="field.textAreaRows" [placeholder]="field.placeholder" [formControl]="f(field.name)" [maxlength]="field.maxLength" (ngModelChange)="valueChange(f(field.name).value)"></textarea>
+                            </mat-form-field>
+                        </ng-container>
+
+                    </ng-container>
+                </ng-container>
+
+            </ng-container>
+
+            <div *ngIf="useErrors">
+                <mat-error
+                    *ngIf="f(field.name).hasError('required')  && (f(field.name).dirty || f(field.name).touched || form.pending)">
+                    O Campo é obrigatório</mat-error>
+                <mat-error
+                    *ngIf="f(field.name).hasError('email')  && (f(field.name).dirty || f(field.name).touched || form.pending)">
+                    O e-mail é inválido</mat-error>
+            </div>
+        </div>
+
+        <div *ngIf="formRow.submit" [fxFlex]="formRow.size">
+            <button mat-raised-button class="w100 buttonContinuar hover-cursor-pointer" type="submit"
+                (click)="submit()">{{formRow.submitText}}</button>
+        </div>
+    </div>
+</form>

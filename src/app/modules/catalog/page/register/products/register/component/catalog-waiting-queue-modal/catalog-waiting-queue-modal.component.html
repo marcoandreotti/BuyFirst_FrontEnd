@@ -1,0 +1,56 @@
+<div id="dialog-queue">
+    <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+        <div class="fl-row title">
+            <mat-icon class="header-icon" color="primary">report</mat-icon>
+        </div>
+        <div class="fl-row title">
+            <h3>Resultado importação</h3>
+        </div>
+    </div>
+
+    <div mat-dialog-content class="container">
+        <div class="scrollable-content">
+            <table class="table-info" *ngIf="data != null">
+                <thead>
+                    <tr>
+                        <th class="center">Data</th>
+                        <th class="center">Cod</th>
+                        <th class="center">Ref</th>
+                        <th class="center">Produto</th>
+                        <th class="center">Marca</th>
+                        <th class="center">Entrega</th>
+                        <th class="center">Qtd</th>
+                        <th class="center">Qtd Min</th>
+                        <th class="center">Qtd Max</th>
+                        <th class="center">Valor</th>
+                        <th class="center">UM</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let q of data">
+                    <tr>
+                        <td class="left">{{q.created| date:'dd/MM/yyyy'}}</td>
+                        <td class="left">{{q.externalCode}}</td>
+                        <td class="left">{{q.referenceCodes}}</td>
+                        <td class="left">{{q.productName}}</td>
+                        <td class="left">{{q.brandName}}</td>
+                        <td class="left">{{q.deliveryTime}}</td>
+                        <td class="left">{{q.availableQuantity}}</td>
+                        <td class="left">{{q.salesMaximumQuantity}}</td>
+                        <td class="left">{{q.salesMinimumQuantity}}</td>
+                        <td class="left">{{q.price| currency:'':''}}</td>
+                        <td class="left">{{q.unitOfMeasureAcronym}}</td>
+                    </tr>
+                    <tr style="color: tomato;">
+                        <th class="right">Erro:</th>
+                        <td colspan="7">{{q.message}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 *ngIf="data == null">Nenhun erro retornado!</h3>
+        </div>
+    </div>
+    <div mat-dialog-actions class="dialog-queue-botoes">
+        <button class="large" mat-raised-button color="lightgray" (click)="cancel()" mat-dialog-close>Fechar</button>
+    </div>
+</div>

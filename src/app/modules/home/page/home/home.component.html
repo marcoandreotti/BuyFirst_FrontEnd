@@ -1,0 +1,91 @@
+<div class="home-background">
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap="wrap" fxLayoutGap="20px">
+        <div [fxFlex]="auth.isBuyFirst ? 70 : 100" fxFlex.xs="100" fxFlex.sm="100" [fxFlex.xl]="auth.isBuyFirst ? 70 : 100" [fxFlex.md]="auth.isBuyFirst ? 70 : 100">
+            <div class="fl-col w100 h100">
+
+                <div class="home-rows">
+                    <!-- <mat-card class="dash">
+                        <h3><b>Pesquisar preços</b></h3>
+                        <app-fishing-form (onSubmit)="onSubmitPesquisar()"></app-fishing-form>
+                    </mat-card> -->
+
+                    <mat-card class="dash" *ngIf="!auth.isBuyer">
+                        <h3 *ngIf="auth.isSupplier"><b>Minhas Vendas</b></h3>
+                        <h3 *ngIf="!auth.isSupplier"><b>Vendas</b></h3>
+                        <a class="large" mat-raised-button color="primary" [style.color]="'white'" href="/#/vendas" style="position: absolute; right: 18px; top: 10px;">
+                            <span *ngIf="auth.isSupplier">Ir para minhas vendas...</span>
+                            <span *ngIf="!auth.isSupplier">Ir para vendas</span>
+                        </a>
+                        <mat-card-content *ngIf="(!vendas$ || vendas$.data.length <= 0) &&
+                                                 (!compras$ || compras$.data.length <= 0)"><h3>Não há movimentações.</h3></mat-card-content>
+                        <mat-card-content *ngIf="vendas$ && vendas$.data.length > 0">
+                            <div class="grid-sales scrolly">
+                                <app-grid *ngIf="vendas$ != null" [ableEdit]="false" [columns]="cols"
+                                    [displayedColumns]="displayedColumns" [specialFilter]="false" [filters]="[]"
+                                    [itemMenus]="itemMenus" [modelIdentity]="modelIdentity"
+                                    [rows]="vendas$.data" [title]="gridDashVendas" [useEditColumns]="false"
+                                    [useHeader]="false" [usePagination]="false" [useRegister]="false"
+                                    [useSelect]="false" [print]="true">
+                                </app-grid>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="dash" *ngIf="auth.isBuyer">
+                        <h3><b>Minhas Finanças</b></h3>
+                        <a class="large" mat-raised-button color="primary" [style.color]="'white'" href="/#/vendas"
+                            style="position: absolute; right: 18px; top: 10px;">
+                            Ir para minhas finanças...
+                        </a>
+                        <mat-card-content *ngIf="(!vendas$ || vendas$.data.length <= 0) &&
+                                                 (!compras$ || compras$.data.length <= 0)"><h3>Não há movimentações.</h3></mat-card-content>
+                        <mat-card-content *ngIf="vendas$ && vendas$.data.length > 0">
+                            <div class="grid-sales scrolly">
+                                <h4><b>Vendas:</b></h4>
+                                <app-grid *ngIf="vendas$ != null" [ableEdit]="false" [columns]="cols"
+                                    [displayedColumns]="displayedColumns" [specialFilter]="false" [filters]="[]"
+                                    [itemMenus]="itemMenus" [modelIdentity]="modelIdentity"
+                                    [rows]="vendas$.data" [title]="gridDashVendas" [useEditColumns]="false"
+                                    [useHeader]="false" [usePagination]="false" [useRegister]="false"
+                                    [useSelect]="false" [print]="true">
+                                </app-grid>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-content *ngIf="compras$ && compras$.data.length > 0">
+                            <div class="grid-sales scrolly">
+                                <h4><b>Compras:</b></h4>
+                                <app-grid *ngIf="compras$ != null" [ableEdit]="false" [columns]="colsBuyers"
+                                    [displayedColumns]="displayedSupplierColumns" [specialFilter]="false" [filters]="[]"
+                                    [itemMenus]="[]" [modelIdentity]="modelIdentity"
+                                    [rows]="compras$.data" [title]="gridDashCompras" [useEditColumns]="false"
+                                    [useHeader]="false" [usePagination]="false" [useRegister]="false"
+                                    [useSelect]="false" [print]="true">
+                                </app-grid>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+
+        <div *ngIf="auth.isBuyFirst" fxFlex="30" fxFlex.xs="100" fxFlex.sm="100" fxFlex.xl="30" fxFlex.md="30">
+            <div class="fl-col w100 h100">
+                <div class="home-charts">
+                    <mat-card class="dash">
+                        <div style="margin-bottom: 5px;padding-right: 12px;">
+                            <button mat-raised-button (click)="onGoQuoteErpHistoric(null)" style="font-size: 1.17em;font-weight: 500;">Cotações</button>
+                            <button mat-raised-button *ngIf="countErros > 0" [matBadge]="countErros" matBadgeColor="warn" style="font-size: 1em;float: right;" (click)="showModalProblem()">Problemas!</button>
+                        </div>
+                        <mat-card-content style="display: flex;">
+                            <ngx-charts-bar-vertical-stacked [view]="view" [scheme]="colorScheme" [results]="multi"
+                                [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                                [animations]="animations" (select)="onGoQuoteErpHistoric($event)">
+                            </ngx-charts-bar-vertical-stacked>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

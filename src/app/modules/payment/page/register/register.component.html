@@ -1,0 +1,37 @@
+<div class="bf-container">
+  <mat-card>
+    <mat-card-title>
+      <mat-card-subtitle>Preencha os dados para liberar o cadastro do meio de pagamento</mat-card-subtitle>
+    </mat-card-title>
+    <mat-card-content>
+
+      <app-form [(form)]="paymentForm" [model]="model" [formRows]="formPayment" [useErrors]="false"></app-form>
+
+      <div *ngIf="editId > 0" style="margin-top: 10px; margin-bottom: 10px;">
+        <button mat-raised-button color="primary" [style.color]="'white'" (click)="openModal()">Cadastrar Conds. de Pagto.</button>
+      </div>
+
+      <div *ngIf="paymentConditions$ != null" style="width: 100%;">
+        <app-grid
+          [ableEdit]="false"
+          [columns]="cols"
+          [displayedColumns]="dispColumns"
+          [itemMenus]="itemMenus"
+          [modelIdentity]="'paymentConditionId'"
+          [rows]="paymentConditions$"
+          [useEditColumns]="false"
+          [useHeader]="false"
+          [usePagination]="false"
+          [useRegister]="false"
+          [useSelect]="false">
+        </app-grid>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button class="large" mat-raised-button color="primary" (click)="save()" [style.color]="'white'">
+        Salvar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

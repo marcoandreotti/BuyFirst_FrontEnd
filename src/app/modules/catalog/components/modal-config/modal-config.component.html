@@ -1,0 +1,36 @@
+<div id="dialog-config">
+   <div class="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle style="cursor: move">
+      <div class="fl-row title">
+         <mat-icon class="header-icon" color="primary">build</mat-icon>
+      </div>
+      <div class="fl-row title header-title">
+         <h2 mat-dialog-title>Configurações do Catalogo</h2>
+      </div>
+      <div class="fl-row title header-message">
+         Ajuste abaixo o estado do catálogo:
+      </div>
+      <div class="fl-row title header-message">
+         <b>{{data.personName}} - {{data.name}} - [ {{data.statusName}} ]</b>
+      </div>
+   </div>
+   <div *ngIf="data.statusAlias == 'CAT_FINALIZAD' || data.statusAlias == 'CAT_CANCEL'" mat-dialog-content
+      class="dialog-config-corpo mat-app-background">
+      ...
+   </div>
+   <div *ngIf="data.statusAlias != 'CAT_FINALIZAD' && data.statusAlias != 'CAT_CANCEL'" mat-dialog-content
+      class="dialog-config-corpo mat-app-background">
+      <app-form [(form)]="configForm" [model]="model" [formRows]="formConfig" [useErrors]="false"></app-form>
+      <!-- <div *ngIf="data.statusAlias == 'CAT_EXPIRAD'">
+         <br>
+         <mat-divider></mat-divider>
+         <br>
+
+         Expirado... (em desenvolvimento)
+
+      </div> -->
+   </div>
+   <div mat-dialog-actions class="dialog-config-botoes mat-app-background">
+      <button class="large" mat-raised-button color="lightgray" mat-dialog-close (click)="cancel()">Cancelar</button>
+      <button class="large" mat-raised-button color="primary" [style.color]="'white'" (click)="save()">Salvar</button>
+   </div>
+</div>

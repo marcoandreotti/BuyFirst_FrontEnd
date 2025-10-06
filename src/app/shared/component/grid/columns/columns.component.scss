@@ -1,0 +1,144 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.columns {
+    position: absolute;
+    top: 0;
+    right: -420px;
+    height: 100%;
+    opacity: 0;
+    flex-flow: column;
+    height: 100%;
+    display: flex;
+    width: 400px;
+    transition: all ease-in-out 0.2s;
+    z-index: 800;
+    border-left: 1px solid whitesmoke;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.columns.opened {
+    right: -20px;
+    box-shadow: -20px 20px 8px #c7c7c773;
+    opacity: 1;
+}
+
+.columns-itens {
+    flex: 1;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.columns-itens:hover {
+    overflow-y: auto;
+}
+
+.columns .item {
+    width: 100%;
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    align-items: center;
+    height: 60px;
+    cursor: pointer;
+}
+
+.columns .item.btn mat-icon {
+    color: #bbbbbb;
+}
+
+.columns .item h4 {
+    margin: 0px 0px 0px 20px !important;
+    opacity: 0;
+}
+
+.columns.opened .item h4 {
+    opacity: 1;
+    transition: all 0.2s ease 0.5s;
+}
+
+.columns-footer {
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.example-list {
+    width: 500px;
+    max-width: 100%;
+    min-height: 60px;
+    display: block;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.column-box {
+    margin: 10px 0px;
+
+    .item {
+        padding: 20px 10px;
+        border-radius: 4px;
+        border: solid 1px rgb(234 234 234 / 60%);;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        z-index: 1;
+        justify-content: space-between;
+        box-sizing: border-box;
+        cursor: move;
+        position: relative;
+        font-size: 12px;
+
+        .handle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgb(234 234 234 / 60%);
+            cursor: move;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 100%;
+        }
+
+        mat-checkbox {
+            margin-left: 15px;
+        }
+    }
+}
+
+.column-container {
+    flex: 1;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+    border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-custom-placeholder {
+    border: dotted 3px #999;
+    min-height: 60px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

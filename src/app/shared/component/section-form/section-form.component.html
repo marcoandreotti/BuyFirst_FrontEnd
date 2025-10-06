@@ -1,0 +1,10 @@
+
+<div class="section">
+  <div class="tituloSection">
+    <h3>{{tituloSection}}</h3>
+    <p>{{subtituloSection}}</p>
+  </div>
+   <section *ngFor="let tmpl of templates; let i = index">
+    <ng-container [ngTemplateOutlet]="tmpl"></ng-container>
+  </section>
+</div>

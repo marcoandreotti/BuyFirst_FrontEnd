@@ -1,0 +1,21 @@
+<div class="bf-container">
+    <app-grid *ngIf="catalogos$ != null"
+        (onFilter)="onFilter($event)"
+        (pageChange)="onPageEvent($event)"
+        (onChangeSorterValue)="changeSorter($event)"
+        [alwaysFilters]="true"
+        [columns]="cols"
+        [displayedColumns]="displayedColumns"
+        [filterModel]="lastFilter" 
+        [filters]="filters"
+        [itemMenus]="itemMenus"
+        [modelIdentity]="modelIdentity"
+        [pageIndex]="pageIndex"
+        [pageLength]="catalogos$.totalRecords"
+        [pageSize]="pageSize"
+        [rows]="catalogos$.data"
+        [specialFilter]="true"
+        [title]="gridCatalogos"
+        [useSelect]="false">
+    </app-grid>
+</div>

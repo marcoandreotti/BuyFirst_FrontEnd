@@ -1,0 +1,39 @@
+<mat-form-field class="w100" appearance="outline">
+    <mat-label>{{label}}</mat-label>
+    <mat-select [formControl]="form" #singleSelect [disabled]="disabled">
+        <mat-option [hidden]="!useSearch">
+            <ngx-mat-select-search [formControl]="filterFormControl" [placeholderLabel]="placeHolder"
+                noEntriesFoundLabel="'Nenhum resultado encontrado'" (ngModelChange)="onChangeSelect($event)"></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let l of (useSearch ? (filteredList| async) : list)" [value]="l[value]">
+
+            <ng-container *ngIf="getTextOptions().length > 0; else oneOption">
+                <span *ngFor="let o of getTextOptions(), let io = index">
+                    <ng-container *ngIf="io > 0 && io < getTextOptions().length">
+                        -
+                    </ng-container>
+                    <ng-container *ngIf="getText(l, o).mask; else notMask">
+                        {{l[o.name] | mask: getText(l, o).mask}}
+                    </ng-container>
+                    <ng-template #notMask>
+                        {{l[o.name]}}
+                    </ng-template>
+                </span>
+            </ng-container>
+
+            <ng-template #oneOption>
+                {{l[name]}}
+            </ng-template>
+
+        </mat-option>
+    </mat-select>
+    <button *ngIf="useRemove && form.value" matSuffix mat-icon-button type="button" aria-label="Clear"
+        (click)="form.setValue(null); $event.stopPropagation()">
+        <mat-icon color="primary">close</mat-icon>
+    </button>
+    <button *ngIf="useAddEntity && form.value" matSuffix mat-icon-button type="button" aria-label="Add"
+        (click)="addEntity(nameObject); $event.stopPropagation()">
+        <mat-icon color="primary">add_box</mat-icon>
+    </button>
+
+</mat-form-field>

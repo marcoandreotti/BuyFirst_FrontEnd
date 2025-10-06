@@ -1,0 +1,101 @@
+@import "~@angular/material/theming";
+@import "/src/styles/themes/variables.scss";
+
+.reset-password {
+  padding: 15px 150px;
+  height: 100%;
+
+  @media only screen and (max-width: $mobile) {
+    background: none;
+  }
+}
+
+@media (max-width: $mobile) {
+  .mat-card {
+    display: contents;
+    flex-wrap: wrap;
+  }
+}
+
+.container {
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.form-inputs {
+  margin-top: 50px;
+}
+
+.buttons-container {
+  margin: 15px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+@media (max-width: $mobile) {
+  .buttons-container {
+    display: table;
+  }
+}
+
+button {
+  padding: 10px 16px;
+  box-sizing: border-box;
+}
+
+.button-reset-password {
+  width: 100%;
+  padding: 10px 32px !important;
+}
+
+
+.button-senha {
+  width: 100%;
+}
+
+.terms {
+  padding-top: 10px;
+}
+
+@media (max-width: $mobile) {
+  .terms {
+    display: flex;
+    margin-top: 10px;
+    float:left;
+    width:1000px;
+    overflow-y: auto;
+    max-height: 100px;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .reset-password {
+    padding: 5px 40px;
+  }
+
+  .form-inputs {
+    margin: 25px 0px;
+  }
+}
+
+@media (min-width: 500px) and (max-width: 1024px) {
+  .reset-password {
+    padding: 100px 40px;
+  }
+
+  .form-inputs {
+    margin: 25px 0px;
+  }
+}
